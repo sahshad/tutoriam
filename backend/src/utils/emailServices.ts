@@ -11,11 +11,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-/**
- * Sends an OTP email to the user
- * @param email - Recipient's email address
- * @param otp - One-Time Password (OTP) to send
- */
+
 export const sendOtpEmail = async (email: string, otp: string): Promise<void> => {
   try {
     const mailOptions = {
@@ -30,9 +26,28 @@ export const sendOtpEmail = async (email: string, otp: string): Promise<void> =>
     };
 
     await transporter.sendMail(mailOptions);
-    console.log(`OTP sent to ${email}`);
   } catch (error) {
-    console.error("Error sending OTP email:", error);
     throw new Error("Failed to send OTP email");
   }
 };
+
+export const sendForgotPasswordMail = async (email:string, magicLink:string) =>{
+  try {
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Password Reset Request",
+      html: `
+        <h2>Password Reset Request</h2>
+        <p>You requested a password reset. Please click the link below to reset your password:</p>
+        <p><a href="${magicLink}">Reset Password</a></p>
+        <p>If you did not request this password reset, please ignore this email.</p>
+        <p>This link will expire in 1 hour.</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    throw new Error("Failed to send OTP email");
+  }
+}

@@ -9,9 +9,9 @@ const Header:React.FC<HeaderProps> = ({signState,setSignState}) => {
       
   return (
          <header className="flex justify-between p-6">
-          <div className="font-bold text-xl">tutoriam</div>
+          <div className="font-bold text-xl">TUTORIAM</div>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">{signState === 'signIn'?"Don't have account?":"Already have account"}</span>
+            <span className=" hidden md:flex text-sm text-muted-foreground">{signState === 'signIn'?"Don't have account?":"Already have account"}</span>
             <Button
               variant="outline"
               className="hover:cursor-pointer"

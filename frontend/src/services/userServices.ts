@@ -5,13 +5,47 @@ import api from "@/utils/axiosInstance";
 
 const API_URL = "http://localhost:5000/api/user";
 
-export const updateProfile = async (formData: FormData, dispatch:AppDispatch) => {
+export const updateProfile = async (
+  formData: FormData,
+  dispatch: AppDispatch
+) => {
   const response = await api.put(`${API_URL}/profile`, formData, {
     withCredentials: true,
   });
   dispatch(
-        updateUser({
-            user:response.data.user
-        })
-      );
+    updateUser({
+      user: response.data.user,
+    })
+  );
 };
+
+export const changePassword = async (
+  userId: string,
+  currentPassword: string,
+  newPassword: string
+) => {
+ try {
+    const response = await api.patch(
+        `${API_URL}/${userId}/change-password`,
+        { currentPassword, newPassword },
+        { withCredentials: true }
+      );
+      return response
+ } catch (error:any) {
+    return error.response
+ }
+};
+
+export const getUserProfile = async () => {
+  try {
+    const response = await api.get(
+      `user/profile`,
+      {withCredentials:true}
+    )
+    return response
+  } catch (error:any) {
+    console.log(error)
+    return error.response
+
+  }
+}

@@ -17,7 +17,7 @@ const HeroSection = () => {
           </p>
         </div>
         <div>
-          <Button className="">Create Account</Button>
+          {/* <Button className="">Create Account</Button> */}
         </div>
       </div>
       <div className="relative h-[400px] w-full">

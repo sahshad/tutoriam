@@ -10,4 +10,13 @@ export class AdminService {
         throw new Error("error while fetching all users")
     }
    }
+
+   async toggleUserStatus(userId:string){
+    try {
+        const user = await adminRepsitory.toggleUserStatus(userId)
+        return user 
+    } catch (error:any) {
+        throw new Error(error)
+    }
+   }
 }

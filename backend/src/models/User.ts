@@ -19,7 +19,7 @@ const UserSchema = new Schema<IUser>(
     password: { type: String, required: true },
     profileImageUrl: { type: String },
     role: { type: String, enum: ["user", "tutor"], default: "user" },
-    status: {type:String, default:"active"},
+    status: {type:String, enum: ["active", "blocked"], default:"active"},
     title: { type: String },
   },
   { timestamps: true }

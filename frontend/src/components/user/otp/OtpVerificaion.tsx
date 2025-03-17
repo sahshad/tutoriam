@@ -1,5 +1,4 @@
 import type React from "react";
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { resendOtp, verifyOtp } from "@/services/authService";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 interface OtpVerificationProps {
   length?: number;
@@ -37,7 +37,6 @@ export default function OtpVerification({
   const dispactch = useDispatch()
   const navigate = useNavigate()
 
-  // Timer countdown effect
   useEffect(() => {
     if (timeLeft <= 0) {
       setIsResendDisabled(false);
@@ -138,11 +137,9 @@ export default function OtpVerification({
     }
   };
 
-  // Handle verify
   const handleVerify = async () => {
     const otpString = otp.join("");
 
-    // Check if OTP is complete
     if (otpString.length !== length) {
       setVerificationStatus("error");
       setErrorMessage("Please enter all digits");
@@ -152,15 +149,23 @@ export default function OtpVerification({
     setIsVerifying(true);
 
     try {
-      // const isValid = await onVerify(otpString);
 
       const response = await verifyOtp(email, otpString, dispactch)
-      const isValid = response.status === 200
-      if (isValid) {
-        setVerificationStatus("success");
+
+      if (response.status === 200) {
+          navigate("/")
       } else {
-        setVerificationStatus("error");
-        setErrorMessage("Invalid verification code");
+      setVerificationStatus("error");
+      setErrorMessage(response.data.message || "Incorrect otp");
+        toast.error(response.data.message || "Incorrect otp", 
+          {
+            position:"top-right",
+            style:{
+              color:"red"
+            }
+          },
+          
+        )
       }
     } catch (error) {
       setVerificationStatus("error");
@@ -168,7 +173,6 @@ export default function OtpVerification({
       console.error("Error verifying OTP:", error);
     } finally {
       setIsVerifying(false);
-      navigate("/")
     }
   };
 

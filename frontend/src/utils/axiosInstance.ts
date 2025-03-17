@@ -19,7 +19,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Auto-refresh token if expired
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -27,12 +26,21 @@ api.interceptors.response.use(
       try {
         const newAccessToken = await refreshToken(store.dispatch);
         error.config.headers.Authorization = `Bearer ${newAccessToken}`;
-        return api(error.config); // Retry request with new token
+        return api(error.config);
       } catch {
         console.error("Session expired. Please log in again.");
         store.dispatch(logout());
+        localStorage.clear()
       }
     }
+
+    if (error.response.status === 403) {
+      console.error("You do not have permission to access this resource.");
+      localStorage.clear()
+      store.dispatch(logout()); 
+      return Promise.reject(error); 
+    }
+
     return Promise.reject(error);
   }
 );

@@ -7,10 +7,10 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({role}:ProtectedRouteProps) => {
-  const user = useSelector((state: RootState) => state.auth.user);  
+  const user = useSelector((state: any) => state.auth.user);  
   const isAdmin = localStorage.getItem("adminLoggedIn")
   if(role === 'user'){
-    return user&& !isAdmin ? <Outlet /> : <Navigate to="/login" replace />;
+    return user && !isAdmin && user.status === 'active' ? <Outlet /> : <Navigate to="/login" replace />;
   }else{
     return user&& isAdmin ? <Outlet /> : <Navigate to="/admin/login" replace />;
   }

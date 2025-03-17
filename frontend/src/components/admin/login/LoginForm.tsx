@@ -15,6 +15,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { login } from "@/services/authService";
 import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -28,8 +30,7 @@ const formSchema = z.object({
 const LoginForm = () => {
   const navigate = useNavigate();
   const dispactch = useDispatch()
-  //   const { toast } = useToast()
-  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,18 +41,21 @@ const LoginForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
 
-      //   toast({
-      //     title: "Login successful",
-      //     description: "Redirecting to dashboard...",
-      //   })
     const response = await login(values.email, values.password, 'admin', dispactch)
     if(response.status === 200){
         localStorage.setItem("adminLoggedIn", "true")
         navigate('/admin/dashboard')
+    }else{
+        toast.error(response.data.message||'invalid credentials', {
+            position: "top-right",
+        })
     }
   }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
 
   return (
     <div className="lg:p-8">
@@ -84,14 +88,31 @@ const LoginForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="••••••••" {...field} />
+                    <div className="relative">
+                      <Input
+                        className="pr-10"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter password"
+                        {...field} 
+                        aria-invalid={!!form.formState.errors.password}
+                      />
+                      <Button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        variant="link"
+                        className="absolute right-0 top-1/2 transform -translate-y-1/2"
+                      >
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </Button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Logging in..." : "Login"}
+            
+            <Button type="submit" className="w-full" >
+              Login
             </Button>
           </form>
         </Form>

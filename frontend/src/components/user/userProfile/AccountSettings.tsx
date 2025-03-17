@@ -4,23 +4,55 @@ import { TabsContent } from "../../ui/tabs";
 import { Input } from "../../ui/input";
 import { useEffect, useRef, useState } from "react";
 import profiePlaceholder from "/profile_placeholder.png";
-import { updateProfile } from "@/services/userServices";
-import { useDispatch, useSelector } from "react-redux";
+import { getUserProfile, updateProfile } from "@/services/userServices";
+import { useDispatch } from "react-redux";
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  courses: number;
+  title:string
+  profileImageUrl: string;
+  status: "active" | "blocked";
+  createdAt: Date;
+}
 
 const AccountSettings = () => {
-  const user = useSelector((state: any) => state.auth.user);
-  useEffect(() => {}, [user]);
+  const [user, setUser] = useState<User|null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
+  useEffect(() => {
+    const fetchUser = async () =>{
+      const response = await getUserProfile()
+      if(response.status === 200){
+        const user = response.data.user
+        setUser(user)
+        setLoading(false)
+      }
+      setLoading(false)
+    }
+    fetchUser()
+  }, []);
 
-  const [firstName, setFirstName] = useState(user.name.split(" ")[0]);
-  const [lastName, setLastName] = useState(user.name.split(" ")[1]);
-  const [title, setTitle] = useState(user.title || "");
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.name.split(" ")[0]);
+      setLastName(user.name.split(" ")[1] || ""); 
+      setTitle(user.title);
+      setImagePreview(user.profileImageUrl || null);
+    }
+  }, [user])
+
+  const [firstName, setFirstName] = useState(user?user.name.split(" ")[0]:"");
+  const [lastName, setLastName] = useState(user?user.name.split(" ")[1]:'');
+  const [title, setTitle] = useState(user?user.title : "");
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(
-    user.profileImageUrl ? user.profileImageUrl : null
+    user?user.profileImageUrl ? user.profileImageUrl : null : null
   );
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const dispactch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleUploadClick = () => {
     if (fileInputRef) {
@@ -42,8 +74,13 @@ const AccountSettings = () => {
     if (image) formData.append("profileImage", image);
     formData.append("name", `${firstName} ${lastName}`);
     formData.append("title", title);
-    await updateProfile(formData, dispactch);
+    await updateProfile(formData, dispatch);
   };
+
+  if(loading){
+    return <div></div>
+  }
+
   return (
     <TabsContent value="settings" className="space-y-8 pb-20">
       <div>
@@ -108,12 +145,12 @@ const AccountSettings = () => {
                 <label className="mb-1 block text-sm font-medium">
                   Username
                 </label>
-                <Input readOnly placeholder="Username" value={user.name} />
+                <Input readOnly placeholder="Username" value={user?user.name:""} />
               </div>
 
               <div>
                 <label className="mb-1 block text-sm font-medium">Email</label>
-                <Input readOnly type="email" value={user.email} />
+                <Input readOnly type="email" value={user?user.email:''} />
               </div>
 
               <div>

@@ -2,8 +2,11 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { AuthRepository } from "../repositories/AuthRepository";
-import { sendOtpEmail } from "../utils/emailServices";
+import { sendForgotPasswordMail, sendOtpEmail } from "../utils/emailServices";
 import { RedisClient } from "../config/redis";
+import { IUser } from "../models/User";
+import { IAdmin } from "../models/Admin";
+import { verifyResetToken } from "../utils/tokenServices";
 
 dotenv.config();
 
@@ -12,7 +15,7 @@ const authRepository = new AuthRepository();
 export class AuthService {
   async register(name: string, email: string, password: string) {
     const existingUser = await authRepository.findUserByEmail(email);
-    if (existingUser) throw new Error("User already exists");
+    if (existingUser) throw new Error("Email is already taken");
 
     const otp = this.generateOtp();
 
@@ -69,14 +72,18 @@ export class AuthService {
   }
 
   async login(email: string, password: string, role: string) {
-    let user;
+    let user: any;
     if (role === "admin") user = await authRepository.findAdminByEmail(email);
     else user = await authRepository.findUserByEmail(email);
 
-    if (!user) throw new Error("Invalid credentials");
+    if (!user) throw new Error("Invalid email address");
+
+    if (user.status === "blocked") {
+      throw new Error("you have been blocked");
+    }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) throw new Error("Invalid credentials");
+    if (!isPasswordValid) throw new Error("Incorrect password");
 
     const accessToken = this.generateAccessToken(user.id);
     const refreshToken = this.generateRefreshToken(user.id);
@@ -102,9 +109,46 @@ export class AuthService {
     }
   }
 
+  async sendMagicLink(email: string) {
+    try {
+      const user = await authRepository.findUserByEmail(email);
+      if (!user) throw new Error("Invalid email address");
+      const token = jwt.sign(
+        { userId: user._id, email, purpose: "reset-password" },
+        process.env.JWT_TOKEN_SECRET!,
+        { expiresIn: "15m" }
+      );
+      const magicLink = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
+      await sendForgotPasswordMail(email, magicLink);
+      await RedisClient.setex(
+        `magicLink:${email}`,
+        900,
+        JSON.stringify({ magicLink })
+      );
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+
+  async resetPassword(token: string, newPassword: string) {
+    const { userId,email, purpose } = await verifyResetToken(token, 'reset-password')
+    if (!userId || purpose !== 'reset-password') {
+      throw new Error('Invalid token')
+    }
+  
+    const hashedPassword = await this.hashPassword(newPassword)
+  
+    await authRepository.updateUserPassword(userId, hashedPassword)
+  
+    await RedisClient.del(`magicLink:${email}`)
+  
+    return { message: 'Password has been reset successfully' }
+  }
+
   private generateAccessToken(userId: string) {
     return jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET!, {
-      expiresIn: "15m",
+      expiresIn: "1h",
     });
   }
 

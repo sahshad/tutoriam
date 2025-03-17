@@ -2,6 +2,7 @@ import { Button } from "../../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const ProfileHeader = () => {
   const user = useSelector((state: any) => state.auth.user);
@@ -21,6 +22,7 @@ const ProfileHeader = () => {
           </p>
         </div>
         <div className="ml-auto">
+          <Link to={"/become-instructor"}>
           <Button variant="outline" className="">
             Become Instructor
             <svg
@@ -37,6 +39,7 @@ const ProfileHeader = () => {
               />
             </svg>
           </Button>
+          </Link>
         </div>
       </div>
     </div>

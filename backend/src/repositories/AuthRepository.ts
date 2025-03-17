@@ -15,11 +15,15 @@ export class AuthRepository {
   }
 
   async findUserById(id:string){
-    return User.findById(id)
+    return User.findOne({ _id: id, status: 'active' })
   }
 
   async findAdminById(id:string){
     return Admin.findById(id)
+  }
+
+  async updateUserPassword(id:string, password:string){
+    return User.findByIdAndUpdate(id,{password}, {new:true})
   }
   
 }

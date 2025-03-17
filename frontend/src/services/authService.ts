@@ -1,10 +1,11 @@
 import axios from "axios";
 import { setAuthData, logout } from "../redux/slices/authSlice";
 import { AppDispatch } from "../redux/store";
+import api from "@/utils/axiosInstance";
 
 const API_URL = "http://localhost:5000/api/auth";
 
-export const register = async (
+export const registerUser = async (
   name: string,
   email: string,
   password: string
@@ -17,8 +18,8 @@ export const register = async (
     );
 
     return response;
-  } catch (error) {
-    throw error;
+  } catch (error:any) {
+    return error.response
   }
 };
 
@@ -38,8 +39,8 @@ export const verifyOtp = async (email: string, otp: string, dispatch: AppDispatc
     );
     localStorage.setItem("isAuthenticated" , "true")
     return response;
-  } catch (error) {
-    throw error;
+  } catch (error:any) {
+    return error.response
   }
 };
 
@@ -63,21 +64,25 @@ export const login = async (
   role:string,
   dispatch: AppDispatch
 ) => {
-  const response = await axios.post(
-    `${API_URL}/login`,
-    { email, password,role },
-    { withCredentials: true }
-  );
-
-  dispatch(
-    setAuthData({
-      accessToken: response.data.accessToken,
-      user: response.data.user,
-    })
-  );
-  localStorage.clear()
-  localStorage.setItem("isAuthenticated" , "true")
-  return response
+  try {
+    const response = await axios.post(
+      `${API_URL}/login`,
+      { email, password,role },
+      { withCredentials: true }
+    );
+  
+    dispatch(
+      setAuthData({
+        accessToken: response.data.accessToken,
+        user: response.data.user,
+      })
+    );
+    localStorage.clear()
+    localStorage.setItem("isAuthenticated" , "true")
+    return response
+  } catch (error:any) {
+    return error.response
+  }
 };
 
 export const userLogout = async (dispatch:AppDispatch) => {
@@ -122,7 +127,26 @@ export const refreshToken = async (dispatch: AppDispatch) => {
   }
   throw new Error("Session expired. Please log in again")
   } catch (error) {
+    console.log(error)
     dispatch(logout());
     throw new Error("Session expired. Please log in again.");
   }
 };
+
+export const forgotPassword = async (email:string)=>{
+   try {
+     const response = await api.post(`auth/forgot-password`,{email})
+     return response
+   } catch (error:any) {
+     throw error
+   }
+}
+
+export const resetPassword = async (token:string, newPassword:string) => {
+  try {
+    const response = await api.post(`auth/reset-password`, {token, newPassword})
+    return response
+  } catch (error:any) {
+    throw error
+  }
+}

@@ -10,7 +10,7 @@ export class AuthController {
       await authService.register(name, email, password);
       res.status(200).json({ message: "otp send to your email" });
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json({ message: error.message });
     }
   }
 
@@ -28,7 +28,7 @@ export class AuthController {
       });
       res.status(200).json(newUser);
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json({ message: error.message });
       console.log(error)
     }
   }
@@ -59,7 +59,7 @@ export class AuthController {
       });
       res.status(200).json(user);
     } catch (error: any) {
-      res.status(401).json({ error: error.message });
+      res.status(401).json({ message: error.message});
     }
   }
 
@@ -88,6 +88,33 @@ export class AuthController {
       res.status(200).json({message : 'Logged out successfully'})
     } catch (error:any) {
       res.status(500).json({message : 'something went wrong while logging out'})
+    }
+  }
+
+  static async forgotPassword(req:Request, res:Response){
+    try {
+      const { email } = req.body;
+      await authService.sendMagicLink(email);
+
+    res.status(200).json({
+      message: 'A reset link has been sent to your email',
+    });
+    } catch (error:any) {
+      if (error.message === 'Invalid email address') {
+         res.status(404).json({ message: error.message });
+        return
+      }
+       res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async resetPassword(req:Request, res:Response) {
+    try {
+      const {token, newPassword} = req.body
+      const result = await authService.resetPassword(token, newPassword)
+      res.status(200).json({message: "password reseted successfully"})
+    } catch (error:any) {
+      res.status(500).json({message: error.message})
     }
   }
 }

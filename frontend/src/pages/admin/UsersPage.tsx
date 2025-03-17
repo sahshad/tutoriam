@@ -1,41 +1,83 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { getUsers } from '@/services/adminService'
-import { MoreHorizontal } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { getUsers, toggleUserStatus } from "@/services/adminService";
+import { MoreHorizontal } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface User {
-    _id: string;
-    name: string;
-    email: string;
-    courses: number;
-    profileImageUrl:string
-    status: "active" | "blocked"; 
-    createdAt: Date;
-  }
-  
+  _id: string;
+  name: string;
+  email: string;
+  courses: number;
+  profileImageUrl: string;
+  status: "active" | "blocked";
+  createdAt: Date;
+}
 
 const UsersPage = () => {
-    const [users, setUsers] = useState<User[]|[]>([])
-    useEffect(()=>{
-        const fetchUsers = async() =>{
-          const response =  await getUsers()
-          console.log(response)
-          setUsers(response.data.users)
-        }
+  const [users, setUsers] = useState<User[] | []>([]);
+  useEffect(() => {
+    if (users.length === 0) {
+      const fetchUsers = async () => {
+        const response = await getUsers();
+        console.log(response);
+        setUsers(response.data.users);
+      };
 
-        fetchUsers()
-    },[])
+      fetchUsers();
+    }
+  }, [users]);
+
+  const handleChangeStatus = async (userId: string) => {
+    const response = await toggleUserStatus(userId);
+    if (response.status === 200) {
+      setUsers((prevUsers) =>
+        prevUsers.map((user) => {
+          if (user._id === userId) {
+            return {
+              ...user,
+              status: user.status === "active" ? "blocked" : "active",
+            };
+          }
+          return user;
+        })
+      );
+      toast.success(
+        response.data.message || "user status changed successfully",
+        {
+          position: "top-right",
+        }
+      );
+    }else{
+        toast.error("error while changing user status. Please try again", 
+            {position:"top-right"}
+        )
+    }
+  };
   return (
     <div className="flex-1 space-y-4 md:pl-64">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">Users</h2>
-        <div className="flex items-center gap-2">
-        </div>
+        <div className="flex items-center gap-2"></div>
       </div>
       <Card>
         <CardContent>
@@ -50,25 +92,35 @@ const UsersPage = () => {
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className=''>
+            <TableBody className="">
               {users.map((user) => (
-                <TableRow key={user._id} className='h-15 '>
+                <TableRow key={user._id} className="h-15 ">
                   <TableCell className="font-medium flex gap-5 items-center">
-                  <Avatar>
+                    <Avatar>
                       <AvatarImage src={user.profileImageUrl} alt={user.name} />
                       <AvatarFallback>
-                        {user.name.split(" ").map((n) => n[0]).join("")}
+                        {user.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
                       </AvatarFallback>
                     </Avatar>
-                    {user.name}</TableCell>
+                    {user.name}
+                  </TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.courses}</TableCell>
                   <TableCell>
-                    <Badge variant={user.status === "active" ? "default" : "destructive"}>
+                    <Badge
+                      variant={
+                        user.status === "active" ? "default" : "destructive"
+                      }
+                    >
                       {user.status === "active" ? "Active" : "Blocked"}
                     </Badge>
                   </TableCell>
-                  <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    {new Date(user.createdAt).toLocaleDateString()}
+                  </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -78,11 +130,17 @@ const UsersPage = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        {/* <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>View details</DropdownMenuItem>
-                        <DropdownMenuItem>Send email</DropdownMenuItem>
+                        <DropdownMenuItem>Send email</DropdownMenuItem> */}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>{user.status === "active" ? "Block user" : "Unblock user"}</DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleChangeStatus(user._id)}
+                        >
+                          {user.status === "active"
+                            ? "Block user"
+                            : "Unblock user"}
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -93,7 +151,7 @@ const UsersPage = () => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default UsersPage
+export default UsersPage;
