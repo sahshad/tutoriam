@@ -1,17 +1,19 @@
 import express from "express";
 import { authMiddleware } from "../middlewares/authMiddleware";
-import { UserController } from "../controllers/userController";
+import { UserController } from "../controllers/UserController";
 import upload from "../middlewares/upload";
 
 const router = express.Router();
 
+const userController = new UserController()
+
 router.use(authMiddleware);
-router.get("/profile", UserController.getUserProfile)
+router.get("/profile", userController.getUserProfile)
 router.put(
   "/profile",
   upload.single("profileImage"),
-  UserController.updateProfile
+  userController.updateProfile
 );
-router.patch("/:userId/change-password", UserController.changePassword)
+router.patch("/:userId/change-password", userController.changePassword)
 
 export default router;

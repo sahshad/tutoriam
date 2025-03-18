@@ -1,19 +1,24 @@
-import { AdminRepository } from "../repositories/AdminRepository";
+import { inject, injectable } from "inversify";
+import { IAdminService } from "../core/interfaces/service/IAdminService";
+import { IUser } from "../models/User";
+import { IAdminRepository } from "../core/interfaces/repository/IAdminRepository";
+import { TYPES } from "../di/types";
 
-const adminRepsitory = new AdminRepository()
-export class AdminService {
-   async getUsers(){
+@injectable()
+export class AdminService implements IAdminService {
+    constructor(@inject(TYPES.AdminRepository) private adminRepository:IAdminRepository){}
+   async getUsers():Promise<IUser[]>{
     try {
-        const users = await adminRepsitory.getUsers()
+        const users = await this.adminRepository.getUsers()
         return users
     } catch (error) {
         throw new Error("error while fetching all users")
     }
    }
 
-   async toggleUserStatus(userId:string){
+   async toggleUserStatus(userId:string):Promise<IUser| null>{
     try {
-        const user = await adminRepsitory.toggleUserStatus(userId)
+        const user = await this.adminRepository.toggleUserStatus(userId)
         return user 
     } catch (error:any) {
         throw new Error(error)

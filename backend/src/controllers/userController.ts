@@ -3,11 +3,12 @@ import { AuthRequest } from "../types/custom";
 import cloudinary, { uploadToCloudinary } from "../config/cloudinary";
 import { UserService } from "../services/userService";
 import { error } from "console";
+import { IUserController } from "../core/interfaces/controller/IUserController";
 
 const userService = new UserService();
 
-export class UserController {
-  static async updateProfile(req: AuthRequest, res: Response) {
+export class UserController implements IUserController{
+   async updateProfile(req: AuthRequest, res: Response):Promise<void> {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -49,7 +50,7 @@ export class UserController {
     }
   }
 
-  static async changePassword(req: Request, res: Response) {
+   async changePassword(req: Request, res: Response):Promise<void>  {
     try {
       const { currentPassword, newPassword } = req.body;
       const { userId } = req.params;
@@ -75,7 +76,7 @@ export class UserController {
     }
   }
 
-  static async getUserProfile(req: AuthRequest, res: Response) {
+   async getUserProfile(req: AuthRequest, res: Response):Promise<void>  {
     try {
       const userId = req.user?.id;
       if (!userId) {

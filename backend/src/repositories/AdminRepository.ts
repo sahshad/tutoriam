@@ -1,11 +1,14 @@
+import { injectable } from "inversify";
+import { IAdminRepository } from "../core/interfaces/repository/IAdminRepository";
 import { IUser, User } from "../models/User";
 
-export class AdminRepository {
-  async getUsers() {
-    return User.find({ role: "user" });
+@injectable()
+export class AdminRepository implements IAdminRepository{
+  async getUsers(): Promise<IUser[]> {
+    return await User.find({ role: "user" });
   }
 
-  async toggleUserStatus(userId: string) {
+  async toggleUserStatus(userId: string): Promise<IUser|null> {
     const user: IUser | null = await User.findById(userId);
 
     if (!user) throw new Error("user not found");

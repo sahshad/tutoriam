@@ -7,19 +7,21 @@ import { RedisClient } from "../config/redis";
 import { IUser } from "../models/User";
 import { IAdmin } from "../models/Admin";
 import { verifyResetToken } from "../utils/tokenServices";
+import { refreshedUser, verifiedUer } from "../core/types/userTypes";
+import { IAuthService } from "../core/interfaces/service/IAuthService";
 
 dotenv.config();
 
 const authRepository = new AuthRepository();
 
-export class AuthService {
-  async register(name: string, email: string, password: string) {
+export class AuthService implements IAuthService {
+  async register(name: string, email: string, password: string): Promise<void> {
     const existingUser = await authRepository.findUserByEmail(email);
     if (existingUser) throw new Error("Email is already taken");
 
-    const otp = this.generateOtp();
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    const hashedPassword = await this.hashPassword(password);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     await sendOtpEmail(email, otp);
 
@@ -32,7 +34,7 @@ export class AuthService {
     );
   }
 
-  async verifyOtp(email: string, otp: string) {
+  async verifyOtp(email: string, otp: string): Promise<verifiedUer> {
     const data = await RedisClient.get(`otp:${email}`);
     if (!data) throw new Error("OTP expired or invalid");
 
@@ -45,9 +47,18 @@ export class AuthService {
     const { name, hashedPassword } = JSON.parse(userData);
 
     const user = await authRepository.createUser(name, email, hashedPassword);
-
-    const accessToken = this.generateAccessToken(user._id as string);
-    const refreshToken = this.generateRefreshToken(user._id as string);
+    if (!user) throw new Error("Cannot create user please register again");
+    const userId = user._id;
+    const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET!, {
+      expiresIn: "15m",
+    });
+    const refreshToken = jwt.sign(
+      { userId },
+      process.env.REFRESH_TOKEN_SECRET!,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     await RedisClient.del(`otp:${email}`);
     await RedisClient.del(`user_session:${email}`);
@@ -55,12 +66,12 @@ export class AuthService {
     return { accessToken, refreshToken, user };
   }
 
-  async resendOtp(email: string) {
+  async resendOtp(email: string): Promise<void> {
     try {
       const user = await RedisClient.get(`user_session:${email}`);
       if (!user) throw new Error("user session expired please register again");
 
-      const otp = this.generateOtp();
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
       await sendOtpEmail(email, otp);
 
@@ -71,45 +82,71 @@ export class AuthService {
     }
   }
 
-  async login(email: string, password: string, role: string) {
-    let user: any;
+  async login(
+    email: string,
+    password: string,
+    role: string
+  ): Promise<verifiedUer> {
+    let user: IAdmin | IUser | null;
     if (role === "admin") user = await authRepository.findAdminByEmail(email);
     else user = await authRepository.findUserByEmail(email);
 
     if (!user) throw new Error("Invalid email address");
 
-    if (user.status === "blocked") {
+    if ("status" in user && user.status === "blocked") {
       throw new Error("you have been blocked");
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw new Error("Incorrect password");
-
-    const accessToken = this.generateAccessToken(user.id);
-    const refreshToken = this.generateRefreshToken(user.id);
+    const userId = user._id;
+    const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET!, {
+      expiresIn: "15m",
+    });
+    const refreshToken = jwt.sign(
+      { userId },
+      process.env.REFRESH_TOKEN_SECRET!,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     return { accessToken, refreshToken, user };
   }
 
-  async refreshAccessToken(refreshToken: string, role: string) {
+  async refreshAccessToken(
+    refreshToken: string,
+    role: string
+  ): Promise<refreshedUser> {
     try {
       const decoded = jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET!
       ) as { userId: string };
 
-      const newAccessToken = this.generateAccessToken(decoded.userId);
+      const userId = decoded.userId;
+      const newAccessToken = jwt.sign(
+        { userId },
+        process.env.ACCESS_TOKEN_SECRET!,
+        {
+          expiresIn: "15m",
+        }
+      );
       let user;
       if (role === "admin")
         user = await authRepository.findAdminById(decoded.userId);
       else user = await authRepository.findUserById(decoded.userId);
+
+      if (!user) {
+        throw new Error("cannot find user please try again");
+      }
       return { accessToken: newAccessToken, user };
     } catch (error) {
       throw new Error("Invalid refresh token");
     }
   }
 
-  async sendMagicLink(email: string) {
+  async sendMagicLink(email: string): Promise<void> {
     try {
       const user = await authRepository.findUserByEmail(email);
       if (!user) throw new Error("Invalid email address");
@@ -130,39 +167,23 @@ export class AuthService {
     }
   }
 
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    try {
+      const { userId, email, purpose } = await verifyResetToken(
+        token,
+        "reset-password"
+      );
+      if (!userId || purpose !== "reset-password") {
+        throw new Error("Invalid token");
+      }
 
-  async resetPassword(token: string, newPassword: string) {
-    const { userId,email, purpose } = await verifyResetToken(token, 'reset-password')
-    if (!userId || purpose !== 'reset-password') {
-      throw new Error('Invalid token')
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      await authRepository.updateUserPassword(userId, hashedPassword);
+
+      await RedisClient.del(`magicLink:${email}`);
+    } catch (error: any) {
+      throw new Error(error.message);
     }
-  
-    const hashedPassword = await this.hashPassword(newPassword)
-  
-    await authRepository.updateUserPassword(userId, hashedPassword)
-  
-    await RedisClient.del(`magicLink:${email}`)
-  
-    return { message: 'Password has been reset successfully' }
-  }
-
-  private generateAccessToken(userId: string) {
-    return jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET!, {
-      expiresIn: "1h",
-    });
-  }
-
-  private generateRefreshToken(userId: string) {
-    return jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET!, {
-      expiresIn: "7d",
-    });
-  }
-
-  private generateOtp() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
-
-  private async hashPassword(password: string) {
-    return await bcrypt.hash(password, 10);
   }
 }

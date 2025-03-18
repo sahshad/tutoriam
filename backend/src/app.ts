@@ -1,3 +1,4 @@
+import "reflect-metadata"
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -9,6 +10,7 @@ import adminRoutes from './routes/adminRoutes'
 
 dotenv.config();
 connectDB();
+
 
 const app = express();
 const CLIENT_URL = process.env.CLIENT_URL

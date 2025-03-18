@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/AuthService";
+import { IAuthController } from "../core/interfaces/controller/IAuthController";
 
 const authService = new AuthService();
 
-export class AuthController {
-  static async register(req: Request, res: Response) {
+export class AuthController implements IAuthController {
+   async register(req: Request, res: Response):Promise<void> {
     try {
       const { name, email, password } = req.body;
       await authService.register(name, email, password);
@@ -14,7 +15,7 @@ export class AuthController {
     }
   }
 
-  static async verifyOtp(req: Request, res: Response) {
+   async verifyOtp(req: Request, res: Response):Promise<void> {
     try {
       const { email, otp } = req.body;
       console.log(email, otp)
@@ -33,7 +34,7 @@ export class AuthController {
     }
   }
 
-  static async resendOtp(req: Request, res: Response){
+   async resendOtp(req: Request, res: Response):Promise<void>{
     try {
       const {email} = req.body
       await authService.resendOtp(email)
@@ -43,7 +44,7 @@ export class AuthController {
     }
   }
 
-  static async login(req: Request, res: Response) {
+   async login(req: Request, res: Response):Promise<void> {
     try {
       const { email, password, role } = req.body;
       const { refreshToken, ...user } = await authService.login(
@@ -63,7 +64,7 @@ export class AuthController {
     }
   }
 
-  static async refreshToken(req: Request, res: Response) {
+   async refreshToken(req: Request, res: Response):Promise<void> {
     try {
       const refreshToken = req.cookies.refreshToken;
       if (!refreshToken)
@@ -78,7 +79,7 @@ export class AuthController {
     }
   }
 
-  static async logout(req:Request, res:Response){
+   async logout(req:Request, res:Response):Promise<void>{
     try {
       res.clearCookie("refreshToken", {
         httpOnly: true,
@@ -91,7 +92,7 @@ export class AuthController {
     }
   }
 
-  static async forgotPassword(req:Request, res:Response){
+   async forgotPassword(req:Request, res:Response):Promise<void>{
     try {
       const { email } = req.body;
       await authService.sendMagicLink(email);
@@ -108,10 +109,10 @@ export class AuthController {
     }
   }
 
-  static async resetPassword(req:Request, res:Response) {
+   async resetPassword(req:Request, res:Response):Promise<void> {
     try {
       const {token, newPassword} = req.body
-      const result = await authService.resetPassword(token, newPassword)
+       await authService.resetPassword(token, newPassword)
       res.status(200).json({message: "password reseted successfully"})
     } catch (error:any) {
       res.status(500).json({message: error.message})

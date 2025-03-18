@@ -1,11 +1,18 @@
 import { Request, Response } from "express";
-import { AdminService } from "../services/AdminService";
+import { IAdminController } from "../core/interfaces/controller/IAdminController";
+import { inject, injectable } from "inversify";
+import { IAdminService } from "../core/interfaces/service/IAdminService";
+import { TYPES } from "../di/types";
 
-const adminService = new AdminService();
-export class AdminController {
-  static async getUsers(req: Request, res: Response) {
+@injectable()
+export class AdminController implements IAdminController {
+  constructor(
+    @inject(TYPES.AdminService) private adminService: IAdminService
+  ) {}
+
+  async getUsers(req: Request, res: Response): Promise<void> {
     try {
-      const users = await adminService.getUsers();
+      const users = await this.adminService.getUsers();
       if (!users) res.status(404).json({ message: "users not found" });
       res.status(200).json({ users });
     } catch (error) {
@@ -13,14 +20,14 @@ export class AdminController {
     }
   }
 
- static async toggleUserStatus(req:Request, res:Response){
+  async toggleUserStatus(req: Request, res: Response): Promise<void> {
     try {
-        const {userId} = req.params
-        const user = await adminService.toggleUserStatus(userId)
-        res.status(200).json({message: 'user status changed successfully'})
-    } catch (error:any) {
-        console.log(error)
-        res.status(500).json({message: 'user not found'})
+      const { userId } = req.params;
+      const user = await this.adminService.toggleUserStatus(userId);
+      res.status(200).json({ message: "user status changed successfully" });
+    } catch (error: any) {
+      console.log(error);
+      res.status(500).json({ message: "user not found" });
     }
- }
+  }
 }

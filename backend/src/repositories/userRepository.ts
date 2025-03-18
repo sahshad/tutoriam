@@ -1,11 +1,12 @@
+import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
 import { IUser, User } from "../models/User";
 
-export class UserRepository {
-  async updateById(userId: string, updateData: Partial<IUser>) {
+export class UserRepository implements IUserRepository {
+  async updateById(userId: string, updateData: Partial<IUser>): Promise<IUser | null> {
     return await User.findByIdAndUpdate(userId, updateData, { new: true });
   }
 
-  async findUserById(userId: string) {
+  async findUserById(userId: string):Promise<IUser| null> {
     return await User.findById(userId)
   }
 

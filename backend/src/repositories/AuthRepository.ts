@@ -1,28 +1,29 @@
-import { Admin } from "../models/Admin";
-import { User } from "../models/User";
+import { IAuthRepository } from "../core/interfaces/repository/IAuthRepository";
+import { Admin, IAdmin } from "../models/Admin";
+import { IUser, User } from "../models/User";
 
-export class AuthRepository {
-  async findUserByEmail(email: string) {
+export class AuthRepository implements IAuthRepository {
+  async findUserByEmail(email: string):Promise<IUser|null> {
     return User.findOne({ email });
   }
 
-  async findAdminByEmail(email:string){
+  async findAdminByEmail(email:string):Promise<IAdmin|null>{
     return Admin.findOne({email})
   }
 
-  async createUser(name: string, email: string, hashedPassword: string) {
+  async createUser(name: string, email: string, hashedPassword: string):Promise<IUser|null> {
     return User.create({ name, email, password: hashedPassword });
   }
 
-  async findUserById(id:string){
+  async findUserById(id:string):Promise<IUser|null>{
     return User.findOne({ _id: id, status: 'active' })
   }
 
-  async findAdminById(id:string){
+  async findAdminById(id:string):Promise<IAdmin|null>{
     return Admin.findById(id)
   }
 
-  async updateUserPassword(id:string, password:string){
+  async updateUserPassword(id:string, password:string):Promise<IUser|null>{
     return User.findByIdAndUpdate(id,{password}, {new:true})
   }
   
