@@ -2,16 +2,20 @@ import { IUser } from "../models/User";
 import bcrypt from "bcryptjs";
 import { UserRepository } from "../repositories/userRepository";
 import { IUserService } from "../core/interfaces/service/IUserService";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../di/types";
+import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
 
-const userRepository = new UserRepository();
 
+@injectable()
 export class UserService implements IUserService {
+  constructor(@inject(TYPES.UserRepository) private userRepository:IUserRepository){}
   async updateUser(
     userId: string,
     updateData: Partial<IUser>
   ): Promise<IUser > {
     try {
-      const user = await userRepository.updateById(userId, updateData);
+      const user = await this.userRepository.updateById(userId, updateData);
       if (!user) {
         throw new Error("cannot update user. please try again");
       }
@@ -27,7 +31,7 @@ export class UserService implements IUserService {
     newPassword: string
   ):Promise<IUser> {
     try {
-      const user = await userRepository.findUserById(userId);
+      const user = await this.userRepository.findUserById(userId);
       if (!user) throw new Error("invalid userId");
 
       const isPasswordValid = await bcrypt.compare(
@@ -38,7 +42,7 @@ export class UserService implements IUserService {
 
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-      const updatedUser = await userRepository.updateById(userId, { password: hashedPassword });
+      const updatedUser = await this.userRepository.updateById(userId, { password: hashedPassword });
       if(!updatedUser){
         throw new Error("cannot changed password. please try again")
       }
@@ -50,7 +54,7 @@ export class UserService implements IUserService {
 
   async getUserProfile(userId: string):Promise<IUser> {
     try {
-      const user = await userRepository.findUserById(userId);
+      const user = await this.userRepository.findUserById(userId);
       if (!user) {
         throw new Error("invalid userId");
       }

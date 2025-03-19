@@ -9,14 +9,20 @@ import { IAdmin } from "../models/Admin";
 import { verifyResetToken } from "../utils/tokenServices";
 import { refreshedUser, verifiedUer } from "../core/types/userTypes";
 import { IAuthService } from "../core/interfaces/service/IAuthService";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../di/types";
+import { IAuthRepository } from "../core/interfaces/repository/IAuthRepository";
+
 
 dotenv.config();
 
-const authRepository = new AuthRepository();
-
+// const authRepository = new AuthRepository();
+@injectable()
 export class AuthService implements IAuthService {
+  constructor(@inject(TYPES.AuthRepository) private authRepository:IAuthRepository){}
+  
   async register(name: string, email: string, password: string): Promise<void> {
-    const existingUser = await authRepository.findUserByEmail(email);
+    const existingUser = await this.authRepository.findUserByEmail(email);
     if (existingUser) throw new Error("Email is already taken");
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -46,7 +52,7 @@ export class AuthService implements IAuthService {
 
     const { name, hashedPassword } = JSON.parse(userData);
 
-    const user = await authRepository.createUser(name, email, hashedPassword);
+    const user = await this.authRepository.createUser(name, email, hashedPassword);
     if (!user) throw new Error("Cannot create user please register again");
     const userId = user._id;
     const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET!, {
@@ -88,8 +94,8 @@ export class AuthService implements IAuthService {
     role: string
   ): Promise<verifiedUer> {
     let user: IAdmin | IUser | null;
-    if (role === "admin") user = await authRepository.findAdminByEmail(email);
-    else user = await authRepository.findUserByEmail(email);
+    if (role === "admin") user = await this.authRepository.findAdminByEmail(email);
+    else user = await this.authRepository.findUserByEmail(email);
 
     if (!user) throw new Error("Invalid email address");
 
@@ -134,8 +140,8 @@ export class AuthService implements IAuthService {
       );
       let user;
       if (role === "admin")
-        user = await authRepository.findAdminById(decoded.userId);
-      else user = await authRepository.findUserById(decoded.userId);
+        user = await this.authRepository.findAdminById(decoded.userId);
+      else user = await this.authRepository.findUserById(decoded.userId);
 
       if (!user) {
         throw new Error("cannot find user please try again");
@@ -148,7 +154,7 @@ export class AuthService implements IAuthService {
 
   async sendMagicLink(email: string): Promise<void> {
     try {
-      const user = await authRepository.findUserByEmail(email);
+      const user = await this.authRepository.findUserByEmail(email);
       if (!user) throw new Error("Invalid email address");
       const token = jwt.sign(
         { userId: user._id, email, purpose: "reset-password" },
@@ -179,7 +185,7 @@ export class AuthService implements IAuthService {
 
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-      await authRepository.updateUserPassword(userId, hashedPassword);
+      await this.authRepository.updateUserPassword(userId, hashedPassword);
 
       await RedisClient.del(`magicLink:${email}`);
     } catch (error: any) {

@@ -1,25 +1,31 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/AuthService";
 import { IAuthController } from "../core/interfaces/controller/IAuthController";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../di/types";
+import { IAuthService } from "../core/interfaces/service/IAuthService";
 
-const authService = new AuthService();
 
+@injectable()
 export class AuthController implements IAuthController {
-   async register(req: Request, res: Response):Promise<void> {
+  constructor(
+      @inject(TYPES.AuthService) private authService: IAuthService
+    ) {}
+    register = async (req: Request, res: Response):Promise<void> =>{
     try {
       const { name, email, password } = req.body;
-      await authService.register(name, email, password);
+      await this.authService.register(name, email, password);
       res.status(200).json({ message: "otp send to your email" });
     } catch (error: any) {
       res.status(400).json({ message: error.message });
     }
   }
 
-   async verifyOtp(req: Request, res: Response):Promise<void> {
+    verifyOtp = async (req: Request, res: Response):Promise<void> => {
     try {
       const { email, otp } = req.body;
       console.log(email, otp)
-      const response = await authService.verifyOtp(email, otp);
+      const response = await this.authService.verifyOtp(email, otp);
 
       const { refreshToken, ...newUser } = response;
       res.cookie("refreshToken", refreshToken, {
@@ -34,20 +40,22 @@ export class AuthController implements IAuthController {
     }
   }
 
-   async resendOtp(req: Request, res: Response):Promise<void>{
+    resendOtp = async(req: Request, res: Response):Promise<void> =>{
     try {
       const {email} = req.body
-      await authService.resendOtp(email)
+      await this.authService.resendOtp(email)
       res.status(200).json({message:'otp resend to your email'})
     } catch (error:any) {
       res.status(400).json({error:error.message})
     }
   }
 
-   async login(req: Request, res: Response):Promise<void> {
+    login=async(req: Request, res: Response):Promise<void>=> {
     try {
+
       const { email, password, role } = req.body;
-      const { refreshToken, ...user } = await authService.login(
+      console.log(email)
+      const { refreshToken, ...user } = await this.authService.login(
         email,
         password,
         role
@@ -60,11 +68,12 @@ export class AuthController implements IAuthController {
       });
       res.status(200).json(user);
     } catch (error: any) {
+      console.log(error)
       res.status(401).json({ message: error.message});
     }
   }
 
-   async refreshToken(req: Request, res: Response):Promise<void> {
+    refreshToken = async(req: Request, res: Response):Promise<void> => {
     try {
       const refreshToken = req.cookies.refreshToken;
       if (!refreshToken)
@@ -72,14 +81,14 @@ export class AuthController implements IAuthController {
 
       const {role} = req.body 
       const { accessToken, user } =
-        await authService.refreshAccessToken(refreshToken,role);
+        await this.authService.refreshAccessToken(refreshToken,role);
       res.status(200).json({ accessToken, user });
     } catch (error: any) {
       res.status(403).json({ error: error.message });
     }
   }
 
-   async logout(req:Request, res:Response):Promise<void>{
+    logout = async(req:Request, res:Response):Promise<void> =>{
     try {
       res.clearCookie("refreshToken", {
         httpOnly: true,
@@ -92,10 +101,10 @@ export class AuthController implements IAuthController {
     }
   }
 
-   async forgotPassword(req:Request, res:Response):Promise<void>{
+    forgotPassword = async(req:Request, res:Response):Promise<void> => {
     try {
       const { email } = req.body;
-      await authService.sendMagicLink(email);
+      await this.authService.sendMagicLink(email);
 
     res.status(200).json({
       message: 'A reset link has been sent to your email',
@@ -109,10 +118,10 @@ export class AuthController implements IAuthController {
     }
   }
 
-   async resetPassword(req:Request, res:Response):Promise<void> {
+    resetPassword = async (req:Request, res:Response):Promise<void> =>{
     try {
       const {token, newPassword} = req.body
-       await authService.resetPassword(token, newPassword)
+       await this.authService.resetPassword(token, newPassword)
       res.status(200).json({message: "password reseted successfully"})
     } catch (error:any) {
       res.status(500).json({message: error.message})

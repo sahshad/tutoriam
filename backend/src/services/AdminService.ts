@@ -7,7 +7,8 @@ import { TYPES } from "../di/types";
 @injectable()
 export class AdminService implements IAdminService {
     constructor(@inject(TYPES.AdminRepository) private adminRepository:IAdminRepository){}
-   async getUsers():Promise<IUser[]>{
+
+    getUsers = async():Promise<IUser[]> =>{
     try {
         const users = await this.adminRepository.getUsers()
         return users
@@ -16,7 +17,7 @@ export class AdminService implements IAdminService {
     }
    }
 
-   async toggleUserStatus(userId:string):Promise<IUser| null>{
+    toggleUserStatus = async(userId:string):Promise<IUser| null> =>{
     try {
         const user = await this.adminRepository.toggleUserStatus(userId)
         return user 

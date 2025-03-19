@@ -4,11 +4,20 @@ import cloudinary, { uploadToCloudinary } from "../config/cloudinary";
 import { UserService } from "../services/userService";
 import { error } from "console";
 import { IUserController } from "../core/interfaces/controller/IUserController";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../di/types";
+import { IUserService } from "../core/interfaces/service/IUserService";
 
-const userService = new UserService();
+
+// const userService = new UserService();
+
+@injectable()
 
 export class UserController implements IUserController{
-   async updateProfile(req: AuthRequest, res: Response):Promise<void> {
+  constructor(
+      @inject(TYPES.UserService) private userService: IUserService
+    ) {}
+    updateProfile = async(req: AuthRequest, res: Response):Promise<void> =>{
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -27,7 +36,7 @@ export class UserController implements IUserController{
                 name,
                 title,
               };
-              const response = await userService.updateUser(userId, updateData);
+              const response = await this.userService.updateUser(userId, updateData);
               res
                 .status(200)
                 .json({ message: "user updated successfully", user: response });
@@ -39,7 +48,7 @@ export class UserController implements IUserController{
           name,
           title,
         };
-        const response = await userService.updateUser(userId, updateData);
+        const response = await this.userService.updateUser(userId, updateData);
         res
           .status(200)
           .json({ message: "user updated successfully", user: response });
@@ -50,11 +59,11 @@ export class UserController implements IUserController{
     }
   }
 
-   async changePassword(req: Request, res: Response):Promise<void>  {
+    changePassword = async(req: Request, res: Response):Promise<void> => {
     try {
       const { currentPassword, newPassword } = req.body;
       const { userId } = req.params;
-      const updatedUser = await userService.changePassword(
+      const updatedUser = await this.userService.changePassword(
         userId,
         currentPassword,
         newPassword
@@ -76,7 +85,7 @@ export class UserController implements IUserController{
     }
   }
 
-   async getUserProfile(req: AuthRequest, res: Response):Promise<void>  {
+    getUserProfile = async(req: AuthRequest, res: Response):Promise<void> => {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -84,7 +93,7 @@ export class UserController implements IUserController{
         return;
       }
 
-      const user = await userService.getUserProfile(userId)
+      const user = await this.userService.getUserProfile(userId)
 
       if(user.status === 'blocked'){
         res.status(403).json({message: "you have been blocked"})
