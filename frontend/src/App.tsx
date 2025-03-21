@@ -18,6 +18,7 @@ import BecomeInstructorPage from "./pages/user/BecomeInstructorPage";
 import TutorApplicationForm from "./pages/tutor/TutorApplicationPage";
 import ForgotPasswordPage from "./pages/user/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/user/ResetPasswordPage";
+import InstructorApplicationsPage from "./pages/admin/InstructorApplications";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -69,6 +70,7 @@ const App = () => {
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="users" element={<UsersPage/>}/>
             <Route path="tutors" element={<TutorsPage/>}/>
+            <Route path="instructor-applications" element={<InstructorApplicationsPage/>}/>
             </Route>
         </Route>
       </Routes>

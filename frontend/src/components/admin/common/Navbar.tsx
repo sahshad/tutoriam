@@ -28,12 +28,12 @@ const Navbar = () => {
       </div>
       <div className="hidden flex-1 md:flex md:max-w-md md:px-6">
         <div className="relative w-full">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
+          {/* <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" /> */}
+          {/* <Input
             type="search"
             placeholder="Search..."
             className="w-full bg-background pl-8 md:w-[300px] lg:w-[400px]"
-          />
+          /> */}
         </div>
       </div>
       <div className="flex items-center gap-2">

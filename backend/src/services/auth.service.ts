@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { AuthRepository } from "../repositories/AuthRepository";
+import { AuthRepository } from "../repositories/auth.repository";
 import { sendForgotPasswordMail, sendOtpEmail } from "../utils/emailServices";
 import { RedisClient } from "../config/redis";
 import { IUser } from "../models/User";

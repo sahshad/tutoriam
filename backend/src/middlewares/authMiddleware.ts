@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 
 export interface AuthRequest extends Request {
   user?: {
@@ -16,15 +16,22 @@ export const authMiddleware = (
     const accessToken =
       req.cookies.accessToken || req.header("Authorization")?.split(" ")[1];
     if (!accessToken)
-       res.status(401).json({ error: "Unauthorized: No token provided" });
+      res.status(401).json({ error: "Unauthorized: No token provided" });
+
 
     const decoded = jwt.verify(
       accessToken,
       process.env.ACCESS_TOKEN_SECRET!
     ) as { userId: string };
+
     req.user = { id: decoded.userId };
+
     next();
   } catch (error) {
-     res.status(403).json({ error: "Invalid token" });
+    if (error instanceof TokenExpiredError) {
+      res.status(401).json({ error: "Token has expired" });
+      return;
+    }
+    res.status(403).json({ error: "Invalid token" });
   }
 };

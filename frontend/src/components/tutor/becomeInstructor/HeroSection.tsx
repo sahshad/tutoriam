@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Award, Building, CheckCircle, GlobeIcon, UserIcon } from 'lucide-react'
 import bannerImage from '/become_instructor_banner.png'
+import { Link } from 'react-router-dom'
 
 const HeroSection = () => {
   return (
@@ -13,9 +14,11 @@ const HeroSection = () => {
               Become an instructor & start teaching with 26k certified instructors. Create a success story with 67.1k
               Students — Grow yourself with 71 countries.
             </p>
-            <Button className=" px-8 py-6 rounded-md text-lg font-medium">
+            <Link to="/become-instructor/application">
+            <Button  className=" px-8 py-6 rounded-md text-lg font-medium">
               Get Started
             </Button>
+            </Link>
           </div>
           <div className="flex justify-center md:justify-center">
             <img

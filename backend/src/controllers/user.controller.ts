@@ -1,15 +1,14 @@
 import { Request, Response } from "express";
 import { AuthRequest } from "../types/custom";
 import cloudinary, { uploadToCloudinary } from "../config/cloudinary";
-import { UserService } from "../services/userService";
+import { UserService } from "../services/user.service";
 import { error } from "console";
 import { IUserController } from "../core/interfaces/controller/IUserController";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../di/types";
 import { IUserService } from "../core/interfaces/service/IUserService";
+import { uploadImageToCloudinary } from "../utils/clodinaryServices";
 
-
-// const userService = new UserService();
 
 @injectable()
 
@@ -26,33 +25,25 @@ export class UserController implements IUserController{
       }
 
       const { name, title } = req.body;
+
+      const updateData = {
+        name,
+        title,
+        profileImageUrl: ''
+      };
+
       if (req.file) {
-        const result = cloudinary.uploader
-          .upload_stream({ folder: "profile_image" }, async (error, result) => {
-            if (error) res.status(500).json({ error: error.message });
-            if (result) {
-              const updateData = {
-                profileImageUrl: result.secure_url,
-                name,
-                title,
-              };
-              const response = await this.userService.updateUser(userId, updateData);
-              res
-                .status(200)
-                .json({ message: "user updated successfully", user: response });
-            }
-          })
-          .end(req.file.buffer);
-      } else {
-        const updateData = {
-          name,
-          title,
-        };
+        const url = await uploadImageToCloudinary(req.file.buffer, 'users/profileImages')
+        if(url)
+        updateData.profileImageUrl = url
+      }  
+        
         const response = await this.userService.updateUser(userId, updateData);
         res
           .status(200)
           .json({ message: "user updated successfully", user: response });
-      }
+
+    
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: error });
@@ -108,5 +99,22 @@ export class UserController implements IUserController{
         .status(500)
         .json({ message: "an unexpted error occurred please try again" });
     }
+  }
+
+  becomeInstructor = async (req:AuthRequest, res:Response):Promise<void> => {
+      try {
+        const instructorData = req.body
+        instructorData.userId = req.user
+        
+        const url = await uploadImageToCloudinary(req.file.buffer, 'instructors/idCards')
+        instructorData.idCardImageUrl = url
+
+        const Instructor = await this.userService.becomeInstructor(instructorData)
+
+        res.status(200).json({message:'application submitted successfully'})
+      } catch (error:any) {
+        console.log(error)
+        res.status(500).json({message: error.message})
+      }
   }
 }

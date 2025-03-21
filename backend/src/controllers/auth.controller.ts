@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AuthService } from "../services/AuthService";
+import { AuthService } from "../services/auth.service";
 import { IAuthController } from "../core/interfaces/controller/IAuthController";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../di/types";
@@ -54,7 +54,6 @@ export class AuthController implements IAuthController {
     try {
 
       const { email, password, role } = req.body;
-      console.log(email)
       const { refreshToken, ...user } = await this.authService.login(
         email,
         password,

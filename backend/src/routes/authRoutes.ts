@@ -1,5 +1,5 @@
 import express from "express";
-import { AuthController } from "../controllers/AuthController";
+import { AuthController } from "../controllers/auth.controller";
 import container from "../di/container";
 import { IAuthController } from "../core/interfaces/controller/IAuthController";
 import { TYPES } from "../di/types";
