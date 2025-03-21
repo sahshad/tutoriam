@@ -10,7 +10,7 @@ export class AdminController implements IAdminController {
     @inject(TYPES.AdminService) private adminService: IAdminService
   ) {}
 
-  async getUsers(req: Request, res: Response): Promise<void> {
+   getUsers = async (req: Request, res: Response): Promise<void> =>{
     try {
       const users = await this.adminService.getUsers();
       if (!users) res.status(404).json({ message: "users not found" });
@@ -20,7 +20,7 @@ export class AdminController implements IAdminController {
     }
   }
 
-  async toggleUserStatus(req: Request, res: Response): Promise<void> {
+   toggleUserStatus= async (req: Request, res: Response): Promise<void> =>{
     try {
       const { userId } = req.params;
       const user = await this.adminService.toggleUserStatus(userId);

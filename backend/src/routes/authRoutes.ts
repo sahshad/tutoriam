@@ -1,9 +1,13 @@
 import express from "express";
 import { AuthController } from "../controllers/AuthController";
+import container from "../di/container";
+import { IAuthController } from "../core/interfaces/controller/IAuthController";
+import { TYPES } from "../di/types";
+
 
 const router = express.Router();
 
-const authController = new AuthController()
+const authController = container.get<IAuthController>(TYPES.AuthController)
 
 router.post("/register", authController.register);
 router.post("/verify-otp", authController.verifyOtp);
