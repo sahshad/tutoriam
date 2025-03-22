@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { userLogout } from "@/services/authService";
 import {
   BarChart3,
+  Book,
   BookOpen,
   GraduationCap,
   LogOutIcon,
@@ -49,6 +50,11 @@ const sidebarItems = [
     title: "Settings",
     href: "/admin/settings",
     icon: Settings,
+  },
+  {
+    title: "Applications",
+    href: "/admin/instructor-applications",
+    icon: Book,
   },
 ];
 

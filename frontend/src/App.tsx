@@ -9,15 +9,16 @@ import { useEffect, useState } from "react";
 import { refreshToken } from "./services/authService";
 import { useDispatch } from "react-redux";
 import ProtectedRoute from "./components/user/auth/ProtectedRoute";
-import DashboardLayout from "./components/layout/DashboardLayout";
+import DashboardLayout from "./components/admin/layout/DashboardLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
 import UsersPage from "./pages/admin/UsersPage";
 import TutorsPage from "./pages/admin/TutorsPage";
 import { Toaster } from "sonner";
 import BecomeInstructorPage from "./pages/user/BecomeInstructorPage";
-import TutorApplicationForm from "./pages/tutor/TutorApplicationPage";
+import TutorApplicationForm from "./pages/user/TutorApplicationPage";
 import ForgotPasswordPage from "./pages/user/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/user/ResetPasswordPage";
+import InstructorApplicationsPage from "./pages/admin/InstructorApplications";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -69,6 +70,7 @@ const App = () => {
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="users" element={<UsersPage/>}/>
             <Route path="tutors" element={<TutorsPage/>}/>
+            <Route path="instructor-applications" element={<InstructorApplicationsPage/>}/>
             </Route>
         </Route>
       </Routes>

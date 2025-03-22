@@ -1,15 +1,18 @@
 import { IUser } from "../models/User";
 import bcrypt from "bcryptjs";
-import { UserRepository } from "../repositories/userRepository";
+import { UserRepository } from "../repositories/user.repository";
 import { IUserService } from "../core/interfaces/service/IUserService";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../di/types";
 import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
+import { IInstructor } from "../models/Instructor";
+import { IInstructorRepository } from "../core/interfaces/repository/IInstructorRepository";
 
 
 @injectable()
 export class UserService implements IUserService {
-  constructor(@inject(TYPES.UserRepository) private userRepository:IUserRepository){}
+  constructor(@inject(TYPES.UserRepository) private userRepository:IUserRepository,
+  @inject(TYPES.InstructorRepository) private instructorRepository: IInstructorRepository){}
   async updateUser(
     userId: string,
     updateData: Partial<IUser>
@@ -66,5 +69,17 @@ export class UserService implements IUserService {
     }
   }
 
+  async becomeInstructor(instructorData:Partial<IInstructor>): Promise<IInstructor|null> {
+    try {
+    const instructor = await this.instructorRepository.createInstructor(instructorData)
+      if(!instructor){
+        throw new Error("error while creating instructor")
+      }
+      return instructor
+    } catch (error) {
+      console.log(error)
+      throw new Error("error while creating instructor")
+    }    
+  }
 
 }
