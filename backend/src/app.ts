@@ -7,6 +7,7 @@ import connectDB  from "./config/db";
 import authRoutes from './routes/authRoutes'
 import userRoutes from './routes/userRoutes'
 import adminRoutes from './routes/adminRoutes'
+import { errorHandler } from "./middlewares/errorMiddleware";
 
 dotenv.config();
 connectDB();
@@ -27,5 +28,7 @@ app.use(cors({
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes)
 app.use("/api/admin", adminRoutes)
+
+app.use(errorHandler)
 
 export default app;

@@ -1,4 +1,4 @@
-import TutorApplicationForm from "@/components/tutor/becomeTutorForms/TutorApplicationForm"
+import TutorApplicationForm from "@/components/user/becomeInstructorForms/TutorApplicationForm"
 import Header from "@/components/user/home/Header"
 
 const TutorApplicationPage = () => {

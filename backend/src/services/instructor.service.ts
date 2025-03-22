@@ -3,7 +3,6 @@ import { IInstructor } from "../models/Instructor";
 import { TYPES } from "../di/types";
 import { IInstructorService } from "../core/interfaces/service/IInstructorService";
 import { IInstructorRepository } from "../core/interfaces/repository/IInstructorRepository";
-import { errorMonitor } from "events";
 
 @injectable()
 export class InstructorService implements IInstructorService{
@@ -18,5 +17,12 @@ export class InstructorService implements IInstructorService{
         } catch (error) {
             throw new Error(" cannot find any applications please try again")
         }
+    }
+
+    async getInstructors():Promise<IInstructor[]|null>{
+        const instructors = await this.instructorRepository.getInstructors()
+        if(!instructors)    
+            throw new Error("no instructors found") 
+        return instructors
     }
 }

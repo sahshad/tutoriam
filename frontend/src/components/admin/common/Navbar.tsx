@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Menu, Search, X } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { MobileSidebar } from './MobileSidebar'
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -19,7 +20,7 @@ const Navbar = () => {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="p-0 pt-10">
-            {/* <MobileSidebar /> */}
+            <MobileSidebar />
           </SheetContent>
         </Sheet>
         <Link to="/dashboard" className="flex items-center gap-2 font-semibold">

@@ -27,4 +27,5 @@ export class InstructorRepository implements IInstructorRepository {
   getInstructors = async ():Promise<IInstructor[]  | null> => {
     return await Instructor.find({"adminApproval.status": "approved"}).populate("userId")
   }
+
 }
