@@ -1,6 +1,6 @@
 import express from "express";
 import { authMiddleware } from "../middlewares/authMiddleware";
-import { UserController } from "../controllers/UserController";
+import { UserController } from "../controllers/user.controller";
 import upload from "../middlewares/upload";
 import container from "../di/container";
 import { IUserController } from "../core/interfaces/controller/IUserController";
@@ -19,5 +19,6 @@ router.put(
   userController.updateProfile
 );
 router.patch("/:userId/change-password", userController.changePassword)
+router.post("/:userId/become-instructor",upload.single("idCardImage"), userController.becomeInstructor)
 
 export default router;

@@ -72,7 +72,7 @@ const Header = () => {
               Become an Instructor
             </Link>
           </nav>
-          <div className="flex items-center space-x-4">
+          <div className="items-center space-x-4 sm:flex hidden">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -93,15 +93,15 @@ const Header = () => {
       </div>
       <div className="container flex h-16 items-center justify-between px-[2%]">
         <div className="flex items-center space-x-4">
-          <Link to="/" className="text-2xl font-bold">
-            tutoriam
+          <Link to="/" className="text-xl font-bold">
+            TUTORIAM
           </Link>
-          <DropdownMenu>
+          <DropdownMenu >
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 gap-1 text-muted-foreground"
+                className="h-8 gap-1 text-muted-foreground sm:flex hidden"
               >
                 Browse <ChevronDown className="h-4 w-4" />
               </Button>
@@ -112,25 +112,25 @@ const Header = () => {
               <DropdownMenuItem>New Releases</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <div className="relative flex w-full max-w-md items-center">
+          <div className="relative w-full max-w-md items-center sm:flex hidden">
             <Search className="absolute left-3 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
               placeholder="What do you want learn..."
-              className="pl-10 w-[450px]"
+              className="pl-10 w-[450px] "
             />
           </div>
         </div>
         <div className="flex items-center space-x-4">
           {user && !isAdmin ? (
             <>
-              <Button variant="ghost" size="icon" aria-label="Notifications">
-                <Bell className="h-5 w-5" />
+              <Button variant="ghost" size="icon" aria-label="Notifications" className="sm:flex hidden">
+                <Bell className="h-5 w-5 " />
               </Button>
-              <Button variant="ghost" size="icon" aria-label="Wishlist">
+              <Button variant="ghost" size="icon" aria-label="Wishlist" className="sm:flex hidden">
                 <Heart className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon" aria-label="Cart">
+              <Button variant="ghost" size="icon" aria-label="Cart" className="sm:flex hidden">
                 <ShoppingCart className="h-5 w-5" />
               </Button>
               <Link to="/profile">

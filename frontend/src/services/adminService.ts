@@ -1,10 +1,9 @@
-import api from "@/utils/axiosInstance"
-
-const API_URL = "http://localhost:5000/api/admin";
+import apiClient from "@/utils/axiosInstance"
+import { AxiosResponse } from "axios";
 
 export const getUsers = async () =>{
-    const response = await api.get(
-        `${API_URL}/users`,
+    const response = await apiClient.get(
+        `/admin/users`,
         {withCredentials:true}
     )
     return response
@@ -12,8 +11,8 @@ export const getUsers = async () =>{
 
 export const toggleUserStatus = async (userId:string) =>{
     try {
-        const response = await api.patch(
-            `${API_URL}/users/${userId}/toggle-status`,
+        const response = await apiClient.patch(
+            `/admin/users/${userId}/status`,
             {},
             {withCredentials:true}
         )
@@ -24,3 +23,29 @@ export const toggleUserStatus = async (userId:string) =>{
         return error.response
     }
 }
+
+export const fetchInstructorApplications = async () => {
+    try {
+        const response :AxiosResponse = await apiClient.get(`/admin/instructors/applications`, {withCredentials:true})
+        return response
+    } catch (error:any) {
+        return error.response
+    }
+}
+
+
+export const updateInstructorStatus = async (instructorId: string, status: "approved" | "rejected", reason?:string) => {
+    try {
+      const response = await apiClient.patch(
+        `/admin/instructors/application/${instructorId}/status`,
+        { status,reason},
+        { withCredentials: true }
+      );
+  
+      return response;
+    } catch (error: any) {
+      console.error("Error updating instructor status:", error);
+      return error.response;
+    }
+  };
+  

@@ -18,7 +18,7 @@ const UserSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     profileImageUrl: { type: String },
-    role: { type: String, enum: ["user", "tutor"], default: "user" },
+    role: { type: String, enum: ["user", "instructor"], default: "user" },
     status: {type:String, enum: ["active", "blocked"], default:"active"},
     title: { type: String },
   },

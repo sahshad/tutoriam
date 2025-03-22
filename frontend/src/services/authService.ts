@@ -1,7 +1,7 @@
 import axios from "axios";
 import { setAuthData, logout } from "../redux/slices/authSlice";
 import { AppDispatch } from "../redux/store";
-import api from "@/utils/axiosInstance";
+import apiClient from "@/utils/axiosInstance";
 
 const API_URL = "http://localhost:5000/api/auth";
 
@@ -135,7 +135,7 @@ export const refreshToken = async (dispatch: AppDispatch) => {
 
 export const forgotPassword = async (email:string)=>{
    try {
-     const response = await api.post(`auth/forgot-password`,{email})
+     const response = await apiClient.post(`auth/forgot-password`,{email})
      return response
    } catch (error:any) {
      throw error
@@ -144,7 +144,7 @@ export const forgotPassword = async (email:string)=>{
 
 export const resetPassword = async (token:string, newPassword:string) => {
   try {
-    const response = await api.post(`auth/reset-password`, {token, newPassword})
+    const response = await apiClient.post(`auth/reset-password`, {token, newPassword})
     return response
   } catch (error:any) {
     throw error

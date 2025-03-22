@@ -3,12 +3,12 @@ import store  from "../redux/store";
 import { refreshToken } from "../services/authService";
 import {logout  } from '../redux/slices/authSlice'
 
-const api = axios.create({
+const apiClient = axios.create({
   baseURL: "http://localhost:5000/api",
   withCredentials: true, 
 });
 
-api.interceptors.request.use(
+apiClient.interceptors.request.use(
   (config) => {
     const accessToken = store.getState().auth.accessToken;
     if (accessToken) {
@@ -19,14 +19,14 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-api.interceptors.response.use(
+apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response.status === 401) {
       try {
         const newAccessToken = await refreshToken(store.dispatch);
         error.config.headers.Authorization = `Bearer ${newAccessToken}`;
-        return api(error.config);
+        return apiClient(error.config);
       } catch {
         console.error("Session expired. Please log in again.");
         store.dispatch(logout());
@@ -45,4 +45,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api;
+export default apiClient ;
