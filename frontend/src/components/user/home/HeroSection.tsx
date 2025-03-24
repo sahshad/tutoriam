@@ -20,7 +20,7 @@ const HeroSection = () => {
           {/* <Button className="">Create Account</Button> */}
         </div>
       </div>
-      <div className="relative h-[400px] w-full">
+      <div className=" h-[400px] w-full">
         <img
           src={bannerImage}
           width="450px"

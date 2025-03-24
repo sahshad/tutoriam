@@ -15,48 +15,30 @@ export class AdminController implements IAdminController {
     private instructorService: IInstructorService
   ) {}
 
-  getUsers = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const users = await this.adminService.getUsers();
-      if (!users) res.status(404).json({ message: "users not found" });
-      res.status(200).json({ users });
-    } catch (error) {
-      res.status(500).json({ message: "server error" });
+  getUsers = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const users = await this.adminService.getUsers();
+    if (!users) {
+      res.status(404).json({ message: "users not found" });
+      return;
     }
-  };
+    res.status(200).json({ users });
+  });
 
-  toggleUserStatus = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { userId } = req.params;
-      const user = await this.adminService.toggleUserStatus(userId);
-      res.status(200).json({ message: "user status changed successfully" });
-    } catch (error: any) {
-      console.log(error);
-      res.status(500).json({ message: "user not found" });
-    }
-  };
+  toggleUserStatus = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const { userId } = req.params;
+    const user = await this.adminService.toggleUserStatus(userId);
+    res.status(200).json({ message: "user status changed successfully" });
+  });
 
-  reviewInstructor = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { instructorId } = req.params;
-      const { status, reason } = req.body;
-      const instructor = this.adminService.reviewTutorApplication(
-        instructorId,
-        status,
-        reason
-      );
-      res.status(200).json({ message: `instructor ${status} successfully` });
-    } catch (error: any) {
-      res.status(400).json({ message: error.message });
-    }
-  };
+  reviewInstructor = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const { instructorId } = req.params;
+    const { status, reason } = req.body;
+    await this.adminService.reviewTutorApplication(instructorId, status, reason);
+    res.status(200).json({ message: `instructor ${status} successfully` });
+  });
 
-  getInstructors = asyncHandler(
-    async (req: Request, res: Response): Promise<void> => {
-      const instructors = this.instructorService.getInstructors();
-      res
-        .status(StatusCodes.OK)
-        .json({ message: "Instructors retrieved successfully.", instructors });
-    }
-  );
+  getInstructors = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const instructors = await this.instructorService.getInstructors();
+    res.status(StatusCodes.OK).json({ message: "Instructors retrieved successfully.", instructors });
+  });
 }

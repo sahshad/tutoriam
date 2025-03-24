@@ -10,44 +10,30 @@ import { StatusCodes } from "http-status-codes";
 @injectable()
 export class AuthController implements IAuthController {
   constructor(@inject(TYPES.AuthService) private authService: IAuthService) {}
-  register = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { name, email, password } = req.body;
-      await this.authService.register(name, email, password);
-      res.status(200).json({ message: "otp send to your email" });
-    } catch (error: any) {
-      res.status(400).json({ message: error.message });
-    }
-  };
+  
+  register = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const { name, email, password } = req.body;
+    await this.authService.register(name, email, password);
+    res.status(StatusCodes.OK).json({ message: "otp send to your email" });
+  });
 
-  verifyOtp = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { email, otp } = req.body;
-      console.log(email, otp);
-      const response = await this.authService.verifyOtp(email, otp);
+  verifyOtp = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const { email, otp } = req.body;
+    const response = await this.authService.verifyOtp(email, otp);
+    const { refreshToken, ...newUser } = response;
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+    res.status(StatusCodes.OK).json(newUser);
+  });
 
-      const { refreshToken, ...newUser } = response;
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-      });
-      res.status(200).json(newUser);
-    } catch (error: any) {
-      res.status(400).json({ message: error.message });
-      console.log(error);
-    }
-  };
-
-  resendOtp = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { email } = req.body;
-      await this.authService.resendOtp(email);
-      res.status(200).json({ message: "otp resend to your email" });
-    } catch (error: any) {
-      res.status(400).json({ error: error.message });
-    }
-  };
+  resendOtp = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const { email } = req.body;
+    await this.authService.resendOtp(email);
+    res.status(StatusCodes.OK).json({ message: "otp resend to your email" });
+  });
 
   login = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const { email, password, role } = req.body;
@@ -62,65 +48,38 @@ export class AuthController implements IAuthController {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
-    res.status(StatusCodes.OK).json({user});
+    res.status(StatusCodes.OK).json(user);
   });
 
-  refreshToken = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const refreshToken = req.cookies.refreshToken;
-      if (!refreshToken)
-        res.status(403).json({ error: "Refresh tokekn required" });
-
-      const { role } = req.body;
-      const { accessToken, user } = await this.authService.refreshAccessToken(
-        refreshToken,
-        role
-      );
-      res.status(200).json({ accessToken, user });
-    } catch (error: any) {
-      res.status(403).json({ error: error.message });
+  refreshToken = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      res.status(403).json({ error: "Refresh token required" });
+      return;
     }
-  };
+    const { role } = req.body;
+    const { accessToken, user } = await this.authService.refreshAccessToken(refreshToken, role);
+    res.status(StatusCodes.OK).json({ accessToken, user });
+  });
 
-  logout = async (req: Request, res: Response): Promise<void> => {
-    try {
-      res.clearCookie("refreshToken", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-      });
-      res.status(200).json({ message: "Logged out successfully" });
-    } catch (error: any) {
-      res
-        .status(500)
-        .json({ message: "something went wrong while logging out" });
-    }
-  };
+  logout = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+    res.status(StatusCodes.OK).json({ message: "Logged out successfully" });
+  });
 
-  forgotPassword = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { email } = req.body;
-      await this.authService.sendMagicLink(email);
+  forgotPassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const { email } = req.body;
+    await this.authService.sendMagicLink(email);
+    res.status(StatusCodes.OK).json({ message: "A reset link has been sent to your email" });
+  });
 
-      res.status(200).json({
-        message: "A reset link has been sent to your email",
-      });
-    } catch (error: any) {
-      if (error.message === "Invalid email address") {
-        res.status(404).json({ message: error.message });
-        return;
-      }
-      res.status(500).json({ message: error.message });
-    }
-  };
-
-  resetPassword = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { token, newPassword } = req.body;
-      await this.authService.resetPassword(token, newPassword);
-      res.status(200).json({ message: "password reseted successfully" });
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  };
+  resetPassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const { token, newPassword } = req.body;
+    await this.authService.resetPassword(token, newPassword);
+    res.status(StatusCodes.OK).json({ message: "password reseted successfully" });
+  });
 }

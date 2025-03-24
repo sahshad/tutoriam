@@ -7,7 +7,7 @@ import HomePage from "./pages/user/HomePage";
 import UserProfile from "./pages/user/UserProfile";
 import { useEffect, useState } from "react";
 import { refreshToken } from "./services/authService";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ProtectedRoute from "./components/user/auth/ProtectedRoute";
 import DashboardLayout from "./components/admin/layout/DashboardLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
@@ -19,10 +19,13 @@ import TutorApplicationForm from "./pages/user/TutorApplicationPage";
 import ForgotPasswordPage from "./pages/user/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/user/ResetPasswordPage";
 import InstructorApplicationsPage from "./pages/admin/InstructorApplications";
+import InstructorDashboardPage from "./pages/instructor/InstructorDashboardPage";
+import CreateCoursePage from "./pages/instructor/CreateCoursePage";
 
 const App = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(true);
+  const user = useSelector((state: any) => state.auth.user);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -55,12 +58,15 @@ const App = () => {
         <Route path="/reset-password" element={<ResetPasswordPage/>}/>
 
         <Route element={<ProtectedRoute role="user"/>}>
-              <Route path="/profile" element={<UserProfile />} />
+              <Route path="/profile" element={<UserProfile /> } />
               <Route path="/become-instructor" element={<BecomeInstructorPage/>}/>
               <Route path="/become-instructor/application" element={<TutorApplicationForm/>}/>
         </Route>
 
-
+        <Route element={<ProtectedRoute role="instructor"/>}>
+          <Route path="/instructor/dashboard" element={<InstructorDashboardPage/>}/>
+          <Route path="/instructor/create-course" element={<CreateCoursePage/>}/>
+        </Route>
 
         <Route path="/admin/login" element={<AdminLoginPage/>}/>
 

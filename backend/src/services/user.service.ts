@@ -70,16 +70,14 @@ export class UserService implements IUserService {
   }
 
   async becomeInstructor(instructorData:Partial<IInstructor>): Promise<IInstructor|null> {
-    try {
+    const instructorExists = await this.instructorRepository.findInstructorByUserId( instructorData.userId as string);
+    if (instructorExists) 
+      throw new Error("you already applied to become an instructor");
     const instructor = await this.instructorRepository.createInstructor(instructorData)
-      if(!instructor){
-        throw new Error("error while creating instructor")
-      }
-      return instructor
-    } catch (error) {
-      console.log(error)
-      throw new Error("error while creating instructor")
-    }    
+      if(!instructor)
+        throw new Error("cannot apply to become an instructor. please try again")
+      
+      return instructor   
   }
 
 }

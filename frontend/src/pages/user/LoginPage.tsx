@@ -3,10 +3,14 @@ import LoginForm from "@/components/user/login/LoginForm";
 import SignupForm from "@/components/user/login/SignupForm";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
 
 const LoginPage = () => {
-  const [signState, setSignState] = useState<"signIn" | "signUp">("signIn");
+
+  const location = useLocation();
+  const formState = location.state?.formState || 'signIn';
+  const [signState, setSignState] = useState<"signIn" | "signUp">(formState === "signIn" ? "signIn" : "signUp");
   const user = useSelector((state:any) => state.auth.user)
   const [loading, setLoading] = useState<boolean>(true)
   const isAdmin = localStorage.getItem("adminLoggedIn")
