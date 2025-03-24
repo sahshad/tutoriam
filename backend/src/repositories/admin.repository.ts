@@ -1,9 +1,12 @@
 import { injectable } from "inversify";
 import { IAdminRepository } from "../core/interfaces/repository/IAdminRepository";
 import { IUser, User } from "../models/User";
+import { BaseRepository } from "../core/abstracts/base.repository";
+import { Admin, IAdmin } from "../models/Admin";
 
 @injectable()
-export class AdminRepository implements IAdminRepository{
+export class AdminRepositor implements IAdminRepository{
+
   async getUsers(): Promise<IUser[]> {
     return await User.find({ role: "user" });
   }

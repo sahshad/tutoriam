@@ -14,33 +14,56 @@ import {
   Search,
   ShoppingCart,
   User,
+  Menu,
+  X,
 } from "lucide-react";
 import { Input } from "../../ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { userLogout } from "@/services/authService";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useState } from "react";
 
 const Header = () => {
   const user = useSelector((state: any) => state.auth.user);
-  const isAdmin = localStorage.getItem("adminLoggedIn")
-  const dispactch = useDispatch();
+  const isAdmin = localStorage.getItem("adminLoggedIn");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [sidebarOpen, setSidebarOpen] = useState(false); 
+
   const handleLogout = async () => {
-    const resposne = await userLogout(dispactch);
-    if (resposne.status === 200) {
+    const response = await userLogout(dispatch);
+    if (response.status === 200) {
       navigate("/");
-      localStorage.clear()
+      localStorage.clear();
     }
   };
 
-  useEffect(() => {}, [user]);
+  const handleCreateAccountClick = () => {
+    navigate("/login", { state: { formState: "signup" } });
+  };
+
+  const handleSignInClick = () => {
+    navigate("/login", { state: { formState: "signIn" } });
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   return (
     <header className="border-b">
-      <div className="bg-black text-white px-[2%]">
+      <div className="bg-black text-white px-4 sm:px-[2%]">
         <div className="container flex h-10 items-center justify-between">
-          <nav className="flex items-center space-x-6">
+          <Button
+            onClick={toggleSidebar}
+            className="sm:hidden text-white"
+            aria-label="Menu"
+          >
+            <Menu className="h-6 w-6" />
+          </Button>
+
+          <nav className="hidden sm:flex items-center space-x-6 flex-wrap">
             <Link
               to="/"
               className="text-sm font-medium text-white hover:text-white/80"
@@ -72,7 +95,8 @@ const Header = () => {
               Become an Instructor
             </Link>
           </nav>
-          <div className="items-center space-x-4 sm:flex hidden">
+
+          <div className="hidden sm:flex items-center space-x-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -91,12 +115,14 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className="container flex h-16 items-center justify-between px-[2%]">
-        <div className="flex items-center space-x-4">
+
+      <div className="container flex h-16 items-center justify-between px-4 sm:px-[2%]">
+        <div className="flex items-center space-x-4 flex-wrap">
           <Link to="/" className="text-xl font-bold">
             TUTORIAM
           </Link>
-          <DropdownMenu >
+
+          <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
@@ -112,20 +138,22 @@ const Header = () => {
               <DropdownMenuItem>New Releases</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
           <div className="relative w-full max-w-md items-center sm:flex hidden">
             <Search className="absolute left-3 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="What do you want learn..."
-              className="pl-10 w-[450px] "
+              placeholder="What do you want to learn..."
+              className="pl-10 w-[450px]"
             />
           </div>
         </div>
+
         <div className="flex items-center space-x-4">
           {user && !isAdmin ? (
             <>
               <Button variant="ghost" size="icon" aria-label="Notifications" className="sm:flex hidden">
-                <Bell className="h-5 w-5 " />
+                <Bell className="h-5 w-5" />
               </Button>
               <Button variant="ghost" size="icon" aria-label="Wishlist" className="sm:flex hidden">
                 <Heart className="h-5 w-5" />
@@ -133,28 +161,26 @@ const Header = () => {
               <Button variant="ghost" size="icon" aria-label="Cart" className="sm:flex hidden">
                 <ShoppingCart className="h-5 w-5" />
               </Button>
-              <Link to="/profile">
+
+              <Link to={user.role === "instructor" ? "/instructor/dashboard" : "/profile"}>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Avatar className="h-10 w-10 border-2 border-white shadow-md cursor-pointer">
                       <AvatarImage src={user.profileImageUrl} alt="user" />
-                      <AvatarFallback>{user.name.split("")[0]}</AvatarFallback>
+                      <AvatarFallback>{user.name[0]}</AvatarFallback>
                     </Avatar>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    align="end"
-                    className=" mt-1 px-2 pb-4 pt-2 flex flex-col gap-2"
-                  >
+                  <DropdownMenuContent align="end" className="mt-1 px-2 pb-4 pt-2 flex flex-col gap-2">
                     <DropdownMenuItem asChild className="gap-3">
-                      <Link to="/profile" className="text-sm">
+                      <Link
+                        to={user.role === "instructor" ? "/instructor/dashboard" : "/profile"}
+                        className="text-sm"
+                      >
                         <User className="mr-2 h-4 w-4" />
                         Profile
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={handleLogout}
-                      className="text-sm text-red-600 gap-3"
-                    >
+                    <DropdownMenuItem onClick={handleLogout} className="text-sm text-red-600 gap-3">
                       <LogOutIcon className="mr-2 h-4 w-4" />
                       Logout
                     </DropdownMenuItem>
@@ -164,15 +190,51 @@ const Header = () => {
             </>
           ) : (
             <>
-              <Link to="/login">
-                <Button variant="outline">Create Account</Button>
-              </Link>
-              <Link to="/login">
-                <Button className="">Sign In</Button>
-              </Link>
+              <Button variant="outline" onClick={handleCreateAccountClick}>
+                Create Account
+              </Button>
+              <Button className="" onClick={handleSignInClick}>
+                Sign In
+              </Button>
             </>
           )}
         </div>
+      </div>
+
+      <div
+        className={`fixed inset-0 z-10 bg-opacity-50 sm:hidden ${
+          sidebarOpen ? "block" : "hidden"
+        }`}
+        onClick={toggleSidebar} 
+      />
+      <div
+        className={`fixed top-0 left-0 w-2/3 h-full bg-white p-4 sm:hidden transform transition-transform ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <Button
+          className="absolute top-4 right-4 "
+          onClick={toggleSidebar}
+        >
+          <X className="h-6 w-6" />
+        </Button>
+        <nav className="flex flex-col space-y-4">
+          <Link to="/" onClick={toggleSidebar} className="text-lg font-medium text-gray-800">
+            Home
+          </Link>
+          <Link to="/courses" onClick={toggleSidebar} className="text-lg font-medium text-gray-800">
+            Courses
+          </Link>
+          <Link to="/about" onClick={toggleSidebar} className="text-lg font-medium text-gray-800">
+            About
+          </Link>
+          <Link to="/contact" onClick={toggleSidebar} className="text-lg font-medium text-gray-800">
+            Contact
+          </Link>
+          <Link to="/become-instructor" onClick={toggleSidebar} className="text-lg font-medium text-gray-800">
+            Become an Instructor
+          </Link>
+        </nav>
       </div>
     </header>
   );

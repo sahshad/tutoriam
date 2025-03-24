@@ -1,10 +1,10 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, ObjectId, Schema } from "mongoose";
 
 export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  profileImageUrl: string;
+  profileImageUrl?: string;
   status:string;
   role: string;
   title: string;

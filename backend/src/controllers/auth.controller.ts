@@ -62,14 +62,16 @@ export class AuthController implements IAuthController {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
-    res.status(StatusCodes.OK).json({user});
+    res.status(StatusCodes.OK).json(user);
   });
 
   refreshToken = async (req: Request, res: Response): Promise<void> => {
     try {
       const refreshToken = req.cookies.refreshToken;
-      if (!refreshToken)
+      if (!refreshToken){
         res.status(403).json({ error: "Refresh tokekn required" });
+        return;
+      }
 
       const { role } = req.body;
       const { accessToken, user } = await this.authService.refreshAccessToken(

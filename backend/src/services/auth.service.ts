@@ -16,7 +16,6 @@ import { IAuthRepository } from "../core/interfaces/repository/IAuthRepository";
 
 dotenv.config();
 
-// const authRepository = new AuthRepository();
 @injectable()
 export class AuthService implements IAuthService {
   constructor(@inject(TYPES.AuthRepository) private authRepository:IAuthRepository){}
@@ -98,10 +97,11 @@ export class AuthService implements IAuthService {
     else user = await this.authRepository.findUserByEmail(email);
 
     if (!user) throw new Error("Invalid email address");
-
-    if ("status" in user && user.status === "blocked") {
+    
+    if ( "status" in user && user.status === "blocked") {
       throw new Error("you have been blocked");
     }
+    console.log(user)
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw new Error("Incorrect password");

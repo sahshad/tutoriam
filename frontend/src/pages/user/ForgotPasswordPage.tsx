@@ -9,6 +9,7 @@ import { AxiosResponse } from "axios";
 import { toast } from "sonner";
 import { useState } from "react";
 import { BarLoader } from "react-spinners";
+import { Link } from "react-router-dom";
 
 const forgotPasswordSchema = z.object({
   email: z
@@ -50,7 +51,16 @@ const ForgotPasswordPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex justify-between items-center p-6">
+        <Link to="/">
         <h1 className="text-xl font-bold">TUTORIAM</h1>
+        </Link>
+        <div className="flex items-center space-x-4">
+          <Link to="/login" className="text-sm font-semibold">
+             <Button variant="link" className="text-gray-600">
+             Go to Login page
+             </Button>
+          </Link>
+          </div>
       </div>
 
       <div className="flex flex-1 flex-col items-center justify-center px-6 sm:px-8 md:px-12 lg:px-24">
