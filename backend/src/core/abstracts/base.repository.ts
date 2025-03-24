@@ -37,7 +37,7 @@ export abstract class BaseRepository<T extends Document>
     return await this.model.find();
   }
 
-  async findOne(id: string): Promise<T | null> {
-    return await this.model.findById(id);
+  async findOne(data: Partial<T>): Promise<T | null> {
+    return await this.model.findOne({data});
   }
 }

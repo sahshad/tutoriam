@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
 
 export interface IInstructorController {
-    getInstructorApplications(req:Request, res:Response):Promise<void>
+    getInstructorApplications:RequestHandler
 }

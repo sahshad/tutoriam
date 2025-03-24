@@ -5,7 +5,7 @@ import { BaseRepository } from "../core/abstracts/base.repository";
 import { Admin, IAdmin } from "../models/Admin";
 
 @injectable()
-export class AdminRepositor implements IAdminRepository{
+export class AdminRepository implements IAdminRepository{
 
   async getUsers(): Promise<IUser[]> {
     return await User.find({ role: "user" });

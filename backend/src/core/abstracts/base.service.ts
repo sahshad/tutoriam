@@ -33,7 +33,7 @@ export abstract class BaseService<T extends Document> implements IBaseService<T>
     return await this.repository.findAll();
   }
 
-  async findOne(id: string): Promise<T | null> {
-    return await this.repository.findOne(id);
+  async findOne(data: Partial<T>): Promise<T | null> {
+    return await this.repository.findOne(data);
   }
 }

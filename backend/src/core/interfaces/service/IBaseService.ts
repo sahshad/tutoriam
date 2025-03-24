@@ -5,5 +5,5 @@ export interface IBaseService<T> {
     findByIdAndUpdate(id: string, data: Partial<T>): Promise<T | null>;
     delete(id: string): Promise<T | null>;
     findAll(): Promise<T[] | null>;
-    findOne(id: string): Promise<T | null>;
+    findOne(data: Partial<T>): Promise<T | null>;
   }

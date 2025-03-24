@@ -13,6 +13,7 @@ import SkillsInfoSection from "./sections/SkillsInfoSection"
 import BioSection from "./sections/BioSection"
 import { sendInstructorApplication } from "@/services/userServices"
 import { useSelector } from "react-redux"
+import { toast } from "sonner"
 
 const TutorApplicationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -58,11 +59,19 @@ const TutorApplicationForm = () => {
     })
 
 
-    const resposne = await sendInstructorApplication(user._id,formData)
+    try {
+      const resposne = await sendInstructorApplication(user._id,formData)  
+      console.log(resposne)
+      setIsSubmitted(true)
+      toast.success("Application submitted successfully",{position:"top-right"})
+    } catch (error:any) {
+      console.log(error)
+      toast.error(error.response.data.message||"Something went wrong. Please try again.",{position:"top-right"})
+    }finally{
+      setIsSubmitting(false)
+    }
+
     
-    console.log(resposne)
-    setIsSubmitting(false)
-    setIsSubmitted(true)
 
   }
 
@@ -84,8 +93,15 @@ const TutorApplicationForm = () => {
     }
   }
 
+  const onReset = () => {
+    form.reset(defaultValues) 
+    setCurrentStep(0)
+    setIsSubmitted(false)
+
+  }
+
   if (isSubmitted) {
-    return <SubmissionSuccess onReset={() => setIsSubmitted(false)} />
+    return <SubmissionSuccess onReset={onReset} />
   }
 
   return (
@@ -106,7 +122,6 @@ const TutorApplicationForm = () => {
         </div>
 
         {sections[currentStep].component}
-
 
         <div className="fixed bottom-0 left-0 right-0 px-50 pb-5 bg-white p-4 shadow-md z-10">
           <div className="flex justify-between">
