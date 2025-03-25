@@ -22,6 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { userLogout } from "@/services/authService";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import ThemeToggle from "@/components/common/ThemeToggle";
 
 const Header = () => {
   const user = useSelector((state: any) => state.auth.user);
@@ -57,7 +58,7 @@ const Header = () => {
         <div className="container flex h-10 items-center justify-between">
           <Button
             onClick={toggleSidebar}
-            className="sm:hidden text-white"
+            className="sm:hidden "
             aria-label="Menu"
           >
             <Menu className="h-6 w-6" />
@@ -96,7 +97,7 @@ const Header = () => {
             </Link>
           </nav>
 
-          <div className="hidden sm:flex items-center space-x-4">
+          <div className=" items-center space-x-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -112,6 +113,7 @@ const Header = () => {
                 <DropdownMenuItem>French</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+          <ThemeToggle/>
           </div>
         </div>
       </div>

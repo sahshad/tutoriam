@@ -24,6 +24,24 @@ import { InstructorController } from "../controllers/instructor.controller";
 import { IInstructorController } from "../core/interfaces/controller/IInstructorController";
 import { InstructorService } from "../services/instructor.service";
 import { IInstructorService } from "../core/interfaces/service/IInstructorService";
+import { ICourseController } from "../core/interfaces/controller/ICourseController";
+import { CourseController } from "../controllers/course.controller";
+import { ICourseService } from "../core/interfaces/service/ICourseService";
+import { ICourseRepository } from "../core/interfaces/repository/ICourseRepository";
+import { CourseRepository } from "../repositories/course.repository";
+import { ModuleController } from "../controllers/module.controller";
+import { IModuleController } from "../core/interfaces/controller/IModuleController";
+import { IModuleService } from "../core/interfaces/service/IModuleService";
+import { ModuleService } from "../services/module.service";
+import { IModuleRepository } from "../core/interfaces/repository/IModuleRepository";
+import { ModuleRepository } from "../repositories/module.repository";
+import { ILessonController } from "../core/interfaces/controller/ILessonController";
+import { ILessonService } from "../core/interfaces/service/ILessonService";
+import { LessonController } from "../controllers/lesson.controller";
+import { LessonService } from "../services/lesson.service";
+import { ILessonRepository } from "../core/interfaces/repository/ILessonRepository ";
+import { LessonRepository } from "../repositories/lesson.repository";
+import { CourseService } from "../services/coruse.service";
 
 const container = new Container()
 
@@ -42,5 +60,17 @@ container.bind<IAuthRepository>(TYPES.AuthRepository).to(AuthRepository)
 container.bind<IInstructorController>(TYPES.InstructorController).to(InstructorController)
 container.bind<IInstructorService>(TYPES.InstructorService).to(InstructorService)
 container.bind<IInstructorRepository>(TYPES.InstructorRepository).to(InstructorRepository)
+
+container.bind<ICourseController>(TYPES.CourseController).to(CourseController)
+container.bind<ICourseService>(TYPES.CourseService).to(CourseService)
+container.bind<ICourseRepository>(TYPES.CourseRepository).to(CourseRepository)
+
+container.bind<IModuleController>(TYPES.ModuleController).to(ModuleController)
+container.bind<IModuleService>(TYPES.ModuleService).to(ModuleService)
+container.bind<IModuleRepository>(TYPES.ModuleRepository).to(ModuleRepository)
+
+container.bind<ILessonController>(TYPES.LessonController).to(LessonController)
+container.bind<ILessonService>(TYPES.LessonService).to(LessonService)
+container.bind<ILessonRepository>(TYPES.LessonRepository).to(LessonRepository)
 
 export default container

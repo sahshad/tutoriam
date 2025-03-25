@@ -7,7 +7,7 @@ import HomePage from "./pages/user/HomePage";
 import UserProfile from "./pages/user/UserProfile";
 import { useEffect, useState } from "react";
 import { refreshToken } from "./services/authService";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import ProtectedRoute from "./components/user/auth/ProtectedRoute";
 import DashboardLayout from "./components/admin/layout/DashboardLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
@@ -21,11 +21,11 @@ import ResetPasswordPage from "./pages/user/ResetPasswordPage";
 import InstructorApplicationsPage from "./pages/admin/InstructorApplications";
 import InstructorDashboardPage from "./pages/instructor/InstructorDashboardPage";
 import CreateCoursePage from "./pages/instructor/CreateCoursePage";
+import { CourseProvider } from "./contexts/couseContext";
 
 const App = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(true);
-  const user = useSelector((state: any) => state.auth.user);
 
   useEffect(() => {
     const fetchUser = async () => {

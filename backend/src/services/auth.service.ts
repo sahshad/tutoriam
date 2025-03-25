@@ -101,7 +101,6 @@ export class AuthService implements IAuthService {
     if ( "status" in user && user.status === "blocked") {
       throw new Error("you have been blocked");
     }
-    console.log(user)
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw new Error("Incorrect password");

@@ -1,7 +1,7 @@
 import mongoose, { Document, ObjectId, Schema } from "mongoose";
 
 export interface ILesson extends Document {
-    moduleId: ObjectId;
+    moduleId: mongoose.Schema.Types.ObjectId | string;
     title: string;
     content: string;
     videoUrl?: string;
