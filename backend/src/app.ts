@@ -8,14 +8,20 @@ import authRoutes from './routes/authRoutes'
 import userRoutes from './routes/userRoutes'
 import adminRoutes from './routes/adminRoutes'
 import { errorHandler } from "./middlewares/errorMiddleware";
+import passport from "passport";
+import passportSetup from '../src/config/passport' 
 
 dotenv.config();
 connectDB();
 
 
+
 const app = express();
 const CLIENT_URL = process.env.CLIENT_URL
 
+
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({

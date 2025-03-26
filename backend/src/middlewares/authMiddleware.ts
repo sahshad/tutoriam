@@ -1,14 +1,24 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
+import { IUser } from "../models/User";
+import { File } from "buffer";
+import { Multer } from "multer";
 
-export interface AuthRequest extends Request {
-  user?: {
-    id: string;
-  };
-}
+// export interface Request extends Request {
+//   user?: {
+//     id: string;
+//   };
+// }
+
+declare module "express-serve-static-core"{
+  interface Request {
+    user?: Partial<IUser>
+    file?: Express.Multer.File
+  }
+ }
 
 export const authMiddleware = (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -24,7 +34,7 @@ export const authMiddleware = (
       process.env.ACCESS_TOKEN_SECRET!
     ) as { userId: string };
 
-    req.user = { id: decoded.userId };
+    req.user = { _id: decoded.userId };
 
     next();
   } catch (error) {
