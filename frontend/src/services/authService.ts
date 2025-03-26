@@ -150,3 +150,9 @@ export const resetPassword = async (token:string, newPassword:string) => {
     throw error
   }
 }
+
+export const googleLogin = () => {
+  window.open(`${API_URL}/google/callback`,
+    "_self"
+  )
+}
