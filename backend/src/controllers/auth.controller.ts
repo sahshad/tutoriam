@@ -6,10 +6,16 @@ import { TYPES } from "../di/types";
 import { IAuthService } from "../core/interfaces/service/IAuthService";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
+import { IUserService } from "../core/interfaces/service/IUserService";
+import { createRefreshToken } from "../utils/tokenServices";
+import dotenv from "dotenv";
+dotenv.config();
 
 @injectable()
 export class AuthController implements IAuthController {
-  constructor(@inject(TYPES.AuthService) private authService: IAuthService) {}
+  constructor(@inject(TYPES.AuthService) private authService: IAuthService,
+  @inject(TYPES.UserService) private userService: IUserService
+) {}
   
   register = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const { name, email, password } = req.body;
@@ -83,4 +89,35 @@ export class AuthController implements IAuthController {
     await this.authService.resetPassword(token, newPassword);
     res.status(StatusCodes.OK).json({ message: "password reseted successfully" });
   });
+
+  googleAuth = asyncHandler(async (req:Request, res:Response): Promise<void> => {
+
+    const { id, displayName, emails, photos } = req.user as any
+
+    if (!emails || emails.length === 0) {
+       res.status(400).json({ message: "Email is required" });
+       return
+    }
+
+    const email = emails[0].value;
+    const profileImageUrl = photos ? photos[0].value : null;
+
+
+    let user = await this.userService.findUserByGoogleId(id)
+    if (!user) {
+      user = await this.userService.createGoogleUser( displayName, email,profileImageUrl, id )
+    }
+
+    const refreshToken = createRefreshToken(user?.id)
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    res.redirect(process.env.CLIENT_URL!)
+  })
 }
+
+

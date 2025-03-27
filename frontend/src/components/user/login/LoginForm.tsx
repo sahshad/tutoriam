@@ -35,10 +35,6 @@ const LoginForm = () => {
     resolver: zodResolver(formSchema),
   });
 
-  const googleAuth = () => {
-    googleLogin()
-  }
-
   const onSubmit = async (data: FormData) => {
     const { email, password } = data;
     const role = "user";
@@ -132,7 +128,7 @@ const LoginForm = () => {
         </div>
 
         <div className="">
-          <Button variant="outline" className="w-full cursor-pointer" onClick={googleAuth}>
+          <Button variant="outline" className="w-full cursor-pointer" onClick={googleLogin}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

@@ -55,7 +55,6 @@ const BasicInformation = ({ defaultValues, onSubmit, onCancel }: BasicInformatio
 
   return (
     <ScrollArea>
-
     <Card className="md:px-7">
       <CardContent className="p-6 ">
         <Form {...form}>

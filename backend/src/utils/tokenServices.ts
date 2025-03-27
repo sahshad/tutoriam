@@ -1,4 +1,4 @@
-import { verify } from 'jsonwebtoken'
+import jwt,{ verify } from 'jsonwebtoken'
 import {RedisClient} from '../config/redis'
 import dotenv from 'dotenv'
 dotenv.config()
@@ -26,4 +26,25 @@ export const verifyResetToken = async (token: string, expectedPurpose: string) =
   } catch (error) {
     throw new Error('Invalid or expired token')
   }
+}
+
+export const createRefreshToken = (userId:string) => {
+ return jwt.sign(
+      { userId },
+      process.env.REFRESH_TOKEN_SECRET!,
+      {
+        expiresIn: "7d",
+      }
+  );
+}
+
+
+export const createAccessToken = (userId:string) => {
+  return jwt.sign(
+    { userId },
+    process.env.ACCESS_TOKEN_SECRET!,
+    {
+      expiresIn: "15m",
+    }
+);
 }

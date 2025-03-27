@@ -8,21 +8,13 @@ passport.use(
         {
             clientID:process.env.CLIENT_ID!,
             clientSecret:process.env.CLIENT_SECRET!,
-            callbackURL:'/api/auth/google/callback',
-            scope:["profile", "email"]
+            callbackURL:'http://localhost:5000/api/auth/google/callback',
+        
         },
         function (accessToken, refreshToken, profile, callback){
             callback(null, profile)
         }
     )
 )
-
-passport.serializeUser((user, done) => {
-    done(null, user)
-})
-
-passport.deserializeUser((user:Express.User, done) => {
-    done(null, user)
-})
 
 export default passport

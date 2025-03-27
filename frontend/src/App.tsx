@@ -21,7 +21,6 @@ import ResetPasswordPage from "./pages/user/ResetPasswordPage";
 import InstructorApplicationsPage from "./pages/admin/InstructorApplications";
 import InstructorDashboardPage from "./pages/instructor/InstructorDashboardPage";
 import CreateCoursePage from "./pages/instructor/CreateCoursePage";
-import { CourseProvider } from "./contexts/couseContext";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -29,8 +28,6 @@ const App = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const isAuthenticated = localStorage.getItem("isAuthenticated");
-      if (isAuthenticated === "true") {
         try {
           await refreshToken(dispatch);
         } catch (error) {
@@ -38,10 +35,8 @@ const App = () => {
         } finally {
           setLoading(false);
         }
-      } else {
-        setLoading(false);
-      }
     };
+
     fetchUser();
   }, [dispatch]);
   if (loading) {
