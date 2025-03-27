@@ -4,7 +4,7 @@ import Header from '@/components/user/home/Header'
 
 const BecomeInstructorPage = () => {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen ">
     <Header/>
         <HeroSection/>
         <Features/>

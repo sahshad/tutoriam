@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from "express"
-import { AuthRequest } from "../../../types/custom"
+import { Request } from "../../../types/custom"
 
 export interface IUserController {
     updateProfile:RequestHandler

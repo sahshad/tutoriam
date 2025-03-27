@@ -3,7 +3,7 @@ import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { useState } from "react";
-import { registerUser } from "@/services/authService";
+import { googleLogin, registerUser } from "@/services/authService";
 import { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BarLoader} from "react-spinners"; 
 import { toast } from "sonner";
+
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -21,12 +22,24 @@ const formSchema = z.object({
     .min(8, "Password must be at least 8 characters")
     .regex(/[a-zA-Z]/, "Password must contain at least one letter")
     .regex(/[0-9]/, "Password must contain at least one number"),
-});
+  confirmPassword: z
+  .string()
+  .min(8, "Password must be at least 8 characters")
+    .regex(/[a-zA-Z]/, "Password must contain at least one letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
+}).refine(
+  (data) => data.password === data.confirmPassword,
+  {
+    message: "Passwords don't match",
+    path: ["confirmPassword"]
+  }
+);
 
 type FormData = z.infer<typeof formSchema>;
 
 const SignupForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const navigate = useNavigate();
 
@@ -38,6 +51,9 @@ const SignupForm = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   const onSubmit = async (data: FormData) => {
@@ -108,7 +124,7 @@ const SignupForm = () => {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
-                type="email"
+                type="text"
                 {...register("email")}
                 placeholder="Email address"
               />
@@ -144,6 +160,35 @@ const SignupForm = () => {
                 )}
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="password">Confirm Password</Label>
+              <div className="relative">
+                <Input
+                className="pr-10"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Cnfirm password"
+                  {...register("confirmPassword")}
+                />
+                
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  type="button"
+                  onClick={toggleConfirmPasswordVisibility}
+                  className="absolute right-0 top-0 h-full cursor-pointer"
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+              {errors.confirmPassword && (
+                  <p className="text-red-500 font-mono text-xs">{errors.confirmPassword.message}</p>
+                )}
+            </div>
+
             <Button className="w-full mt-5 cursor-pointer" type="submit" >
               {loading ? 
             <BarLoader color="#fff" width={280} height={1} />
@@ -169,7 +214,7 @@ const SignupForm = () => {
         </div>
 
         <div className=" w-full">
-          <Button variant="outline" className="w-full cursor-pointer">
+          <Button variant="outline" className="w-full cursor-pointer" onClick={googleLogin}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24"

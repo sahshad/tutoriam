@@ -104,14 +104,12 @@ export const userLogout = async (dispatch:AppDispatch) => {
 
 export const refreshToken = async (dispatch: AppDispatch) => {
   try {
-    const isAuthenticated = localStorage.getItem("isAuthenticated")
     const isAdmin = localStorage.getItem("adminLoggedIn")
     let data = {role:'user'}
-    if(isAuthenticated === 'true'){
       if(isAdmin === 'true'){
         data = {role:'admin'}
       }
-    const response = await axios.post(
+    const response = await apiClient.post(
       `${API_URL}/refresh-token`,
       data,
       { withCredentials: true }
@@ -124,8 +122,6 @@ export const refreshToken = async (dispatch: AppDispatch) => {
       })
     );
     return response.data.accessToken;
-  }
-  throw new Error("Session expired. Please log in again")
   } catch (error) {
     console.log(error)
     dispatch(logout());
@@ -149,4 +145,8 @@ export const resetPassword = async (token:string, newPassword:string) => {
   } catch (error:any) {
     throw error
   }
+}
+
+export const googleLogin = () => {
+  window.location.href = `${API_URL}/google`
 }

@@ -12,6 +12,7 @@ import { IAuthService } from "../core/interfaces/service/IAuthService";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../di/types";
 import { IAuthRepository } from "../core/interfaces/repository/IAuthRepository";
+import { decode } from "punycode";
 
 
 dotenv.config();
@@ -101,7 +102,6 @@ export class AuthService implements IAuthService {
     if ( "status" in user && user.status === "blocked") {
       throw new Error("you have been blocked");
     }
-    console.log(user)
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw new Error("Incorrect password");
@@ -129,7 +129,6 @@ export class AuthService implements IAuthService {
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET!
       ) as { userId: string };
-
       const userId = decoded.userId;
       const newAccessToken = jwt.sign(
         { userId },

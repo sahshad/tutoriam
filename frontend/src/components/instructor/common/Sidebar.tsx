@@ -1,5 +1,5 @@
-
-import type React from "react"
+import React from "react"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import {
   LayoutDashboard,
   PlusCircle,
@@ -11,10 +11,8 @@ import {
   Menu,
   X,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Link } from "react-router-dom"
 
 interface SidebarProps {
   open: boolean
@@ -22,9 +20,20 @@ interface SidebarProps {
 }
 
 export function Sidebar({ open, setOpen }: SidebarProps) {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const handleNavigation = (href: string) => {
+    if (window.innerWidth < 1024) {
+      setOpen(false)
+    }
+    setTimeout(() => {
+      navigate(href)
+    }, 10)
+  }
+
   return (
     <>
-      {/* Mobile sidebar backdrop */}
       {open && (
         <div
           className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden"
@@ -32,52 +41,96 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
         />
       )}
 
-      {/* Mobile menu button */}
-      <Button
-        variant="outline"
-        size="icon"
-        className="fixed left-4 top-4 z-50 lg:hidden"
-        onClick={() => setOpen(!open)}
-      >
-        {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-      </Button>
+      {!open && (
+        <Button
+          variant="outline"
+          size="icon"
+          className="fixed left-4 top-4 z-50 lg:hidden"
+          onClick={() => setOpen(true)}
+        >
+          <Menu className="h-4 w-4" />
+        </Button>
+      )}
 
-      {/* Sidebar */}
       <div
-        className={cn(
-          "fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-gray-950 text-white transition-transform duration-300 ease-in-out lg:static lg:translate-x-0",
-          open ? "translate-x-0" : "-translate-x-full",
-        )}
+        className={`fixed inset-y-0 left-0 z-40 flex w-60 flex-col  transition-transform duration-300 ease-in-out lg:static lg:translate-x-0  ${open ? 'translate-x-0' : '-translate-x-full'}`}
       >
-        <div className="flex h-16 items-center border-b border-gray-800 px-6">
+        <div className="flex h-16 items-center justify-between border-b border-gray-300 px-6 ">
           <Link to="/" className="flex items-center gap-2 font-bold text-xl">
-            tutoriam
+            TUTORIAM
           </Link>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-gray-600 hover:text-black lg:hidden"
+            onClick={() => setOpen(false)}
+          >
+            <X className="h-4 w-4" />
+          </Button>
         </div>
         <ScrollArea className="flex-1 py-4">
           <nav className="grid gap-1 px-2">
-            <NavItem href="/instructor/dashboard" icon={<LayoutDashboard className="h-4 w-4" />} active>
+            <NavItem
+              href="/instructor/dashboard"
+              icon={<LayoutDashboard className="h-4 w-4" />}
+              active={location.pathname === "/instructor/dashboard"}
+              onClick={() => handleNavigation("/instructor/dashboard")}
+            >
               Dashboard
             </NavItem>
-            <NavItem href="/instructor/create-course" icon={<PlusCircle className="h-4 w-4" />}>
+            <NavItem
+              href="/instructor/create-course"
+              icon={<PlusCircle className="h-4 w-4" />}
+              active={location.pathname.includes("/instructor/create-course")}
+              onClick={() => handleNavigation("/instructor/create-course")}
+            >
               Create New Course
             </NavItem>
-            <NavItem href="/instructor/my-courses" icon={<BookOpen className="h-4 w-4" />}>
+            <NavItem
+              href="/instructor/my-courses"
+              icon={<BookOpen className="h-4 w-4" />}
+              active={location.pathname.includes("/instructor/my-courses")}
+              onClick={() => handleNavigation("/instructor/my-courses")}
+            >
               My Courses
             </NavItem>
-            <NavItem href="/instructor/earning" icon={<DollarSign className="h-4 w-4" />}>
+            <NavItem
+              href="/instructor/earning"
+              icon={<DollarSign className="h-4 w-4" />}
+              active={location.pathname.includes("/instructor/earning")}
+              onClick={() => handleNavigation("/instructor/earning")}
+            >
               Earning
             </NavItem>
-            <NavItem href="/instructor/message" icon={<MessageSquare className="h-4 w-4" />} badge={1}>
+            <NavItem
+              href="/instructor/message"
+              icon={<MessageSquare className="h-4 w-4" />}
+              badge={1}
+              active={location.pathname.includes("/instructor/message")}
+              onClick={() => handleNavigation("/instructor/message")}
+            >
               Message
             </NavItem>
-            <NavItem href="/instructor/settings" icon={<Settings className="h-4 w-4" />}>
+            <NavItem
+              href="/instructor/settings"
+              icon={<Settings className="h-4 w-4" />}
+              active={location.pathname.includes("/instructor/settings")}
+              onClick={() => handleNavigation("/instructor/settings")}
+            >
               Settings
             </NavItem>
           </nav>
         </ScrollArea>
-        <div className="mt-auto border-t border-gray-800 p-4">
-          <Button variant="ghost" className="w-full justify-start text-gray-400 hover:text-white hover:bg-gray-800">
+        <div className="mt-auto border-t border-gray-300 p-4">
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-gray-600 hover:text-black hover:bg-gray-100"
+            onClick={() => {
+              if (window.innerWidth < 1024) {
+                setOpen(false)
+              }
+            }}
+          >
             <LogOut className="mr-2 h-4 w-4" />
             Sign-out
           </Button>
@@ -93,16 +146,14 @@ interface NavItemProps {
   children: React.ReactNode
   active?: boolean
   badge?: number
+  onClick?: () => void
 }
 
-function NavItem({ href, icon, children, active, badge }: NavItemProps) {
+function NavItem({ icon, children, active, badge, onClick }: NavItemProps) {
   return (
-    <Link
-        to={href}
-      className={cn(
-        "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
-        active ? "bg-gray-800 text-white font-medium" : "text-gray-400 hover:text-white hover:bg-gray-800",
-      )}
+    <button
+      onClick={onClick}
+      className={`flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors text-left ${active ? 'bg-gray-200 text-black font-medium' : 'text-gray-600 hover:text-black hover:bg-gray-100'}`}
     >
       {icon}
       <span>{children}</span>
@@ -111,7 +162,6 @@ function NavItem({ href, icon, children, active, badge }: NavItemProps) {
           {badge}
         </span>
       )}
-    </Link>
+    </button>
   )
 }
-

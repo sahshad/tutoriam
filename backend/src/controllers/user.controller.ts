@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { AuthRequest } from "../types/custom";
 import cloudinary, { uploadToCloudinary } from "../config/cloudinary";
 import { UserService } from "../services/user.service";
 import { error } from "console";
@@ -9,6 +8,7 @@ import { TYPES } from "../di/types";
 import { IUserService } from "../core/interfaces/service/IUserService";
 import { uploadImageToCloudinary } from "../utils/clodinaryServices";
 import asyncHandler from "express-async-handler";
+import { StatusCodes } from "http-status-codes";
 
 
 @injectable()
@@ -18,8 +18,8 @@ export class UserController implements IUserController{
       @inject(TYPES.UserService) private userService: IUserService
     ) {}
 
-    updateProfile = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
-      const userId = req.user?.id;
+    updateProfile = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+      const userId = req.user?._id
       if (!userId) {
         res.status(401).json({ message: "Unauthorized" });
         return;
@@ -54,8 +54,8 @@ export class UserController implements IUserController{
       res.status(200).json({ message: "password changed successfully" });
     });
 
-    getUserProfile = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
-      const userId = req.user?.id;
+    getUserProfile = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+      const userId = req.user?._id;
       if (!userId) {
         res.status(401).json({ message: "Unauthorized" });
         return;
@@ -72,10 +72,15 @@ export class UserController implements IUserController{
     });
   
 
-    becomeInstructor = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
+    becomeInstructor = asyncHandler(async (req: Request, res: Response): Promise<void> => {
       const instructorData = req.body;
-      instructorData.userId = req.user?.id;
-  
+      instructorData.userId = req.user?._id;
+   
+      if(!req.file){
+        res.status(StatusCodes.BAD_REQUEST).json({message: "file not found"})
+        return
+      }
+
       const url = await uploadImageToCloudinary(req.file.buffer, 'instructors/idCards');
       instructorData.idCardImageUrl = url;
   

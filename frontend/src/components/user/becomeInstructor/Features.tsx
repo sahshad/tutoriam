@@ -17,8 +17,8 @@ const Features = () => {
           </div>
 
           <div className="space-y-10">
-            <h2 className="text-3xl md:text-2xl font-bold text-gray-900">Why you'll start teaching on Tutoriam</h2>
-            <p className="text-gray-600 text-sm">
+            <h2 className="text-3xl md:text-2xl font-bold ">Why you'll start teaching on Tutoriam</h2>
+            <p className=" text-sm">
               Present congue ornare nibh sed ullamcorper. Proin venenatis tellus non turpis sollicitudin, vitae auctor
               arcu ornare. Cras vitae nulla a purus mollis venenatis.
             </p>
@@ -46,13 +46,13 @@ const Features = () => {
 const FeatureItem: React.FC<{ title: string; description: string }> = ({ title, description }) => (
     <div className="flex gap-4">
       <div className="flex-shrink-0 mt-1">
-        <div className="bg-[#E9F9EF] w-6 h-6 rounded-full flex items-center justify-center">
+        <div className=" w-6 h-6 rounded-full flex items-center justify-center">
           <Check className="h-3 w-3 text-green-600" />
         </div>
       </div>
       <div className="space-y-2">
-        <h3 className="text-md font-semibold text-gray-900">{title}</h3>
-        <p className="text-gray-600 text-sm">{description}</p>
+        <h3 className="text-md font-semibold ">{title}</h3>
+        <p className=" text-sm">{description}</p>
       </div>
     </div>
   )

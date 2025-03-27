@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "../../ui/button";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
-import { login } from "@/services/authService";
+import { googleLogin, login } from "@/services/authService";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import * as z from "zod";
@@ -39,6 +39,7 @@ const LoginForm = () => {
     const { email, password } = data;
     const role = "user";
     const response = await login(email, password, role, dispactch);
+    console.log(response)
     if (response.status === 200) {
       navigate("/");
     } else {
@@ -127,7 +128,7 @@ const LoginForm = () => {
         </div>
 
         <div className="">
-          <Button variant="outline" className="w-full cursor-pointer">
+          <Button variant="outline" className="w-full cursor-pointer" onClick={googleLogin}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

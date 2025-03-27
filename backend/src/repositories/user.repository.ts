@@ -15,4 +15,8 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
     return await User.findById(userId)
   }
 
+  async findUserByGoogleId(googleId: string):Promise<IUser | null> {
+    return await User.findOne({googleId:googleId})
+  }
+
 }

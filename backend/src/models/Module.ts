@@ -1,7 +1,7 @@
 import mongoose, { Document, ObjectId, Schema } from "mongoose";
 
 export interface IModule extends Document {
-    courseId: ObjectId;
+    courseId: mongoose.Schema.Types.ObjectId | string;
     title: string;
     description?: string;
     order: number;

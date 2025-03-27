@@ -7,7 +7,7 @@ import HomePage from "./pages/user/HomePage";
 import UserProfile from "./pages/user/UserProfile";
 import { useEffect, useState } from "react";
 import { refreshToken } from "./services/authService";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import ProtectedRoute from "./components/user/auth/ProtectedRoute";
 import DashboardLayout from "./components/admin/layout/DashboardLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
@@ -25,12 +25,9 @@ import CreateCoursePage from "./pages/instructor/CreateCoursePage";
 const App = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(true);
-  const user = useSelector((state: any) => state.auth.user);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const isAuthenticated = localStorage.getItem("isAuthenticated");
-      if (isAuthenticated === "true") {
         try {
           await refreshToken(dispatch);
         } catch (error) {
@@ -38,10 +35,8 @@ const App = () => {
         } finally {
           setLoading(false);
         }
-      } else {
-        setLoading(false);
-      }
     };
+
     fetchUser();
   }, [dispatch]);
   if (loading) {
