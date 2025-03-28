@@ -1,5 +1,4 @@
-import { Request, RequestHandler, Response } from "express"
-import { Request } from "../../../types/custom"
+import { RequestHandler } from "express"
 
 export interface IUserController {
     updateProfile:RequestHandler

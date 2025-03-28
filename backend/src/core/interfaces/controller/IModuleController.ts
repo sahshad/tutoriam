@@ -1,3 +1,5 @@
-export interface IModuleController {
+import { RequestHandler } from "express";
 
+export interface IModuleController {
+ createModule:RequestHandler
 }

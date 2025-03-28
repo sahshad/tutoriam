@@ -78,3 +78,39 @@ export const uploadImageToCloudinary = async (
 };
 
 
+export const uploadVideoToCloudinary = async (
+  buffer: Buffer,
+  folder: string
+): Promise<string | null> => {
+  try {
+    const result = await new Promise<UploadApiResponse>((resolve, reject) => {
+      // Upload video stream
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: "video", 
+          folder: `Tutoriam/${folder}`,
+        },
+        (error: UploadApiErrorResponse | undefined, result: UploadApiResponse | undefined) => {
+          if (result) {
+            resolve(result);
+          } else if (error) {
+            reject(new Error(`Cloudinary video upload failed: ${error.message}`));
+          }
+        }
+      );
+
+      if (buffer) {
+        uploadStream.end(buffer);
+      } else {
+        reject(new Error("No video buffer provided."));
+      }
+    });
+
+    return result ? result.secure_url : null;
+  } catch (error: any) {
+    console.error("Error uploading video to Cloudinary:", error);
+    throw new Error(`Error uploading video: ${error.message}`);
+  }
+}
+
+

@@ -8,7 +8,6 @@ import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
 import { IInstructor } from "../models/Instructor";
 import { IInstructorRepository } from "../core/interfaces/repository/IInstructorRepository";
 
-
 @injectable()
 export class UserService implements IUserService {
   constructor(@inject(TYPES.UserRepository) private userRepository:IUserRepository,

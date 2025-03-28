@@ -2,6 +2,7 @@ import mongoose, { ObjectId,Document, Schema } from "mongoose";
 
 export interface ICourse extends Document {
     title: string;
+    subtitle:string;
     category: string;
     subCategory: string;
     language: string;
@@ -11,11 +12,11 @@ export interface ICourse extends Document {
     trailer: string;
     description: string;
     whatYouWillLearn: string[];
-    targetAudience: string;
-    requirements: string[];
+    targetAudience?: string;
+    requirements?: string[];
     instructorId: ObjectId;
     modules?: ObjectId[];
-    status: "draft" | "published" | "archived";
+    status?: "draft" | "published" | "archived";
     price?: number;
     discountPrice?: number;
     rating?: number;
@@ -29,6 +30,7 @@ export interface ICourse extends Document {
 const CourseSchema = new Schema<ICourse>(
     {
       title: { type: String, required: true },
+      subtitle:{type:String, required: true},
       category: { type: String, required: true },
       subCategory: { type: String, required: true },
       language: { type: String, required: true },
@@ -38,8 +40,8 @@ const CourseSchema = new Schema<ICourse>(
       trailer: { type: String, required: true },
       description: { type: String, required: true },
       whatYouWillLearn: [{ type: String, required: true }],
-      targetAudience: { type: String, required: true },
-      requirements: [{ type: String, required: true }],
+      // targetAudience: { type: String, required: true },
+      // requirements: [{ type: String, required: true }],
       instructorId: { type: Schema.Types.ObjectId, ref: "Instructor", required: true },
       modules: [{ type: Schema.Types.ObjectId, ref: "Module" }],
       status: { type: String, enum: ["draft", "published", "archived"], default: "draft" },

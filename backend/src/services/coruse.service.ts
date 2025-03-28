@@ -9,7 +9,7 @@ export class CourseService extends BaseService<ICourse> implements ICourseServic
     constructor(@inject(TYPES.CourseRepository) private courseRepository: ICourseService) {
         super(courseRepository);
     }
-  async createCourse(courseData: any) {
+  async createCourse(courseData: Partial<ICourse>) {
     return await this.courseRepository.create(courseData);
   }
 

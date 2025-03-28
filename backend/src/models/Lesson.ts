@@ -3,7 +3,7 @@ import mongoose, { Document, ObjectId, Schema } from "mongoose";
 export interface ILesson extends Document {
     moduleId: mongoose.Schema.Types.ObjectId | string;
     title: string;
-    content: string;
+    contentType: string;
     videoUrl?: string;
     order: number;
     attachments?: string[]; 
@@ -15,7 +15,7 @@ const LessonSchema = new Schema<ILesson>(
     {
       moduleId: { type: Schema.Types.ObjectId, ref: "Module", required: true },
       title: { type: String, required: true },
-      content: { type: String, required: true },
+      contentType: { type: String, required: true },
       videoUrl: { type: String },
       order: { type: Number, required: true },
       attachments: [{ type: String }], 
