@@ -1,39 +1,57 @@
-"use client"
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Search, X } from "lucide-react"
+const priceValidation = z
+  .string()
+  .min(1, "Price is required")
+  .refine((val) => !isNaN(parseFloat(val)), {
+    message: "Price must be a number",
+  })
+  .refine((val) => parseFloat(val) > 0, {
+    message: "Price must be greater than 0",
+  })
+  .refine((val) => parseFloat(val) <= 10000, {
+    message: "Price must be less than 10,000",
+  });
 
-// Publish validation schema
-export const publishSchema = z.object({
-  welcomeMessage: z.string().min(20, "Welcome message should be at least 20 characters long"),
-  congratulationsMessage: z.string().min(20, "Congratulations message should be at least 20 characters long"),
-  price: z.string().min(1, "Please enter a price for your course"),
+const paidCourseSchema = z.object({
+  isFree: z.literal(false).default(false).optional(),
+  price: priceValidation,
+});
+
+const freeCourseSchema = z.object({
+  isFree: z.literal(true),
+  price: z.string().optional(),
+});
+
+const baseSchema = z.object({
+  welcomeMessage: z.string().min(20),
+  congratulationsMessage: z.string().min(20),
   isPublic: z.boolean().optional(),
-})
+});
 
-export type PublishType = z.infer<typeof publishSchema>
+export const publishSchema = baseSchema.and(
+  z
+    .discriminatedUnion("isFree", [freeCourseSchema, paidCourseSchema])
+    .default({ ...baseSchema.shape, isFree: false } as any)
+);
+
+export type PublishType = z.infer<typeof publishSchema>;
 
 interface PublishCourseFormProps {
-  defaultValues?: Partial<PublishType>
-  onSubmit: (data: PublishType) => void
-  onBack: () => void
+  defaultValues?: Partial<PublishType>;
+  onSubmit: (data: PublishType) => void;
+  onBack: () => void;
 }
 
 const PublishCourse = ({ defaultValues, onSubmit, onBack }: PublishCourseFormProps) => {
-  const [instructors, setInstructors] = useState([
-    { id: 1, username: "Username", role: "UI/UX Designer", avatar: "/placeholder.svg?height=40&width=40" },
-    { id: 2, username: "Username", role: "UI/UX Designer", avatar: "/placeholder.svg?height=40&width=40" },
-  ])
-
   const form = useForm<PublishType>({
     resolver: zodResolver(publishSchema),
     defaultValues: defaultValues || {
@@ -41,12 +59,9 @@ const PublishCourse = ({ defaultValues, onSubmit, onBack }: PublishCourseFormPro
       congratulationsMessage: "",
       price: "",
       isPublic: false,
+      isFree: false,
     },
-  })
-
-  const removeInstructor = (id: number) => {
-    setInstructors(instructors.filter((instructor) => instructor.id !== id))
-  }
+  });
 
   return (
     <Card className="mb-6">
@@ -93,92 +108,77 @@ const PublishCourse = ({ defaultValues, onSubmit, onBack }: PublishCourseFormPro
               />
             </div>
 
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">Add Instructor ({instructors.length})</h3>
+            <div className="space-y- mt-8 ">
+              <div className="flex flex-col mb-6 sm:w-1/4">
+                {!form.watch("isFree") && (
+                  <FormField
+                    control={form.control}
+                    name="price"
+                    shouldUnregister={true}
+                    render={({ field }) => (
+                      <FormItem className="space-y-2">
+                        <FormLabel>Price </FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="Enter course price" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search by username" className="pl-9" />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {instructors.map((instructor) => (
-                  <div key={instructor.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-md relative">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={instructor.avatar} alt={instructor.username} />
-                      <AvatarFallback>{instructor.username.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium">{instructor.username}</p>
-                      <p className="text-xs text-muted-foreground">{instructor.role}</p>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6 absolute top-1 right-1 text-muted-foreground hover:text-foreground"
-                      onClick={() => removeInstructor(instructor.id)}
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-4 mt-8">
-              <h3 className="text-lg font-medium">Course Price</h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 <FormField
                   control={form.control}
-                  name="price"
+                  name="isFree"
                   render={({ field }) => (
-                    <FormItem className="space-y-2">
-                      <FormLabel>Price ($)</FormLabel>
+                    <FormItem className=" flex gap-6 space-y-2 min-h-[50px] items-end">
+                      <FormLabel>Make this course free</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="Enter course price" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="isPublic"
-                  render={({ field }) => (
-                    <FormItem className="space-y-2">
-                      <FormLabel>Course Status</FormLabel>
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          id="isPublic"
-                          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                        <Checkbox
                           checked={field.value}
-                          onChange={(e) => field.onChange(e.target.checked)}
+                          onCheckedChange={(checked) => field.onChange(checked)}
+                          className="h-4 w-4 text-primary focus:ring-primary"
                         />
-                        <label htmlFor="isPublic" className="text-sm text-gray-700">
-                          Make this course public
-                        </label>
-                      </div>
-                      <FormMessage />
+                      </FormControl>
                     </FormItem>
                   )}
                 />
               </div>
             </div>
+
+            <FormField
+              control={form.control}
+              name="isPublic"
+              render={({ field }) => (
+                <FormItem className="space-y-2">
+                  {/* <FormLabel>Course Status</FormLabel> */}
+                  <div className="flex items-center space-x-5">
+                    <FormLabel htmlFor="isPublic" className="text-sm">
+                      Make this course public
+                    </FormLabel>
+                    <Checkbox
+                      id="isPublic"
+                      checked={field.value}
+                      onCheckedChange={(checked) => field.onChange(checked)}
+                      className="h-4 w-4 text-primary focus:ring-primary"
+                    />
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="flex justify-between mt-8">
               <Button type="button" variant="outline" onClick={onBack}>
                 Prev Step
               </Button>
-              <Button type="submit">Submit For Review</Button>
+              <Button type="submit">Submit and create</Button>
             </div>
           </form>
         </Form>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default PublishCourse
+export default PublishCourse;

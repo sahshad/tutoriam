@@ -38,6 +38,43 @@ const extractPublicIdFromUrl = (secureUrl: string): string | null => {
   };
 
 
+  const extractPublicIdFromVideoUrl = (secureUrl: string): string | null => {
+    // Regex for extracting the public ID from a Cloudinary video URL
+    const regex = /\/video\/upload\/.*?\/(.*?)\.(mp4|webm|ogg)/;
+    const match = secureUrl.match(regex);
+  
+    if (match && match[1]) {
+      return match[1];
+    } else {
+      console.error('Could not extract public_id from URL');
+      return null;
+    }
+  };
+  
+  export const deleteVideoFromCloudinary = async (videoUrl: string): Promise<boolean> => {
+    try {
+      const publicId = extractPublicIdFromVideoUrl(videoUrl);
+      if (!publicId) {
+        console.log('Cannot extract public_id from video URL');
+        return false;
+      }
+  
+      const result = await cloudinary.uploader.destroy(publicId, { resource_type: 'video' });
+  
+      if (result.result === 'ok') {
+        console.log(`Video with public_id ${publicId} deleted successfully.`);
+        return true;
+      } else {
+        console.error(`Failed to delete video with public_id ${publicId}.`, result);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error deleting video from Cloudinary:', error);
+      return false;
+    }
+  };
+  
+
 
 export const uploadImageToCloudinary = async (
   buffer: Buffer,

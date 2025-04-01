@@ -21,6 +21,12 @@ import ResetPasswordPage from "./pages/user/ResetPasswordPage";
 import InstructorApplicationsPage from "./pages/admin/InstructorApplications";
 import InstructorDashboardPage from "./pages/instructor/InstructorDashboardPage";
 import CreateCoursePage from "./pages/instructor/CreateCoursePage";
+import CoursesPage from "./pages/instructor/Courses";
+import SingleCoursePage from "./pages/instructor/CourseDetails";
+import EditCoursePage from "./pages/instructor/EditCoursePage";
+import UserCoursesPage from "./pages/user/CoursesPage";
+import UserCourseDetailsPage from "./pages/user/UserCourseDetails";
+import CartPage from "./pages/user/CartPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -52,15 +58,22 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
         <Route path="/reset-password" element={<ResetPasswordPage/>}/>
 
+
         <Route element={<ProtectedRoute role="user"/>}>
               <Route path="/profile" element={<UserProfile /> } />
               <Route path="/become-instructor" element={<BecomeInstructorPage/>}/>
               <Route path="/become-instructor/application" element={<TutorApplicationForm/>}/>
+              <Route path="/courses" element={<UserCoursesPage/>}/>
+              <Route path="/courses/:courseId" element={<UserCourseDetailsPage/>}/>
+              <Route path="/cart" element={<CartPage/>}/>
         </Route>
 
         <Route element={<ProtectedRoute role="instructor"/>}>
           <Route path="/instructor/dashboard" element={<InstructorDashboardPage/>}/>
           <Route path="/instructor/create-course" element={<CreateCoursePage/>}/>
+          <Route path="/instructor/my-courses" element={<CoursesPage/>}/>
+          <Route path="/instructor/my-courses/:courseId" element={<SingleCoursePage/>}/>
+          <Route path="/instructor/my-courses/:courseId/edit" element={<EditCoursePage/>}/>
         </Route>
 
         <Route path="/admin/login" element={<AdminLoginPage/>}/>
