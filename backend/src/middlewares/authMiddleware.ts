@@ -35,7 +35,6 @@ export const authMiddleware = (
     ) as { userId: string };
 
     req.user = { _id: decoded.userId };
-
     next();
   } catch (error) {
     if (error instanceof TokenExpiredError) {

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { courseService, type Lesson, type Module, type Course } from "@/lib/api/courseService"
@@ -11,6 +11,8 @@ import Curriculum, { CurriculumType } from "@/components/instructor/create_cours
 import AdvancedInformation, { AdvancedInformationType } from "@/components/instructor/create_course/AdvancedInformation"
 import BasicInformation, { BasicInformationType } from "@/components/instructor/create_course/BasicInformation"
 import PageHeader from "@/components/instructor/common/Header"
+import { createCourse, createLesson, createModule } from "@/services/instructorService"
+import { createCourseData, createLessonData, createModuleData } from "@/utils/Courses"
 
 
 const CreateCoursePage = () => {
@@ -28,13 +30,30 @@ const CreateCoursePage = () => {
   const [advancedInformation, setAdvancedInformation] = useState<Partial<AdvancedInformationType>>({
     teachItems: [
       { id: 1, content: "" },
-
     ],
   })
-  const [curriculum, setCurriculum] = useState<Partial<CurriculumType>>({})
+  const [curriculum, setCurriculum] = useState<Partial<CurriculumType>>({
+    sections: [
+      {
+        id: '1',
+        name: "",
+        description: "",
+        lectures: [
+          {
+            id: '1',
+            name: "",
+            description: "",
+            type: "video",
+            content: undefined,
+            isExpanded: true,
+          },
+        ],
+      },
+    ],
+  })
   const [publish, setPublish] = useState<Partial<PublishType>>({})
+  
 
-  // Form submission handlers
   const handleBasicInfoSubmit = (data: BasicInformationType) => {
     setBasicInformation(data)
     setCurrentStep(2)
@@ -55,64 +74,102 @@ const CreateCoursePage = () => {
     await publishCourse(data)
   }
 
-  // API call sequence for publishing the course
-  const publishCourse = async (publishData: PublishType) => {
-    setIsSubmitting(true)
-    setSubmissionStatus(null)
-
+  const publishCourse = async (publish: PublishType) => {
+    // console.log(publish)
     try {
-      // 1. Create all lessons first
-      const modulePromises = curriculum.sections?.map(async (section:any) => {
-        // Create all lessons for this section
-        const lessonIds = await Promise.all(
-          section.lectures?.map(async (lecture:any) => {
-            const lesson: Lesson = {
-              name: lecture.name,
-              type: lecture.type,
-              content: lecture.content,
-              duration: lecture.duration,
-            }
-            return await courseService.createLesson(lesson)
-          }) || [],
-        )
+      const courseDate = createCourseData(basicInformation,advancedInformation,publish)
+      const response = await createCourse(courseDate)
+      const courseId = response.data._id
+      console.log(`courseCreated ${courseId}`)
 
-        // Create the module with lesson IDs
-        const module: Module = {
-          name: section.name,
-          lessons: lessonIds,
+     if(curriculum.sections){
+      for (let section of curriculum.sections) {
+
+        const moduleData = createModuleData(section, courseId)
+        
+        const response = await createModule(moduleData)
+        const moduleId = response.data._id
+
+      console.log(`moduleCreated ${response}`)
+
+        for (let lecture of section.lectures) {
+          const lessonData = createLessonData(lecture,moduleId);
+          const response = await createLesson(lessonData)
+      console.log(`lessonCreated ${response}`)
         }
-        return await courseService.createModule(module)
-      })
-
-      // Wait for all modules to be created
-      const moduleIds = await Promise.all(modulePromises || [])
-
-      // 3. Create the course with module IDs
-      const course: Course = {
-        ...(basicInformation as BasicInformationType),
-        ...(advancedInformation as AdvancedInformationType),
-        ...publishData,
-        modules: moduleIds,
-        isPublic: publishData.isPublic ?? false,
       }
-
-      const courseId = await courseService.createCourse(course)
-
-      setSubmissionStatus({
-        success: true,
-        message: "Course created successfully!",
-        courseId,
-      })
-    } catch (error) {
-      console.error("Error publishing course:", error)
-      setSubmissionStatus({
-        success: false,
-        message: "Failed to create course. Please try again.",
-      })
-    } finally {
-      setIsSubmitting(false)
+    }
+      console.log(response)
+    } catch (error:any) {
+      console.log(error)
+      console.log(error.response)
     }
   }
+
+
+  useEffect(()=>{
+    console.log('main page render ')
+  })
+  // API call sequence for publishing the course
+  // const publishCourse = async (publishData: PublishType) => {
+  //   setIsSubmitting(true)
+  //   setSubmissionStatus(null)
+
+  //   try {
+  //     // 1. Create all lessons first
+  //     const modulePromises = curriculum.sections?.map(async (section:any) => {
+  //       // Create all lessons for this section
+  //       const lessonIds = await Promise.all(
+  //         section.lectures?.map(async (lecture:any) => {
+  //           const lesson: Lesson = {
+  //             name: lecture.name,
+  //             type: lecture.type,
+  //             content: lecture.content,
+  //             duration: lecture.duration,
+  //           }
+  //           return await courseService.createLesson(lesson)
+  //         }) || [],
+  //       )
+
+  //       // Create the module with lesson IDs
+  //       const module: Module = {
+  //         name: section.name,
+  //         lessons: lessonIds,
+  //       }
+  //       return await courseService.createModule(module)
+  //     })
+
+  //     // Wait for all modules to be created
+  //     const moduleIds = await Promise.all(modulePromises || [])
+
+  //     // 3. Create the course with module IDs
+  //     const course: Course = {
+  //       ...(basicInformation as BasicInformationType),
+  //       ...(advancedInformation as AdvancedInformationType),
+  //       ...publishData,
+  //       modules: moduleIds,
+  //       isPublic: publishData.isPublic ?? false,
+  //     }
+
+  //     const courseId = await courseService.createCourse(course)
+
+  //     setSubmissionStatus({
+  //       success: true,
+  //       message: "Course created successfully!",
+  //       courseId,
+  //     })
+  //   } catch (error) {
+  //     console.error("Error publishing course:", error)
+  //     setSubmissionStatus({
+  //       success: false,
+  //       message: "Failed to create course. Please try again.",
+  //     })
+  //   } finally {
+  //     setIsSubmitting(false)
+  //   }
+  // }
+
+
 
   return (
     <div className="flex h-screen overflow-hidden bg-background" >
@@ -162,7 +219,6 @@ const CreateCoursePage = () => {
             </h2>
           </div>
 
-          {/* Submission Status */}
           {submissionStatus && (
             <div
               className={`mb-6 p-4 rounded-md ${submissionStatus.success ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}
@@ -172,7 +228,6 @@ const CreateCoursePage = () => {
             </div>
           )}
 
-          {/* Form Sections */}
           {currentStep === 1 && (
             <BasicInformation
               defaultValues={basicInformation}

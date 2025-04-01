@@ -7,6 +7,7 @@ import connectDB  from "./config/db";
 import authRoutes from './routes/authRoutes'
 import userRoutes from './routes/userRoutes'
 import adminRoutes from './routes/adminRoutes'
+import instructorRoutes from './routes/instructorRoutes'
 import { errorHandler } from "./middlewares/errorMiddleware";
 import passport from "./config/passport";
 
@@ -32,6 +33,7 @@ app.use(cors({
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes)
 app.use("/api/admin", adminRoutes)
+app.use("/api/instructor",instructorRoutes)
 
 app.use(errorHandler)
 

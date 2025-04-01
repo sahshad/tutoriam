@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 
 import { useRef, useState } from "react"
@@ -13,10 +11,11 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Card, CardContent } from "@/components/ui/card"
 import {Plus, Image, X, Video, Upload } from "lucide-react"
 
-// Advanced Information validation schema
 export const advancedInformationSchema = z.object({
-  thumbnail: z.string({message:"Thumbnail image is required"}).min(1, "Please upload a course thumbnail"),
-  trailer: z.string().optional(),
+  thumbnail: z.union([z.instanceof(File), z.undefined()]).refine((val) => val !== null,{
+      message: "Thumbnail image is required", 
+    }),
+  trailer: z.union([z.instanceof(File), z.undefined()]).optional(),
   description: z.string({message:'Description is required'}).min(50, "Description should be at least 50 characters long"),
   teachItems: z
     .array(
@@ -48,8 +47,8 @@ const AdvancedInformation = ({ defaultValues, onSubmit, onBack }: AdvancedInform
   const form = useForm<AdvancedInformationType>({
     resolver: zodResolver(advancedInformationSchema),
     defaultValues: defaultValues || {
-      thumbnail: "",
-      trailer: "",
+      thumbnail: undefined,
+      trailer: undefined,
       description: "",
       teachItems: [
         { id: 1, content: "" },
@@ -72,16 +71,17 @@ const AdvancedInformation = ({ defaultValues, onSubmit, onBack }: AdvancedInform
       const reader = new FileReader()
       reader.onload = () => {
         setThumbnailPreview(reader.result as string)
-        form.setValue("thumbnail", file.name, { shouldValidate: false })
+        form.setValue("thumbnail", file , { shouldValidate: false })
       }
       reader.readAsDataURL(file)
     }
+
   }
 
   const handleTrailerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      form.setValue("trailer", file.name)
+      form.setValue("trailer", file)
 
       // Create a video preview URL if possible
       if (file.type.startsWith("video/")) {
@@ -93,7 +93,7 @@ const AdvancedInformation = ({ defaultValues, onSubmit, onBack }: AdvancedInform
 
   const removeThumbnail = () => {
     setThumbnailPreview(null)
-    form.setValue("thumbnail", "", { shouldValidate: true })
+    form.setValue("thumbnail", undefined, { shouldValidate: true })
     if (thumbnailInputRef.current) {
       thumbnailInputRef.current.value = ""
     }
@@ -101,7 +101,7 @@ const AdvancedInformation = ({ defaultValues, onSubmit, onBack }: AdvancedInform
 
   const removeTrailer = () => {
     setTrailerPreview(null)
-    form.setValue("trailer", "")
+    form.setValue("trailer", undefined)
     if (trailerInputRef.current) {
       trailerInputRef.current.value = ""
     }
@@ -122,7 +122,7 @@ const AdvancedInformation = ({ defaultValues, onSubmit, onBack }: AdvancedInform
               <div className="grid grid-cols-1 md:grid-cols-2 gap-15 px-6">
                 <div>
                   <h3 className="font-medium mb-4">Course Thumbnail</h3>
-                  <div className="border border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-gray-50">
+                  <div className="border border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
                     {thumbnailPreview ? (
                       <div className="relative w-full mb-4">
                         <div className="absolute top-2 right-2 z-10">
@@ -142,7 +142,7 @@ const AdvancedInformation = ({ defaultValues, onSubmit, onBack }: AdvancedInform
                         />
                       </div>
                     ) : (
-                      <div className="w-full aspect-video bg-gray-200 rounded-md flex items-center justify-center mb-4">
+                      <div className="w-full aspect-video  rounded-md flex items-center justify-center mb-4">
                         <Image className="h-16 w-16 text-gray-400" />
                       </div>
                     )}
@@ -172,7 +172,7 @@ const AdvancedInformation = ({ defaultValues, onSubmit, onBack }: AdvancedInform
 
                 <div>
                   <h3 className=" font-medium mb-4">Course Trailer</h3>
-                  <div className="border border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-gray-50">
+                  <div className="border border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
                     {trailerPreview ? (
                       <div className="relative w-full mb-4">
                         <div className="absolute top-2 right-2 z-10">
@@ -188,8 +188,8 @@ const AdvancedInformation = ({ defaultValues, onSubmit, onBack }: AdvancedInform
                         <video src={trailerPreview} controls className="w-full aspect-video object-cover rounded-md" />
                       </div>
                     ) : (
-                      <div className="w-full aspect-video bg-gray-200 rounded-md flex items-center justify-center mb-4">
-                        <div className="h-16 w-16 rounded-full bg-gray-300 flex items-center justify-center">
+                      <div className="w-full aspect-video  rounded-md flex items-center justify-center mb-4">
+                        <div className="h-16 w-16 rounded-full  flex items-center justify-center">
                           <Video className="h-8 w-8 text-gray-500" />
                         </div>
                       </div>

@@ -10,7 +10,7 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    const accessToken = store.getState().auth.accessToken;
+    const accessToken = (store.getState() as { auth: { accessToken: string } }).auth.accessToken;
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -44,5 +44,7 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+
 
 export default apiClient ;

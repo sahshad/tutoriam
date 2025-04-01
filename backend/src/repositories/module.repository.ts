@@ -6,8 +6,7 @@ export class ModuleRepository extends BaseRepository<IModule> implements IModule
   constructor() {
     super(Module);
   }
-  async addModule(courseId: string, moduleData: Partial<IModule>): Promise<IModule> {
-    moduleData.courseId = courseId
+  async addModule(moduleData: Partial<IModule>): Promise<IModule> {
     return await Module.create(moduleData);
   }
 
