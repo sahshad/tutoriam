@@ -157,12 +157,16 @@ const Header = () => {
               <Button variant="ghost" size="icon" aria-label="Notifications" className="sm:flex hidden">
                 <Bell className="h-5 w-5" />
               </Button>
+              <Link to={"/wishlist"}>
               <Button variant="ghost" size="icon" aria-label="Wishlist" className="sm:flex hidden">
                 <Heart className="h-5 w-5" />
               </Button>
+              </Link>
+              <Link to={"/cart"}>
               <Button variant="ghost" size="icon" aria-label="Cart" className="sm:flex hidden">
                 <ShoppingCart className="h-5 w-5" />
               </Button>
+              </Link>
 
               <Link to={user.role === "instructor" ? "/instructor/dashboard" : "/profile"}>
                 <DropdownMenu>

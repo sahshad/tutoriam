@@ -42,6 +42,18 @@ import { LessonService } from "../services/lesson.service";
 import { ILessonRepository } from "../core/interfaces/repository/ILessonRepository ";
 import { LessonRepository } from "../repositories/lesson.repository";
 import { CourseService } from "../services/coruse.service";
+import { ICartController } from "../core/interfaces/controller/ICartController";
+import { CartController } from "../controllers/cart.controller";
+import { ICartService } from "../core/interfaces/service/ICartService";
+import { CartService } from "../services/cart.service";
+import { ICartRepository } from "../core/interfaces/repository/ICartRepository";
+import { CartRepository } from "../repositories/cart.repository";
+import { IWishlistController } from "../core/interfaces/controller/IWishlistController";
+import { WishlistController } from "../controllers/wishlist.controller";
+import { IWishlistService } from "../core/interfaces/service/IWishlistService";
+import { WishlistService } from "../services/wishlist.service";
+import { IWishlistRepository } from "../core/interfaces/repository/IWishlistRepository";
+import { WishlistRepository } from "../repositories/wishlist.repository";
 
 const container = new Container()
 
@@ -72,5 +84,13 @@ container.bind<IModuleRepository>(TYPES.ModuleRepository).to(ModuleRepository)
 container.bind<ILessonController>(TYPES.LessonController).to(LessonController)
 container.bind<ILessonService>(TYPES.LessonService).to(LessonService)
 container.bind<ILessonRepository>(TYPES.LessonRepository).to(LessonRepository)
+
+container.bind<ICartController>(TYPES.CartController).to(CartController)
+container.bind<ICartService>(TYPES.CartService).to(CartService)
+container.bind<ICartRepository>(TYPES.CartRepository).to(CartRepository)
+
+container.bind<IWishlistController>(TYPES.WishlistController).to(WishlistController)
+container.bind<IWishlistService>(TYPES.WishlistService).to(WishlistService)
+container.bind<IWishlistRepository>(TYPES.WishlistRepository).to(WishlistRepository)
 
 export default container

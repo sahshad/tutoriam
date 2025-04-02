@@ -109,6 +109,7 @@ const navigate = useNavigate()
 
         <div className="lg:col-span-1">
           <CourseSidebar
+           id={course._id}
             price={course.price }
             duration={course.duration}
             level={course.level}

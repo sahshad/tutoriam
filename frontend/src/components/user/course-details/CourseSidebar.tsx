@@ -1,13 +1,12 @@
-"use client"
-
 import { useState } from "react"
 import { Clock, BarChart, Users, Globe, FileText, CheckCircle, Gift } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { addCourseToCart, addCourseToWishlist } from "@/services/userServices"
+import { toast } from "sonner"
 
 export default function CourseSidebar({
+  id,
   price,
-  originalPrice,
-  discount,
   duration,
   level,
   studentsEnrolled,
@@ -16,20 +15,43 @@ export default function CourseSidebar({
 }: any) {
   const [daysLeft, setDaysLeft] = useState(2)
 
+  const handleAddToCart = async () => {
+    try {
+      const res = await addCourseToCart(id)
+      toast.success("course added to cart", {position:"top-right"})
+      console.log(res)
+    } catch (error:any) {
+      toast.error(error.data.message ||"error while adding course to cart", {position:"top-right"})
+    }
+  }
+
+  const handleAddToWishlist = async () => {
+    try {
+      const res = await addCourseToWishlist(id)
+      toast.success("course added to wishlist", {position:"top-right"})
+      console.log(res)
+    } catch (error:any) {
+      toast.error(error.data.message ||"error while adding course to cart", {position:"top-right"})
+    }
+  }
+
   return (
     <div className="sticky top-24 space-y-6 rounded-lg border bg-card p-6 shadow-sm">
       <div className="space-y-2">
         <div className="flex items-baseline justify-between">
-          <div className="text-2xl font-bold">{`${price === 0 ? 'Free' : `${price.toFixed(2)}`}`}</div>
+          <div className="text-2xl font-bold">{`${price === 0 ? 'Free' : `₹ ${price.toFixed(2)}`}`}</div>
           {/* <div className="text-sm text-muted-foreground line-through">${originalPrice.toFixed(2)}</div> */}
         </div>
       </div>
 
       <div className="space-y-4">
         {price === 0 ?
-        <Button className="w-full bg-black text-white hover:bg-black/90">Enroll Now</Button>
+        <Button className="w-full">Enroll Now</Button>
         :
-        <Button className="w-full bg-black text-white hover:bg-black/90">Add To Cart</Button>
+        <div className="flex w-full justify-between gap-5 ">
+        <Button onClick={handleAddToCart} className="flex-1">Add To Cart</Button>
+        <Button onClick={handleAddToWishlist} className="flex-1">Add To wishlist</Button>
+        </div>
         }
         
       </div>

@@ -1,15 +1,15 @@
-import mongoose, { Document, ObjectId, Schema } from "mongoose";
+import mongoose, { Document, ObjectId, Schema, Types } from "mongoose";
 
 export interface ICart extends Document {
-  userId: ObjectId;
+  userId: mongoose.Schema.Types.ObjectId | string;
   courses: ObjectId[];
   createdAt: Date;
 }
 
 const CartSchema = new Schema<ICart>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true, unique: true },
-    courses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+    userId: { type:Types.ObjectId, ref: "User", required: true, unique: true },
+    courses: [{ type: Types.ObjectId, ref: "Course" , default: []}],
   },
   { timestamps: true }
 );

@@ -34,31 +34,31 @@ export function CartSummary({
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground">Subtotal</span>
-          <span>${subtotal.toFixed(2)} USD</span>
+          <span>₹ {subtotal.toFixed(2)} INR</span>
         </div>
 
         {discount > 0 && (
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground">Coupon Discount</span>
-            <span className="text-green-600">-${discount.toFixed(2)} USD</span>
+            <span className="text-green-600">-₹ {discount.toFixed(2)} INR</span>
           </div>
         )}
 
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground">Taxes</span>
-          <span>${taxes.toFixed(2)} USD</span>
+          <span>₹ {taxes.toFixed(2)} INR</span>
         </div>
 
         <Separator />
 
         <div className="flex items-center justify-between font-medium">
           <span>Total:</span>
-          <span className="text-xl">${total.toFixed(2)} USD</span>
+          <span className="text-xl">₹ {total.toFixed(2)} INR</span>
         </div>
       </div>
 
       <div className="mt-6 space-y-4">
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <div className="text-sm font-medium">Apply coupon code</div>
           <div className="flex gap-2">
             <Input
@@ -78,7 +78,7 @@ export function CartSummary({
           {appliedCoupon && (
             <div className="text-sm text-green-600">Coupon "{appliedCoupon}" applied successfully!</div>
           )}
-        </div>
+        </div> */}
 
         <Button className="w-full bg-black text-white hover:bg-black/90">Proceed To Checkout</Button>
 

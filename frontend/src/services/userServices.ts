@@ -1,6 +1,7 @@
 import { updateUser } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
 import apiClient from "@/utils/axiosInstance";
+import { Theater } from "lucide-react";
 
 
 export const updateProfile = async (
@@ -54,5 +55,58 @@ export const sendInstructorApplication = async(userId:string,formData:FormData) 
   } catch (error:any) {
     console.log(error)
     return error.response
+  }
+}
+
+export const addCourseToCart = async (courseId: string) => {
+  try {
+    const res = await apiClient.post("user/cart/add", {courseId})
+    return res.data
+  } catch (error:any) {
+    throw error.response
+  }
+}
+
+export const removeCourseFromCart = async( courseId: string) => {
+  try {
+    const res = await apiClient.post("user/cart/remove", {courseId})
+    return res.data
+  } catch (error) {
+    throw error
+  }
+}
+
+export const getCartItems = async () => {
+  try {
+    const res = await apiClient.get("user/cart")
+    return res.data
+  } catch (error) {
+    throw error
+  }
+}
+export const addCourseToWishlist = async (courseId: string) => {
+  try {
+    const res = await apiClient.post("user/wishlist/add", {courseId})
+    return res.data
+  } catch (error:any) {
+    throw error.response
+  }
+}
+
+export const removeCourseFromWishlist = async( courseId: string) => {
+  try {
+    const res = await apiClient.post("user/wishlist/remove", {courseId})
+    return res.data
+  } catch (error) {
+    throw error
+  }
+}
+
+export const getWishlistItems = async () => {
+  try {
+    const res = await apiClient.get("user/wishlist")
+    return res.data
+  } catch (error) {
+    throw error
   }
 }

@@ -1,24 +1,27 @@
 
-import { Trash2 } from "lucide-react"
+import { Trash2, ShoppingCart } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import type { CartItemType } from "@/lib/mock-data"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Badge } from "@/components/ui/badge"
+import type { WishlistItemType } from "@/lib/mock-data"
 import { Link } from "react-router-dom"
 
-interface CartItemProps {
-  item: CartItemType
+interface WishlistItemProps {
+  item: WishlistItemType
   onRemove: () => void
-  onMoveToWishlist: () => void
+  onMoveToCart: () => void
 }
 
-export function CartItem({ item, onRemove, onMoveToWishlist }: CartItemProps) {
+export function WishlistItem({ item, onRemove, onMoveToCart }: WishlistItemProps) {
   return (
     <div className="grid grid-cols-1 gap-4 rounded-lg border p-4 sm:grid-cols-12">
+
       <div className="col-span-6 flex gap-4">
         <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
           <img src={item.thumbnail || "/placeholder.svg"} alt={item.title}  className="object-cover" />
         </div>
         <div className="flex flex-col">
-          <Link to={`/courses/${item.id}`} className="font-medium hover:underline">
+          <Link to={`/courses/${item._id}`} className="font-medium hover:underline">
             {item.title}
           </Link>
           <div className="mt-1 flex items-center text-sm text-muted-foreground">
@@ -49,25 +52,36 @@ export function CartItem({ item, onRemove, onMoveToWishlist }: CartItemProps) {
               {/* {item.reviewCount.toLocaleString()} {item.reviewCount === 1 ? "review" : "reviews"} */}
             </span>
           </div>
-          <div className="mt-1 text-sm">
-            <span>Course by: </span>
-            <span className="text-muted-foreground">{item.instructor}</span>
+          <div className="mt-1 flex flex-wrap gap-2">
+            <span className="text-sm">
+              By: <span className="text-muted-foreground">{item.instructor}</span>
+            </span>
+            {/* {item.inStock ? (
+              <Badge variant="outline" className="border-green-500 text-green-600">
+                In Stock
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="border-amber-500 text-amber-600">
+                Coming Soon
+              </Badge>
+            )} */}
           </div>
         </div>
       </div>
 
-      <div className="col-span-3 flex items-center justify-center sm:justify-center">
+      <div className="col-span-2 flex items-center justify-start sm:justify-center">
         <div className="flex flex-col items-start sm:items-center">
-          {item.originalPrice && item.originalPrice > item.price && (
+          {/* {item.originalPrice && item.originalPrice > item.price && (
             <span className="text-sm text-muted-foreground line-through">${item.originalPrice.toFixed(2)}</span>
-          )}
-          <span className="text-lg font-bold">${item.price.toFixed(2)}</span>
+          )} */}
+          <span className="text-lg font-bold">₹ {item.price.toFixed(2)}</span>
         </div>
       </div>
 
       <div className="col-span-3 flex items-center justify-between gap-2 sm:justify-center">
-        <Button variant="outline" size="sm" className="w-full" onClick={onMoveToWishlist}>
-          Move To Wishlist
+        <Button variant="outline" size="sm" className="w-full" onClick={onMoveToCart} disabled={!item.inStock}>
+          <ShoppingCart className="mr-2 h-4 w-4" />
+          Add to Cart
         </Button>
         <Button
           variant="ghost"

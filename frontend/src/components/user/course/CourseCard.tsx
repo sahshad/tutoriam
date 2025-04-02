@@ -39,7 +39,7 @@ export function CourseCard({ course }: CourseCardProps) {
             <span className="text-sm font-medium">{rating}</span>
             <span className="text-xs text-muted-foreground">({enrollmentCount?.toLocaleString()} students)</span>
           </div>
-          <div className="text-lg font-bold text-black">
+          <div className="text-lg font-bold ">
   {Number(price) === 0 ? "Free" : `₹${price}`}
 </div>
         </div>

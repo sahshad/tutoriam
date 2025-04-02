@@ -21,8 +21,8 @@
 import { toast } from "sonner";
 
   export default function EditCoursePage() {
-    const { courseId } = useParams();  // React Router's useParams to get dynamic route params
-    const navigate = useNavigate();  // React Router's useNavigate for navigation
+    const { courseId } = useParams();  
+    const navigate = useNavigate();  
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,7 +32,6 @@ import { toast } from "sonner";
       message: string;
     } | null>(null);
 
-    // Form state
     const [basicInformation, setBasicInformation] = useState<Partial<BasicInformationType>>({});
     const [advancedInformation, setAdvancedInformation] = useState<Partial<AdvancedInformationType>>({});
     const [curriculum, setCurriculum] = useState<Partial<CurriculumType>>({});
@@ -62,7 +61,7 @@ import { toast } from "sonner";
           setPrevPublishData(createPublishData(courseData));
         } catch (error) {
           console.error("Failed to fetch course data:", error);
-          // navigate("/my-courses");  // Redirect to courses list
+          // navigate("/my-courses"); 
         } finally {
           setIsLoading(false);
         }

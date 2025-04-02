@@ -1,4 +1,4 @@
-import { Document, Model } from "mongoose";
+import { Document, FilterQuery, Model } from "mongoose";
 import { IBaseRepository } from "../interfaces/repository/IBaseRepository";
 
 export abstract class BaseRepository<T extends Document>
@@ -38,6 +38,7 @@ export abstract class BaseRepository<T extends Document>
   }
 
   async findOne(data: Partial<T>): Promise<T | null> {
-    return await this.model.findOne({data});
+    console.log(data)
+    return await this.model.findOne(data as FilterQuery<T>);
   }
 }

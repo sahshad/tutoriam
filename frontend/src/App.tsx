@@ -27,6 +27,7 @@ import EditCoursePage from "./pages/instructor/EditCoursePage";
 import UserCoursesPage from "./pages/user/CoursesPage";
 import UserCourseDetailsPage from "./pages/user/UserCourseDetails";
 import CartPage from "./pages/user/CartPage";
+import WishlistPage from "./pages/user/WishlistPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -66,6 +67,7 @@ const App = () => {
               <Route path="/courses" element={<UserCoursesPage/>}/>
               <Route path="/courses/:courseId" element={<UserCourseDetailsPage/>}/>
               <Route path="/cart" element={<CartPage/>}/>
+              <Route path="/wishlist" element={<WishlistPage/>} />
         </Route>
 
         <Route element={<ProtectedRoute role="instructor"/>}>
