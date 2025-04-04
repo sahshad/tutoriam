@@ -1,7 +1,34 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { getAdminDashboard } from '@/services/adminService'
 import { ArrowDownRight, ArrowUpRight, BookOpen, DollarSign, GraduationCap, Users } from 'lucide-react'
+import { useEffect, useState } from 'react'
+
+export interface AdminDashboardStats {
+  totalUsers: number | null;
+  totalTutors: number | null;
+  totalCourses: number | null;
+}
 
 const DashboardPage = () => {
+  const [dashboardData, setDashboardData] = useState<AdminDashboardStats | null>(null)
+  const [loading, setLoading] = useState(true)
+  useEffect(()=> {
+    const fetchDashboardData = async()=> {
+      try {
+        const data = await getAdminDashboard()
+        console.log(data)
+        setDashboardData(data.dashboardDetails)
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchDashboardData()
+  },[])
+
+  if(loading){
+    return <div></div>
+  }
   return (
     <div className="flex-1 space-y-4 md:pl-64">
     <div className="flex items-center justify-between">
@@ -14,7 +41,7 @@ const DashboardPage = () => {
           <Users className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">2,543</div>
+          <div className="text-2xl font-bold">{dashboardData?.totalUsers}</div>
           <p className="text-xs text-muted-foreground">
             <span className="text-emerald-500 flex items-center">
               <ArrowUpRight className="mr-1 h-4 w-4" />
@@ -30,7 +57,7 @@ const DashboardPage = () => {
           <GraduationCap className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">128</div>
+          <div className="text-2xl font-bold">{dashboardData?.totalTutors}</div>
           <p className="text-xs text-muted-foreground">
             <span className="text-emerald-500 flex items-center">
               <ArrowUpRight className="mr-1 h-4 w-4" />
@@ -46,7 +73,7 @@ const DashboardPage = () => {
           <BookOpen className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">342</div>
+          <div className="text-2xl font-bold">{dashboardData?.totalCourses}</div>
           <p className="text-xs text-muted-foreground">
             <span className="text-emerald-500 flex items-center">
               <ArrowUpRight className="mr-1 h-4 w-4" />

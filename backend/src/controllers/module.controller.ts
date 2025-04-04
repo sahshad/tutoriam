@@ -22,14 +22,13 @@ export class ModuleController implements IModuleController{
  updateModule = asyncHandler(async (req:Request, res:Response) => {
     const {moduleId} = req.params
     const data = req.body
-    console.log(data)
     
     const module = await this.moduleService.update(moduleId, data)
     res.status(StatusCodes.OK).json({message: "module updated successfully", module})
  })
 
 deleteModule = asyncHandler(async (req:Request, res:Response) => {
-    const {mdouleId} = req.params
+    const {mdouleId} = req.params 
     const module = this.moduleService.delete(mdouleId)
 
     res.status(StatusCodes.OK).json({message: "module deleted successfully"})

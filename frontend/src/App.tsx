@@ -59,7 +59,6 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
         <Route path="/reset-password" element={<ResetPasswordPage/>}/>
 
-
         <Route element={<ProtectedRoute role="user"/>}>
               <Route path="/profile" element={<UserProfile /> } />
               <Route path="/become-instructor" element={<BecomeInstructorPage/>}/>
@@ -76,6 +75,10 @@ const App = () => {
           <Route path="/instructor/my-courses" element={<CoursesPage/>}/>
           <Route path="/instructor/my-courses/:courseId" element={<SingleCoursePage/>}/>
           <Route path="/instructor/my-courses/:courseId/edit" element={<EditCoursePage/>}/>
+          <Route path="/instructor/courses" element={<UserCoursesPage/>}/>
+              <Route path="/instructor/courses/:courseId" element={<UserCourseDetailsPage/>}/>
+              <Route path="/instructor/cart" element={<CartPage/>}/>
+              <Route path="/instructor/wishlist" element={<WishlistPage/>} />
         </Route>
 
         <Route path="/admin/login" element={<AdminLoginPage/>}/>

@@ -26,6 +26,7 @@ import { RejectionDialog } from "@/components/admin/instructorApplication/Reject
 import { fetchInstructorApplications, updateInstructorStatus } from "@/services/adminService";
 import { AxiosResponse } from "axios";
 import { toast } from "sonner";
+import { subjects } from "@/lib/becomeTutorFormShemas";
 
 export default function InstructorApplicationsPage() {
   const [loading, setLoading] = useState(true);
@@ -156,6 +157,9 @@ export default function InstructorApplicationsPage() {
                     </div>
                   </TableCell>
                   <TableCell>{application.education.highestDegree}</TableCell>
+                  {/* {application.preferredSubjects.map((subject:any) => (
+                    <TableCell>{subject}</TableCell>
+                  ))} */}
                   <TableCell>{application.preferredSubjects[0]}</TableCell>
                   <TableCell>{application.teachingLanguages[0]}</TableCell>
                   <TableCell>
@@ -239,10 +243,16 @@ export default function InstructorApplicationsPage() {
                 </div>
                 <div>
                   <p className="font-medium text-muted-foreground">Expertise</p>
+                  {/* {application.preferredSubjects.map((subject:any) => (
+                    <p>{subject}</p>
+                  ))} */}
                   <p>{application.preferredSubjects[0]}</p>
                 </div>
                 <div>
                   <p className="font-medium text-muted-foreground">Language</p>
+                  {/* {application.teachingLanguages.map((language:any) => (
+                    <p>{language}</p>
+                  ))} */}
                   <p>{application.teachingLanguages[0]}</p>
                 </div>
                 <div>

@@ -7,4 +7,5 @@ export interface IInstructorRepository extends IBaseRepository<IInstructor> {
     updateInstructorStatus(id:string, updates:{}):Promise<IInstructor| null>
     getInstructors():Promise<IInstructor[]  | null>
     findInstructorByUserId(userId:string):Promise<IInstructor|null>
+    getInstructorProfile(instructorId:string):Promise<IInstructor | null>
 }

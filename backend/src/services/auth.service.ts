@@ -55,11 +55,11 @@ export class AuthService implements IAuthService {
     const user = await this.authRepository.createUser(name, email, hashedPassword);
     if (!user) throw new Error("Cannot create user please register again");
     const userId = user._id;
-    const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET!, {
+    const accessToken = jwt.sign({ userId, role:"user" }, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: "15m",
     });
     const refreshToken = jwt.sign(
-      { userId },
+      { userId, role: "user" },
       process.env.REFRESH_TOKEN_SECRET!,
       {
         expiresIn: "7d",
@@ -93,9 +93,9 @@ export class AuthService implements IAuthService {
     password: string,
     role: string
   ): Promise<verifiedUer> {
-    let user: IAdmin | IUser | null;
-    if (role === "admin") user = await this.authRepository.findAdminByEmail(email);
-    else user = await this.authRepository.findUserByEmail(email);
+    let user: IUser | null;
+    // if (role === "admin") user = await this.authRepository.findAdminByEmail(email);
+    user = await this.authRepository.findUserByEmail(email);
 
     if (!user) throw new Error("Invalid email address");
     
@@ -106,11 +106,11 @@ export class AuthService implements IAuthService {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw new Error("Incorrect password");
     const userId = user._id;
-    const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET!, {
+    const accessToken = jwt.sign({ userId, role:user.role }, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: "15m",
     });
     const refreshToken = jwt.sign(
-      { userId },
+      { userId, role: user.role },
       process.env.REFRESH_TOKEN_SECRET!,
       {
         expiresIn: "7d",
@@ -122,25 +122,24 @@ export class AuthService implements IAuthService {
 
   async refreshAccessToken(
     refreshToken: string,
-    role: string
   ): Promise<refreshedUser> {
     try {
       const decoded = jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET!
-      ) as { userId: string };
+      ) as { userId: string, role:string };
+
       const userId = decoded.userId;
+      const role = decoded.role
       const newAccessToken = jwt.sign(
-        { userId },
+        { userId,role },
         process.env.ACCESS_TOKEN_SECRET!,
         {
           expiresIn: "15m",
         }
       );
-      let user;
-      if (role === "admin")
-        user = await this.authRepository.findAdminById(decoded.userId);
-      else user = await this.authRepository.findUserById(decoded.userId);
+ 
+    const user = await this.authRepository.findUserById(decoded.userId);
 
       if (!user) {
         throw new Error("cannot find user please try again");

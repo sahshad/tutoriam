@@ -79,7 +79,7 @@ export function WishlistItem({ item, onRemove, onMoveToCart }: WishlistItemProps
       </div>
 
       <div className="col-span-3 flex items-center justify-between gap-2 sm:justify-center">
-        <Button variant="outline" size="sm" className="w-full" onClick={onMoveToCart} disabled={!item.inStock}>
+        <Button variant="outline" size="sm" className="w-full" onClick={onMoveToCart} >
           <ShoppingCart className="mr-2 h-4 w-4" />
           Add to Cart
         </Button>

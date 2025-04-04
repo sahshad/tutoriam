@@ -27,10 +27,9 @@ export class UserController implements IUserController{
   
       const { name, title } = req.body;
   
-      const updateData = {
+      const updateData: { name: any; title: any; profileImageUrl?: string } = {
         name,
         title,
-        profileImageUrl: ''
       };
   
       if (req.file) {
@@ -47,6 +46,7 @@ export class UserController implements IUserController{
       const { userId } = req.params;
       const updatedUser = await this.userService.changePassword(userId, currentPassword, newPassword);
       if (!updatedUser || updatedUser instanceof Error) {
+        console.log(updatedUser)
         res.status(400).json({ message: "please check the given passwords" });
         return;
       }
@@ -88,4 +88,6 @@ export class UserController implements IUserController{
   
       res.status(200).json({ message: 'application submitted successfully' });
     });
+
+    
 }

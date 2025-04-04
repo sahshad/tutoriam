@@ -1,10 +1,34 @@
+import { getInstructorDetails } from "@/services/courseService"
+import { flatMap } from "lodash"
 import { Star } from "lucide-react"
+import { useEffect, useState } from "react"
 
 interface CourseInstructorProps {
-  instructor: any
+  instructorId: any
 }
 
-export default function CourseInstructor({ instructor }: CourseInstructorProps) {
+export default function CourseInstructor({ instructorId }: CourseInstructorProps) {
+  const [instructor, setInstructor] = useState<any>()
+  const [loading, setLoading] = useState<boolean>(true)
+  useEffect(()=> {
+    console.log("hi")
+     const fetchInstructorDetails = async () => {
+      try {
+        const data = await getInstructorDetails(instructorId)
+        console.log(data)
+        setInstructor(data.instructor)
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+      }
+     }
+
+     fetchInstructorDetails()
+  }, [instructorId])
+
+  if(loading){
+    return <div>  </div>
+  }
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-bold">About the Instructor</h2>
@@ -12,21 +36,21 @@ export default function CourseInstructor({ instructor }: CourseInstructorProps) 
       <div className="flex flex-col gap-4 sm:flex-row">
         <div className="flex-shrink-0">
           <div className="relative h-24 w-24 overflow-hidden rounded-full">
-            <img src={instructor.avatar || "/placeholder.svg"} alt={instructor.name}  className="object-cover" />
+            <img src={instructor.userId.profileImageUrl || "/placeholder.svg"} alt={instructor.name}  className="object-cover" />
           </div>
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-lg font-medium">{instructor.name}</h3>
-          <p className="text-sm text-muted-foreground">{instructor.title}</p>
+          <h3 className="text-lg font-medium">{instructor.userId.name}</h3>
+          <p className="text-sm text-muted-foreground">{instructor.userId.title}</p>
 
           <div className="flex items-center gap-4">
             <div className="flex items-center">
-              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-              <span className="ml-1 text-sm">{instructor.rating} Instructor Rating</span>
+              <Star className="h-4 w-4" />
+              <span className="ml-1 text-sm">{instructor.rating} instructor Rating</span>
             </div>
-            <div className="text-sm text-muted-foreground">{instructor.reviews.toLocaleString()} Reviews</div>
-            <div className="text-sm text-muted-foreground">{instructor.students.toLocaleString()} Students</div>
+            {/* <div className="text-sm text-muted-foreground">{instructor.reviews.toLocaleString()} Reviews</div> */}
+            {/* <div className="text-sm text-muted-foreground">{instructor.students.toLocaleString()} Students</div> */}
             <div className="text-sm text-muted-foreground">{instructor.courses} Courses</div>
           </div>
         </div>

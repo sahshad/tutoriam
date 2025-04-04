@@ -28,9 +28,9 @@ export const verifyResetToken = async (token: string, expectedPurpose: string) =
   }
 }
 
-export const createRefreshToken = (userId:string) => {
+export const createRefreshToken = (userId:string, role:string) => {
  return jwt.sign(
-      { userId },
+      { userId,role },
       process.env.REFRESH_TOKEN_SECRET!,
       {
         expiresIn: "7d",
@@ -39,7 +39,7 @@ export const createRefreshToken = (userId:string) => {
 }
 
 
-export const createAccessToken = (userId:string) => {
+export const createAccessToken = (userId:string, role:string) => {
   return jwt.sign(
     { userId },
     process.env.ACCESS_TOKEN_SECRET!,

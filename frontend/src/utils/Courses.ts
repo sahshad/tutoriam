@@ -3,7 +3,7 @@ import { BasicInformationType } from "@/components/instructor/create_course/Basi
 import { CurriculumType } from "@/components/instructor/create_course/Curriculum";
 import { PublishType } from "@/components/instructor/create_course/PublishCourse";
 
- export const createLessonData = (lesson:any, moduleId?:string, ) => {
+export const createLessonData = (lesson:any, moduleId?:string, ) => {
     const lessonData = new FormData();
 
   if(moduleId)lessonData.append("moduleId", moduleId);

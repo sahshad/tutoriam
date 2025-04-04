@@ -88,14 +88,6 @@ export default function CourseSidebar({
             <p className="text-sm text-muted-foreground">{language}</p>
           </div>
         </div>
-
-        <div className="flex items-center gap-3">
-          <FileText className="h-5 w-5 text-muted-foreground" />
-          <div>
-            <p className="text-sm font-medium">Subtitle Language</p>
-            <p className="text-sm text-muted-foreground">{subtitleLanguage}</p>
-          </div>
-        </div>
       </div>
 
       <div className="space-y-2 pt-4">
@@ -104,10 +96,6 @@ export default function CourseSidebar({
           <li className="flex items-center gap-2">
             <CheckCircle className="h-4 w-4 text-black" />
             <span className="text-sm">Lifetime access</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-black" />
-            <span className="text-sm">30-days money-back guarantee</span>
           </li>
           <li className="flex items-center gap-2">
             <CheckCircle className="h-4 w-4 text-black" />

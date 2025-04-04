@@ -25,4 +25,12 @@ export class InstructorService implements IInstructorService{
             throw new Error("no instructors found") 
         return instructors
     }
+
+    async getInstructorProfile(instructorId: string):Promise<IInstructor | null>{
+        const instructor = await this.instructorRepository.getInstructorProfile(instructorId)
+        if(!instructor){
+            throw new Error("instructor not found ")
+        }
+        return instructor
+    }
 }

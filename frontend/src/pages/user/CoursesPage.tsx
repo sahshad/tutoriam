@@ -4,8 +4,6 @@ import { Filter } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-// import { CoursePagination } from "@/components/courses/course-pagination"
-// import { fetchCourses } from "@/lib/api"
 import type { Course } from "@/types/course"
 import { getAllCourses } from "@/services/courseService"
 import { CourseSort } from "@/components/user/course/CourseSort"
@@ -43,7 +41,7 @@ export default function UserCoursesPage() {
         //   category,
         //   search: searchQuery,
         // })
-        const {courses, message} = await getAllCourses()
+        const {courses} = await getAllCourses()
         console.log(courses)
         setCourses(courses)
         setTotalCourses(courses.length)

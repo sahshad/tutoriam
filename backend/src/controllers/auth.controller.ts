@@ -64,6 +64,7 @@ export class AuthController implements IAuthController {
       res.status(403).json({ error: "Refresh token required" });
       return;
     }
+    
     const { role } = req.body;
     const { accessToken, user } = await this.authService.refreshAccessToken(refreshToken, role);
     res.status(StatusCodes.OK).json({ accessToken, user });
@@ -108,7 +109,7 @@ export class AuthController implements IAuthController {
       user = await this.userService.createGoogleUser( displayName, email,profileImageUrl, id )
     }
 
-    const refreshToken = createRefreshToken(user?.id)
+    const refreshToken = createRefreshToken(user?.id, 'user')
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,

@@ -33,5 +33,16 @@ export interface Course {
   
 
   export interface FullCourse extends Partial<Course>, Partial<Module>, Partial<Lesson> {
-
+    instructor:{}
   } 
+
+  export interface GetCoursesRequestParams {
+    page?: number;        
+    limit?: number;          
+    searchQuery?: string;    
+    category?: string;
+    subCategory?: string;
+    rating?: string;
+    sortBy?: string;
+  }
+  

@@ -15,6 +15,11 @@ export class AdminController implements IAdminController {
     private instructorService: IInstructorService
   ) {}
 
+  getDashboard = asyncHandler(async (req: Request, res: Response): Promise<void> =>{
+    const dashboardDetails = await this.adminService.getDashboardDetails()
+    res.status(StatusCodes.OK).json({message:"dashboard details fetched successfully", dashboardDetails})
+  })
+
   getUsers = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const users = await this.adminService.getUsers();
     if (!users) {

@@ -6,7 +6,8 @@ import { Link } from "react-router-dom"
 import { EmptyWishlist } from "@/components/user/wishlist/EmptyWishlist"
 import { WishlistItem } from "@/components/user/wishlist/WishlistItmes"
 import Header from "@/components/user/home/Header"
-import { getWishlistItems, removeCourseFromWishlist } from "@/services/userServices"
+import { addCourseToCart, getWishlistItems, removeCourseFromWishlist } from "@/services/userServices"
+import { toast } from "sonner"
 
 export default function WishlistPage() {
 //   const { toast } = useToast()
@@ -36,8 +37,17 @@ export default function WishlistPage() {
 
   }
 
-  const handleMoveToCart = (id: string) => {
-    setWishlistItems(wishlistItems.filter((item) => item._id !== id))
+  const handleMoveToCart = async (_id: string) => {
+      try {
+          await addCourseToCart(_id)
+          await removeCourseFromWishlist(_id)
+          toast.success("course moved to cart successfully", {position:"top-right"})
+          // setCartItems(cartItems.filter((item) => item._id !== _id))
+          setWishlistItems(wishlistItems.filter((item) => item._id !== _id))
+      } catch (error) {
+        console.log(error)
+        toast.error("course is alredy in your cart", {position:"top-right"})
+      }
 
 
   }

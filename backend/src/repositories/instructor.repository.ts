@@ -38,4 +38,9 @@ constructor() {
     return Instructor.findOne({ userId: new Types.ObjectId(userId) })
   }
 
+ async getInstructorProfile(instructorId:string):Promise<IInstructor | null>{
+    return await Instructor.findOne({userId:instructorId}).populate("userId")
+  
+ }
+
 }

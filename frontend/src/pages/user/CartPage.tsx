@@ -8,7 +8,7 @@ import { Link } from "react-router-dom"
 import { CartItem } from "@/components/user/cart/CartItem"
 import { CartSummary } from "@/components/user/cart/CartSummary"
 import Header from "@/components/user/home/Header"
-import { getCartItems, removeCourseFromCart } from "@/services/userServices"
+import { addCourseToWishlist, getCartItems, removeCourseFromCart } from "@/services/userServices"
 import { toast } from "sonner"
 
 interface CartItemType {
@@ -52,8 +52,19 @@ export default function CartPage() {
     
   }
 
-  const handleMoveToWishlist = (_id: string) => {
-    setCartItems(cartItems.filter((item) => item._id !== _id))
+  const handleMoveToWishlist = async(_id: string) => {
+    // console.log(_id)
+    
+    try {
+      const res = await addCourseToWishlist(_id)
+      const resp = await removeCourseFromCart(_id)
+      toast.success("course moved to wishlist successfully", {position:"top-right"})
+      setCartItems(cartItems.filter((item) => item._id !== _id))
+    } catch (error) {
+      console.log(error)
+      toast.error("course is alredy in your wishlist", {position:"top-right"})
+    }
+    
     // toast({
     //   title: "Moved to wishlist",
     //   description: "The course has been moved to your wishlist.",
@@ -115,7 +126,7 @@ export default function CartPage() {
                   key={item._id}
                   item={item}
                   onRemove={() => handleRemoveItem(item._id)}
-                  onMoveToWishlist={() => handleMoveToWishlist(item.id)}
+                  onMoveToWishlist={() => handleMoveToWishlist(item._id)}
                 />
               ))}
             </div>
