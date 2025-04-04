@@ -22,8 +22,14 @@ export class WishlistRepository extends BaseRepository<IWishlist> implements IWi
     // }
 
     async getWishlistItems(userId: string): Promise<IWishlist | null> {
-         return await Wishlist.findOne({ userId: new mongoose.Types.ObjectId(userId) })
-        .populate('courses');
+        return await Wishlist.findOne({ userId: new mongoose.Types.ObjectId(userId) })
+        .populate({
+            path: 'courses', 
+            populate: {
+            path: 'instructorId', 
+            model: 'User' 
+            }
+            });
     }
 
     async removeWishlistItem(userId: string, courseId: string): Promise<IWishlist | null> {

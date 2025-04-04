@@ -7,7 +7,6 @@ import { CoursePagination } from "@/components/instructor/common/Pagination"
 import { CourseFilters } from "@/components/instructor/courses/CourseFilter"
 import { CourseGrid } from "@/components/instructor/courses/CourseGrid"
 
-
 export default function CoursesPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const {
@@ -19,23 +18,23 @@ export default function CoursesPage() {
     setSortBy,
     category,
     setCategory,
+    subCategory,
+    setSubCategory,
     rating,
     setRating,
     searchQuery,
     setSearchQuery,
-    loading
+    // loading
   } = useCourses({role:'instructor'})
 
-  useEffect(()=>{
-  },[courses])
   
-  if (loading) {
-      return (
-          <div className="flex h-screen bg-background items-center justify-center">
-        <div className="animate-spin h-16 w-16 border-t-4 border-blue-500 border-solid rounded-full" />
-      </div>
-    )
-}
+//   if (loading) {
+//       return (
+//           <div className="flex h-screen bg-background items-center justify-center">
+//         <div className="animate-spin h-16 w-16 border-t-4 border-blue-500 border-solid rounded-full" />
+//       </div>
+//     )
+// }
 
   return (
     <div className="flex h-screen bg-background">
@@ -58,6 +57,8 @@ export default function CoursesPage() {
             setRating={setRating}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
+            subCategory={subCategory}
+            setSubCategory={setSubCategory}
           />
 
           <CourseGrid courses={courses} />

@@ -51,11 +51,10 @@ export function CartItem({ item, onRemove, onMoveToWishlist }: CartItemProps) {
           </div>
           <div className="mt-1 text-sm">
             <span>Course by: </span>
-            <span className="text-muted-foreground">{item.instructor}</span>
+            <span className="text-muted-foreground">{item.instructorId.name}</span>
           </div>
         </div>
       </div>
-
       <div className="col-span-3 flex items-center justify-center sm:justify-center">
         <div className="flex flex-col items-start sm:items-center">
           {item.originalPrice && item.originalPrice > item.price && (

@@ -38,6 +38,7 @@ router.post("/cart/remove",authMiddleware(["user"]), cartController.removeItemFr
 router.get("/wishlist",authMiddleware(["user"]), wishlistControllet.getWishlistItems)
 router.post("/wishlist/add",authMiddleware(["user"]), wishlistControllet.addItemToWishlist)
 router.post("/wishlist/remove",authMiddleware(["user"]), wishlistControllet.removeItemFromWishlist)
+router.get("/applications",authMiddleware(["user"]), instructorController.getUserApplications)
 
 
 export default router;

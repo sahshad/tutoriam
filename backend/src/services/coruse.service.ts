@@ -30,6 +30,71 @@ export class CourseService extends BaseService<ICourse> implements ICourseServic
      return await this.courseRepository.getCoursesByInstructorId(instructorId)
  }
 
+async getMycourses({page=1, limit=12, search='', category='', subCategory='', sortBy='createdAt' }:
+     { page: number; limit: number; search: string; category: string; subCategory: string; sortBy: string },
+      instructorId:string): Promise<PaginatedCoursesResponse | null> {
+    const skip = (page - 1) * limit
+    const perPage = limit
+
+    let filter:any = {};
+    filter.instructorId = instructorId
+    
+    if (search) {
+        filter.$or = [
+            { title: { $regex: search, $options: 'i' } }, 
+            // { description: { $regex: search, $options: 'i' } } 
+        ];
+    }
+
+    if(category){
+        if(category === 'all'){
+            filter.category = {$exists: true}
+        }else{
+        filter.category = category
+        }
+    }
+
+    if(subCategory){
+        if(subCategory === 'all'){
+            filter.subCategory = {$exists: true}
+        }
+        else{
+            filter.subCategory = subCategory
+        }
+    }
+
+    let sort: any = {};
+    switch (sortBy) {
+      case 'price-high':
+        sort.price = -1;  
+        break;
+      case 'price-low':
+        sort.price = 1;  
+        break;
+      case 'latest':
+        sort.createdAt = -1; 
+        break;
+      case 'oldest':
+        sort.createdAt = 1; 
+        break;
+      case 'rating':
+        sort.rating = -1;    
+        break;
+      default:
+        sort.createdAt = -1; 
+    }
+
+     const courses = await this.courseRepository.getAllCourses(filter, skip, perPage, sort )
+     const totalCourses = await this.courseRepository.getCoursescount(filter)
+
+     return {
+         totalCourses,
+         totalPages: Math.ceil(totalCourses / perPage),
+         currentPage: page,
+         courses
+       };
+ }
+
  async updatePublishStatus(courseId: string): Promise<ICourse > {
      const course = await this.courseRepository.updateCoursePublishStatus(courseId)
      if(!course)

@@ -28,6 +28,7 @@ import UserCoursesPage from "./pages/user/CoursesPage";
 import UserCourseDetailsPage from "./pages/user/UserCourseDetails";
 import CartPage from "./pages/user/CartPage";
 import WishlistPage from "./pages/user/WishlistPage";
+import NotFound from "./pages/user/NotFound";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -92,6 +93,7 @@ const App = () => {
             <Route path="instructor-applications" element={<InstructorApplicationsPage/>}/>
             </Route>
         </Route>
+        <Route path="*" element={<NotFound/>} /> 
       </Routes>
     </Router>
   );

@@ -54,7 +54,7 @@ export function WishlistItem({ item, onRemove, onMoveToCart }: WishlistItemProps
           </div>
           <div className="mt-1 flex flex-wrap gap-2">
             <span className="text-sm">
-              By: <span className="text-muted-foreground">{item.instructor}</span>
+              By: <span className="text-muted-foreground">{item.instructorId.name}</span>
             </span>
             {/* {item.inStock ? (
               <Badge variant="outline" className="border-green-500 text-green-600">

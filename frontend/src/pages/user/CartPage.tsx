@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react"
-import { ChevronRight } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 // import { useToast } from "@/hooks/use-toast"
-// import { mockCartItems } from "@/lib/mock-data"
 import { Link } from "react-router-dom"
 import { CartItem } from "@/components/user/cart/CartItem"
 import { CartSummary } from "@/components/user/cart/CartSummary"
@@ -16,12 +13,11 @@ interface CartItemType {
   price: number;
   thumbnail:string
   
-  // other properties based on your actual cart item structure
 }
 
 export default function CartPage() {
 //   const { toast } = useToast()
-  const [cartItems, setCartItems] = useState<CartItemType[]>([]); // Empty array as default
+  const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [couponCode, setCouponCode] = useState("")
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null)
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false)
@@ -38,7 +34,7 @@ export default function CartPage() {
     }
 
     getCartData()
-  }, []); // Dependency array is empty to prevent infinite loop
+  }, []);
 
   const handleRemoveItem = async (_id: string) => {
     try {
@@ -53,7 +49,6 @@ export default function CartPage() {
   }
 
   const handleMoveToWishlist = async(_id: string) => {
-    // console.log(_id)
     
     try {
       const res = await addCourseToWishlist(_id)
@@ -76,7 +71,6 @@ export default function CartPage() {
 
     setIsApplyingCoupon(true)
 
-    // Simulate API call
     setTimeout(() => {
       setAppliedCoupon(couponCode)
       setCouponCode("")

@@ -18,13 +18,19 @@ export class InstructorController implements IInstructorController {
       });
 
     getInstructorProfile = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-      console.log('hi')
       const {id } = req.query
       if(!id){
         res.status(400)
       }
       const instructor = await this.instructorService.getInstructorProfile(id as string)
       res.status(StatusCodes.OK).json({message: "instructor profile fetched successfully", instructor})
+    })
+
+    getUserApplications = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+        const userId = req.user?._id
+        const applications = await this.instructorService.getUserApplications(userId as string);
+        res.status(StatusCodes.OK).json({ applications, message: "applications fetched successfully" });
+      
     })
 
 }

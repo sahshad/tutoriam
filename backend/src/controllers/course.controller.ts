@@ -6,6 +6,7 @@ import { StatusCodes } from "http-status-codes";
 import { TYPES } from "../di/types";
 import { ICourseService } from "../core/interfaces/service/ICourseService";
 import { deleteImageFromCloudinary, deleteVideoFromCloudinary, uploadImageToCloudinary, uploadVideoToCloudinary } from "../utils/clodinaryServices";
+import { Instructor } from "../models/Instructor";
 
 @injectable()
 export class CourseController implements ICourseController {
@@ -21,9 +22,21 @@ export class CourseController implements ICourseController {
     });
 
     getMyCourses = asyncHandler(async(req:Request, res: Response) => {
-        const userId = req.user?._id
-        const courses = await this.courseService.getCoursesByInstructorId(userId as string)
-        res.status(StatusCodes.OK).json(courses)
+        const { page, limit, searchQuery, category, subCategory, sortBy } = req.query;
+        console.log(searchQuery,sortBy)
+        const instructorId = req.user?._id
+        const coursesWithPagination = await this.courseService.getMycourses({
+            page: Number(page) || 1,
+            limit: Number(limit) || 10,
+            search: searchQuery as string || '',
+            category: category as string || '',
+            subCategory: subCategory as string || '',
+            sortBy: sortBy as string || 'createdAt',
+        }, instructorId as string);
+
+        res.status(StatusCodes.OK).json({message: "courses fetched successfully", coursesWithPagination})
+        // const courses = await this.courseService.getCoursesByInstructorId(userId as string)
+        // res.status(StatusCodes.OK).json(courses)
     })
 
     updatePublishStatus = asyncHandler(async (req: Request, res: Response) => {

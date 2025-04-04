@@ -43,4 +43,7 @@ constructor() {
   
  }
 
+ async getUserApplications(userId: string):Promise<IInstructor[] | null>{
+    return await Instructor.find({userId: new Types.ObjectId(userId)}).populate("userId")
+  }
 }

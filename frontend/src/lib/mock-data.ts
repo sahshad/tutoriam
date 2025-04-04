@@ -6,7 +6,7 @@ export interface CartItemType {
     image: string
     rating: number
     reviewCount: number
-    instructor: string
+    instructorId: {name:string}
     thumbnail:string
   }
   
@@ -19,7 +19,7 @@ export interface CartItemType {
     image: string
     rating: number
     reviewCount: number
-    instructor: string
+    instructorId: {name:string}
     inStock: boolean
     dateAdded: string
   }

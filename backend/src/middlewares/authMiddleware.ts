@@ -14,20 +14,17 @@ export const authMiddleware = (
   roles:string[],
 ) => {
   return (  req: Request,res: Response,next: NextFunction) => {
-    // const allRoles = ["admin", "user", "instructor"]
       try {
         const accessToken =
           req.cookies.accessToken || req.header("Authorization")?.split(" ")[1];
         if (!accessToken)
           res.status(401).json({ error: "Unauthorized: No token provided" });
-    
 
         const decoded = jwt.verify(
           accessToken,
           process.env.ACCESS_TOKEN_SECRET!
         ) as { userId: string, role:string };
 
-        console.log(decoded, roles, !roles.includes(decoded.role))
 
         if(roles.length && !roles.includes(decoded.role)){
           res.status(StatusCodes.FORBIDDEN).json({message: "permisson denied"})
@@ -43,7 +40,6 @@ export const authMiddleware = (
         }
         res.status(403).json({ error: "Invalid token" });
       }
-
     }
   
 };

@@ -17,4 +17,5 @@ export interface ICourseService extends IBaseService<ICourse> {
  updatePublishStatus(courseId:string) : Promise<ICourse | null>
  getAllCourses(arg0: getAllCoursesArgument):Promise<PaginatedCoursesResponse | null>
  updateCourse(courseId: string,data: Partial<ICourse>, files?:{ [fieldname: string]: Express.Multer.File[] }):Promise<ICourse | null>
+ getMycourses(arg0: { page: number; limit: number; search: string; category: string; subCategory: string; sortBy: string }, instructorId:string):Promise<PaginatedCoursesResponse | null>
 }

@@ -12,14 +12,14 @@ export function CourseFilters() {
     <div className="space-y-6">
       <div>
         <h2 className="mb-4 text-lg font-semibold uppercase">Category</h2>
-        <Accordion type="multiple" defaultValue={["development"]}>
+        <Accordion type="multiple" defaultValue={[""]}>
           <CategoryAccordionItem
             value="development"
             title="Development"
             items={[
               { id: "web-dev", label: "Web development", count: 574 },
               { id: "data-science", label: "Data Science", count: 365 },
-              { id: "mobile-dev", label: "Mobile Development", count: 1345, checked: true },
+              { id: "mobile-dev", label: "Mobile Development", count: 1345,},
               { id: "software-testing", label: "Software Testing", count: 317 },
               { id: "software-engineering", label: "Software Engineering", count: 31 },
               { id: "dev-tools", label: "Software Development Tools", count: 556 },
@@ -128,7 +128,7 @@ export function CourseFilters() {
         </Accordion>
       </div>
 
-      <div>
+      {/* <div>
         <h2 className="mb-4 text-lg font-semibold uppercase">Rating</h2>
         <Accordion type="multiple" defaultValue={["rating"]}>
           <AccordionItem value="rating">
@@ -166,7 +166,7 @@ export function CourseFilters() {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      </div>
+      </div> */}
 
       <div>
         <h2 className="mb-4 text-lg font-semibold uppercase">Course Level</h2>

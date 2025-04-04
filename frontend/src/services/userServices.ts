@@ -105,6 +105,16 @@ export const removeCourseFromWishlist = async( courseId: string) => {
 export const getWishlistItems = async () => {
   try {
     const res = await apiClient.get("user/wishlist")
+    console.log(res.data)
+    return res.data
+  } catch (error) {
+    throw error
+  }
+}
+
+export const getApplications = async () => {
+  try {
+    const res = await apiClient.get("user/applications")
     return res.data
   } catch (error) {
     throw error

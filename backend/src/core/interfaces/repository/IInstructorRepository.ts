@@ -8,4 +8,5 @@ export interface IInstructorRepository extends IBaseRepository<IInstructor> {
     getInstructors():Promise<IInstructor[]  | null>
     findInstructorByUserId(userId:string):Promise<IInstructor|null>
     getInstructorProfile(instructorId:string):Promise<IInstructor | null>
+    getUserApplications(userId:string):Promise<IInstructor[] | null>
 }
