@@ -21,12 +21,17 @@ const formSchema = z.object({
     .string()
     .min(8, "Password must be at least 8 characters")
     .regex(/[a-zA-Z]/, "Password must contain at least one letter")
-    .regex(/[0-9]/, "Password must contain at least one number"),
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[\W_]/, "Password must contain at least one special character") // Special characters
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")// Uppercase letters
+    .regex(/^(?!.*(?:password|123456|qwerty|letmein)).*$/, "Password cannot contain common patterns"), // Block common patterns
   confirmPassword: z
   .string()
   .min(8, "Password must be at least 8 characters")
     .regex(/[a-zA-Z]/, "Password must contain at least one letter")
-    .regex(/[0-9]/, "Password must contain at least one number"),
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[\W_]/, "Password must contain at least one special character")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter"),
 }).refine(
   (data) => data.password === data.confirmPassword,
   {

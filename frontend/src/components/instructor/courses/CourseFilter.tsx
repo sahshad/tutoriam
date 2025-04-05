@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search } from "lucide-react"
+import { use, useEffect, useState } from "react"
 
 interface CourseFiltersProps {
   sortBy: string
@@ -11,6 +12,8 @@ interface CourseFiltersProps {
   setRating: (value: string) => void
   searchQuery: string
   setSearchQuery: (value: string) => void
+  subCategory: string
+  setSubCategory: (value: string) => void
 }
 
 export function CourseFilters({
@@ -18,11 +21,22 @@ export function CourseFilters({
   setSortBy,
   category,
   setCategory,
-  rating,
-  setRating,
+  // rating,
+  // setRating,
+  subCategory,
+  setSubCategory,
   searchQuery,
   setSearchQuery,
 }: CourseFiltersProps) {
+  const [search, setSearch] = useState("")
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchQuery(search)
+    }, 500) 
+
+    return () => clearTimeout(timer)
+  },[search])
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
       <div>
@@ -32,8 +46,8 @@ export function CourseFilters({
           <Input
             placeholder="Search in your courses..."
             className="pl-9"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </div>
@@ -71,6 +85,22 @@ export function CourseFilters({
       </div>
 
       <div>
+        <p className="text-sm mb-2">Sub Category</p>
+        <Select value={subCategory} onValueChange={setSubCategory}>
+          <SelectTrigger>
+            <SelectValue placeholder="All Sub Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Sub Category</SelectItem>
+            <SelectItem value="web">web</SelectItem>
+            <SelectItem value="mobile">mobile</SelectItem>
+            <SelectItem value="gaming">gaming</SelectItem>
+            <SelectItem value="database design">database design</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* <div>
         <p className="text-sm mb-2">Rating</p>
         <Select value={rating} onValueChange={setRating}>
           <SelectTrigger>
@@ -83,7 +113,7 @@ export function CourseFilters({
             <SelectItem value="1">1 Star & Up</SelectItem>
           </SelectContent>
         </Select>
-      </div>
+      </div> */}
     </div>
   )
 }

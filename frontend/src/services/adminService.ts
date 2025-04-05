@@ -1,5 +1,18 @@
 import apiClient from "@/utils/axiosInstance"
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
+
+export const getAdminDashboard = async () => {
+    try {
+        const res = await apiClient.get("/admin/dashboard")
+        return res.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw error.response?.data?.message || error.message || "An unknown error occurred";
+        } else {
+            throw "An unexpected error occurred";
+        }
+    }
+}
 
 export const getUsers = async () =>{
     const response = await apiClient.get(

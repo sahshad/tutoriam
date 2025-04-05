@@ -1,31 +1,65 @@
-import { useState } from "react"
-import { ChevronRight } from "lucide-react"
-
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 // import { useToast } from "@/hooks/use-toast"
-import { mockCartItems } from "@/lib/mock-data"
 import { Link } from "react-router-dom"
-import { CartItem } from "@/components/user/cart/CartItem"
-import { CartSummary } from "@/components/user/cart/CartSummary"
-import Header from "@/components/user/home/Header"
+import { CartItem } from "@/components/user/cart/cart-item"
+import { CartSummary } from "@/components/user/cart/cart-summary"
+import Header from "@/components/user/home/header"
+import { addCourseToWishlist, getCartItems, removeCourseFromCart } from "@/services/userServices"
+import { toast } from "sonner"
+
+interface CartItemType {
+  _id: string;
+  price: number;
+  thumbnail:string
+  
+}
 
 export default function CartPage() {
 //   const { toast } = useToast()
-  const [cartItems, setCartItems] = useState(mockCartItems)
+  const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [couponCode, setCouponCode] = useState("")
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null)
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false)
 
-  const handleRemoveItem = (id: string) => {
-    setCartItems(cartItems.filter((item) => item.id !== id))
-    // toast({
-    //   title: "Item removed",
-    //   description: "The course has been removed from your cart.",
-    // })
+  useEffect(() => {
+    const getCartData = async () => {
+      try {
+        const res = await getCartItems()
+        console.log(res.cart.courses)
+        setCartItems(res.cart.courses)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    getCartData()
+  }, []);
+
+  const handleRemoveItem = async (_id: string) => {
+    try {
+      const res = await removeCourseFromCart(_id)
+      console.log(res)
+      setCartItems(cartItems.filter((item) => item._id !== _id))
+      toast.success("course removed from cart", {position:"top-right"})
+    } catch (error) {
+      console.log(error)
+    }
+    
   }
 
-  const handleMoveToWishlist = (id: string) => {
-    setCartItems(cartItems.filter((item) => item.id !== id))
+  const handleMoveToWishlist = async(_id: string) => {
+    
+    try {
+      const res = await addCourseToWishlist(_id)
+      const resp = await removeCourseFromCart(_id)
+      toast.success("course moved to wishlist successfully", {position:"top-right"})
+      setCartItems(cartItems.filter((item) => item._id !== _id))
+    } catch (error) {
+      console.log(error)
+      toast.error("course is alredy in your wishlist", {position:"top-right"})
+    }
+    
     // toast({
     //   title: "Moved to wishlist",
     //   description: "The course has been moved to your wishlist.",
@@ -37,7 +71,6 @@ export default function CartPage() {
 
     setIsApplyingCoupon(true)
 
-    // Simulate API call
     setTimeout(() => {
       setAppliedCoupon(couponCode)
       setCouponCode("")
@@ -82,12 +115,12 @@ export default function CartPage() {
             </div>
 
             <div className="space-y-4">
-              {cartItems.map((item) => (
+              {cartItems.map((item :any) => (
                 <CartItem
-                  key={item.id}
+                  key={item._id}
                   item={item}
-                  onRemove={() => handleRemoveItem(item.id)}
-                  onMoveToWishlist={() => handleMoveToWishlist(item.id)}
+                  onRemove={() => handleRemoveItem(item._id)}
+                  onMoveToWishlist={() => handleMoveToWishlist(item._id)}
                 />
               ))}
             </div>
@@ -112,4 +145,3 @@ export default function CartPage() {
     </>
   )
 }
-

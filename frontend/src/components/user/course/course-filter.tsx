@@ -1,30 +1,101 @@
-import type React from "react"
-import { useState } from "react"
-import type { ChevronDown } from "lucide-react"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Slider } from "@/components/ui/slider"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import type React from "react";
+import type { ChevronDown } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
-export function CourseFilters() {
-  const [priceRange, setPriceRange] = useState([0, 200])
+interface CourseFiltersProps {
+  userCatagories: string[];
+  setUserCatagories: (catagories: string[]) => void;
+  userSubCatagories: string[];
+  setUserSubCatagories: (subCatagories: string[]) => void;
+  rating: string;
+  setRating: (rating: string) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  priceRange: [number, number];
+  setPriceRange: (range: [number, number]) => void;
+  level: string[];
+  setLevel: (level: string[]) => void;
+  duration: string[];
+  setDuration: (duration: string[]) => void;
+}
+
+export function CourseFilters(
+
+  {
+    userCatagories,
+    setUserCatagories,
+    userSubCatagories,
+    setUserSubCatagories,
+    rating,
+    setRating,
+    priceRange,
+    setPriceRange,
+    level: selectedLevels,
+    setLevel: setSelectedLevels,
+    duration: selectedDurations,
+    setDuration: setSelectedDurations,
+  }: CourseFiltersProps
+) {
+
+
+  const handleSubCategoryChange = (id: string) => {
+    const updatedSubCategories = userSubCatagories.includes(id)
+        ? userSubCatagories.filter((sub) => sub !== id)
+        : [...userSubCatagories, id];
+    
+      setUserSubCatagories(updatedSubCategories);
+      console.log(userSubCatagories,priceRange);
+  };
+
+  const handlePriceTypeChange = (value: string) => {
+    // setPriceTypes((prev) =>
+    //   prev.includes(value) ? prev.filter((type) => type !== value) : [...prev, value]
+    // );
+    // const updatedPriceTypes = priceRange.includes(+value)
+    //   ? priceRange.filter((type) => +type !== +value) 
+    //   : [...priceRange, +value];
+
+    // setPriceRange(updatedPriceTypes);
+  };
+
+  const handleLevelChange = (level: string) => {
+    // setSelectedLevels((prev) =>
+    //   prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level]
+    // );
+  };
+
+  const handleDurationChange = (duration: string) => {
+    // setSelectedDurations((prev) =>
+    //   prev.includes(duration) ? prev.filter((d) => d !== duration) : [...prev, duration]
+    // );
+  };
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="mb-4 text-lg font-semibold uppercase">Category</h2>
-        <Accordion type="multiple" defaultValue={["development"]}>
+        <Accordion type="multiple" defaultValue={[""]}>
           <CategoryAccordionItem
             value="development"
             title="Development"
             items={[
-              { id: "web-dev", label: "Web development", count: 574 },
+              { id: "web", label: "Web development", count: 574 },
               { id: "data-science", label: "Data Science", count: 365 },
-              { id: "mobile-dev", label: "Mobile Development", count: 1345, checked: true },
+              { id: "mobile-dev", label: "Mobile Development", count: 1345 },
               { id: "software-testing", label: "Software Testing", count: 317 },
               { id: "software-engineering", label: "Software Engineering", count: 31 },
               { id: "dev-tools", label: "Software Development Tools", count: 556 },
               { id: "no-code", label: "No-Code Development", count: 21 },
             ]}
+            selectedSubCategories={userSubCatagories}
+            onSubCategoryChange={handleSubCategoryChange}
           />
           <CategoryAccordionItem
             value="business"
@@ -34,6 +105,8 @@ export function CourseFilters() {
               { id: "management", label: "Management", count: 312 },
               { id: "sales", label: "Sales", count: 287 },
             ]}
+            selectedSubCategories={userSubCatagories}
+            onSubCategoryChange={handleSubCategoryChange}
           />
           <CategoryAccordionItem
             value="finance"
@@ -43,6 +116,8 @@ export function CourseFilters() {
               { id: "crypto", label: "Cryptocurrency", count: 157 },
               { id: "investing", label: "Investing", count: 321 },
             ]}
+            selectedSubCategories={userSubCatagories}
+            onSubCategoryChange={handleSubCategoryChange}
           />
           <CategoryAccordionItem
             value="it-software"
@@ -52,6 +127,8 @@ export function CourseFilters() {
               { id: "network-security", label: "Network & Security", count: 198 },
               { id: "operating-systems", label: "Operating Systems", count: 156 },
             ]}
+            selectedSubCategories={userSubCatagories}
+            onSubCategoryChange={handleSubCategoryChange}
           />
           <CategoryAccordionItem
             value="office"
@@ -61,6 +138,8 @@ export function CourseFilters() {
               { id: "apple", label: "Apple", count: 127 },
               { id: "google", label: "Google", count: 198 },
             ]}
+            selectedSubCategories={userSubCatagories}
+            onSubCategoryChange={handleSubCategoryChange}
           />
           <CategoryAccordionItem
             value="personal"
@@ -70,6 +149,8 @@ export function CourseFilters() {
               { id: "career-dev", label: "Career Development", count: 312 },
               { id: "creativity", label: "Creativity", count: 156 },
             ]}
+            selectedSubCategories={userSubCatagories}
+            onSubCategoryChange={handleSubCategoryChange}
           />
           <CategoryAccordionItem
             value="design"
@@ -79,6 +160,8 @@ export function CourseFilters() {
               { id: "graphic-design", label: "Graphic Design", count: 287 },
               { id: "ui-ux", label: "UI/UX Design", count: 198 },
             ]}
+            selectedSubCategories={userSubCatagories}
+            onSubCategoryChange={handleSubCategoryChange}
           />
           <CategoryAccordionItem
             value="marketing"
@@ -88,6 +171,8 @@ export function CourseFilters() {
               { id: "seo", label: "SEO", count: 198 },
               { id: "social-media", label: "Social Media Marketing", count: 287 },
             ]}
+            selectedSubCategories={userSubCatagories}
+            onSubCategoryChange={handleSubCategoryChange}
           />
           <CategoryAccordionItem
             value="lifestyle"
@@ -97,6 +182,8 @@ export function CourseFilters() {
               { id: "food-beverage", label: "Food & Beverage", count: 127 },
               { id: "travel", label: "Travel", count: 98 },
             ]}
+            selectedSubCategories={userSubCatagories}
+            onSubCategoryChange={handleSubCategoryChange}
           />
           <CategoryAccordionItem
             value="photography"
@@ -106,6 +193,8 @@ export function CourseFilters() {
               { id: "video-production", label: "Video Production", count: 156 },
               { id: "photo-tools", label: "Photography Tools", count: 127 },
             ]}
+            selectedSubCategories={userSubCatagories}
+            onSubCategoryChange={handleSubCategoryChange}
           />
           <CategoryAccordionItem
             value="music"
@@ -115,6 +204,8 @@ export function CourseFilters() {
               { id: "production", label: "Music Production", count: 127 },
               { id: "theory", label: "Music Theory", count: 98 },
             ]}
+            selectedSubCategories={userSubCatagories}
+            onSubCategoryChange={handleSubCategoryChange}
           />
           <CategoryAccordionItem
             value="health"
@@ -124,47 +215,9 @@ export function CourseFilters() {
               { id: "nutrition", label: "Nutrition", count: 156 },
               { id: "yoga", label: "Yoga", count: 127 },
             ]}
+            selectedSubCategories={userSubCatagories}
+            onSubCategoryChange={handleSubCategoryChange}
           />
-        </Accordion>
-      </div>
-
-      <div>
-        <h2 className="mb-4 text-lg font-semibold uppercase">Rating</h2>
-        <Accordion type="multiple" defaultValue={["rating"]}>
-          <AccordionItem value="rating">
-            <AccordionTrigger className="py-2">Rating</AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-2">
-                {[4.5, 4.0, 3.5, 3.0].map((rating) => (
-                  <div key={rating} className="flex items-center space-x-2">
-                    <Checkbox id={`rating-${rating}`} />
-                    <label
-                      htmlFor={`rating-${rating}`}
-                      className="flex items-center text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      <div className="flex items-center">
-                        {Array(5)
-                          .fill(0)
-                          .map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`h-4 w-4 ${
-                                i < Math.floor(rating)
-                                  ? "fill-yellow-400 text-yellow-400"
-                                  : i < rating
-                                    ? "fill-yellow-400 text-yellow-400 opacity-50"
-                                    : "text-gray-300"
-                              }`}
-                            />
-                          ))}
-                        <span className="ml-2">{rating} & up</span>
-                      </div>
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
         </Accordion>
       </div>
 
@@ -177,7 +230,11 @@ export function CourseFilters() {
               <div className="space-y-2">
                 {["All Levels", "Beginner", "Intermediate", "Advanced"].map((level) => (
                   <div key={level} className="flex items-center space-x-2">
-                    <Checkbox id={`level-${level}`} />
+                    <Checkbox
+                      id={`level-${level}`}
+                      checked={selectedLevels.includes(level)}
+                      onCheckedChange={() => handleLevelChange(level)}
+                    />
                     <label
                       htmlFor={`level-${level}`}
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -199,15 +256,25 @@ export function CourseFilters() {
             <AccordionTrigger className="py-2">Price Range</AccordionTrigger>
             <AccordionContent>
               <div className="space-y-6 px-1 pt-2">
-                <Slider defaultValue={[0, 200]} max={200} step={1} value={priceRange} onValueChange={setPriceRange} />
+                <Slider
+                  defaultValue={[0, 200]}
+                  max={200}
+                  step={1}
+                  value={priceRange}
+                  onValueChange={setPriceRange}
+                />
                 <div className="flex items-center justify-between">
                   <span className="text-sm">${priceRange[0]}</span>
                   <span className="text-sm">${priceRange[1]}</span>
                 </div>
                 <div className="space-y-2">
-                  {["Free", "Paid", "Subscription"].map((price) => (
+                  {["Free", "Paid"].map((price) => (
                     <div key={price} className="flex items-center space-x-2">
-                      <Checkbox id={`price-${price}`} />
+                      <Checkbox
+                        id={`price-${price}`}
+                        checked={price.includes(price)}
+                        onCheckedChange={() => handlePriceTypeChange(price)}
+                      />
                       <label
                         htmlFor={`price-${price}`}
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -232,7 +299,11 @@ export function CourseFilters() {
               <div className="space-y-2">
                 {["0-2 Hours", "3-6 Hours", "7-16 Hours", "17+ Hours"].map((duration) => (
                   <div key={duration} className="flex items-center space-x-2">
-                    <Checkbox id={`duration-${duration}`} />
+                    <Checkbox
+                      id={`duration-${duration}`}
+                      checked={selectedDurations.includes(duration)}
+                      onCheckedChange={() => handleDurationChange(duration)}
+                    />
                     <label
                       htmlFor={`duration-${duration}`}
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -247,21 +318,29 @@ export function CourseFilters() {
         </Accordion>
       </div>
     </div>
-  )
+  );
 }
 
 interface CategoryAccordionItemProps {
-  value: string
-  title: string
+  value: string;
+  title: string;
   items: {
-    id: string
-    label: string
-    count: number
-    checked?: boolean
-  }[]
+    id: string;
+    label: string;
+    count: number;
+    checked?: boolean;
+  }[];
+  selectedSubCategories: string[];
+  onSubCategoryChange: (id: string) => void;
 }
 
-function CategoryAccordionItem({ value, title, items }: CategoryAccordionItemProps) {
+function CategoryAccordionItem({
+  value,
+  title,
+  items,
+  selectedSubCategories,
+  onSubCategoryChange,
+}: CategoryAccordionItemProps) {
   return (
     <AccordionItem value={value}>
       <AccordionTrigger className="py-2">{title}</AccordionTrigger>
@@ -270,7 +349,11 @@ function CategoryAccordionItem({ value, title, items }: CategoryAccordionItemPro
           {items.map((item) => (
             <div key={item.id} className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <Checkbox id={item.id} defaultChecked={item.checked} />
+                <Checkbox
+                  id={item.id}
+                  checked={selectedSubCategories.includes(item.id)}
+                  onCheckedChange={() => onSubCategoryChange(item.id)}
+                />
                 <label
                   htmlFor={item.id}
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -284,7 +367,7 @@ function CategoryAccordionItem({ value, title, items }: CategoryAccordionItemPro
         </div>
       </AccordionContent>
     </AccordionItem>
-  )
+  );
 }
 
 function Star(props: React.ComponentProps<typeof ChevronDown>) {
@@ -303,6 +386,5 @@ function Star(props: React.ComponentProps<typeof ChevronDown>) {
     >
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
-  )
+  );
 }
-

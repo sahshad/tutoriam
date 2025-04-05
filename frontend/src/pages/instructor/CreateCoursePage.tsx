@@ -77,6 +77,7 @@ const CreateCoursePage = () => {
   const publishCourse = async (publish: PublishType) => {
     // console.log(publish)
     try {
+      setIsSubmitting(true)
       const courseDate = createCourseData(basicInformation,advancedInformation,publish)
       const response = await createCourse(courseDate)
       const courseId = response.data._id
@@ -103,12 +104,14 @@ const CreateCoursePage = () => {
     } catch (error:any) {
       console.log(error)
       console.log(error.response)
+    }finally{
+      setIsSubmitting(false)
     }
   }
 
 
   useEffect(()=>{
-    console.log('main page render ')
+    // console.log('main page render ')
   })
   // API call sequence for publishing the course
   // const publishCourse = async (publishData: PublishType) => {
@@ -257,6 +260,7 @@ const CreateCoursePage = () => {
               defaultValues={publish}
               onSubmit={handlePublishSubmit}
               onBack={() => setCurrentStep(3)}
+              isSubmitting={isSubmitting}
             />
           )}
 

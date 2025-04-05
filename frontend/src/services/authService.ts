@@ -11,10 +11,9 @@ export const registerUser = async (
   password: string
 ) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/register`,
+    const response = await apiClient.post(
+      'auth/register',
       { name, email, password },
-      { withCredentials: true }
     );
 
     return response;
@@ -25,10 +24,9 @@ export const registerUser = async (
 
 export const verifyOtp = async (email: string, otp: string, dispatch: AppDispatch) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/verify-otp`,
+    const response = await apiClient.post(
+      `auth/verify-otp`,
       { email, otp },
-      { withCredentials: true }
     );
 
     dispatch(
@@ -46,10 +44,9 @@ export const verifyOtp = async (email: string, otp: string, dispatch: AppDispatc
 
 export const resendOtp = async (email:string) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/resend-otp`,
+    const response = await apiClient.post(
+      `auth/resend-otp`,
       {email},
-      {withCredentials:true}
     )
 
     return response
@@ -65,10 +62,9 @@ export const login = async (
   dispatch: AppDispatch
 ) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/login`,
+    const response = await apiClient.post(
+      `auth/login`,
       { email, password,role },
-      { withCredentials: true }
     );
   
     dispatch(
@@ -87,8 +83,8 @@ export const login = async (
 
 export const userLogout = async (dispatch:AppDispatch) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/logout`,
+    const response = await apiClient.post(
+      `auth/logout`,
       {},
       {withCredentials:true}
     )
@@ -110,7 +106,7 @@ export const refreshToken = async (dispatch: AppDispatch) => {
         data = {role:'admin'}
       }
     const response = await apiClient.post(
-      `${API_URL}/refresh-token`,
+      `auth/refresh-token`,
       data,
       { withCredentials: true }
     );

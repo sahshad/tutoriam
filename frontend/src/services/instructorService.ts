@@ -1,3 +1,4 @@
+import { GetCoursesRequestParams } from "@/types/course"
 import apiClient from "@/utils/axiosInstance"
 import api from "@/utils/axiosInstance"
 
@@ -77,12 +78,29 @@ export const deleteLesson = async (lessonId: string) => {
   }
 }
 
-export const getMyCourses = async() => {
+export const getMyCourses = async({page,limit, searchQuery, category, subCategory, sortBy}:GetCoursesRequestParams) => {
+  console.log(page,limit, searchQuery, category, subCategory, sortBy)
   try {
-    return await apiClient.get("/instructor/courses",{withCredentials:true})
+    const response = await apiClient.get("/instructor/courses", {
+      params: {
+        page,
+        limit,
+        searchQuery,
+        category,
+        subCategory,
+        sortBy
+      },
+      withCredentials:true
+    })
+    return response.data
   } catch (error:any) {
     throw error
   }
+  // try {
+  //   return await apiClient.get(`/instructor/courses?${page}`,{withCredentials:true})
+  // } catch (error:any) {
+  //   throw error
+  // }
 }
 
 export const updateCoursePublishStatus = async (courseId: string) => {

@@ -8,7 +8,7 @@ import UserProfile from "./pages/user/UserProfile";
 import { useEffect, useState } from "react";
 import { refreshToken } from "./services/authService";
 import { useDispatch } from "react-redux";
-import ProtectedRoute from "./components/user/auth/ProtectedRoute";
+import ProtectedRoute from "./components/user/auth/protected-routes";
 import DashboardLayout from "./components/admin/layout/DashboardLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
 import UsersPage from "./pages/admin/UsersPage";
@@ -27,6 +27,8 @@ import EditCoursePage from "./pages/instructor/EditCoursePage";
 import UserCoursesPage from "./pages/user/CoursesPage";
 import UserCourseDetailsPage from "./pages/user/UserCourseDetails";
 import CartPage from "./pages/user/CartPage";
+import WishlistPage from "./pages/user/WishlistPage";
+import NotFound from "./pages/user/NotFound";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -58,7 +60,6 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
         <Route path="/reset-password" element={<ResetPasswordPage/>}/>
 
-
         <Route element={<ProtectedRoute role="user"/>}>
               <Route path="/profile" element={<UserProfile /> } />
               <Route path="/become-instructor" element={<BecomeInstructorPage/>}/>
@@ -66,6 +67,7 @@ const App = () => {
               <Route path="/courses" element={<UserCoursesPage/>}/>
               <Route path="/courses/:courseId" element={<UserCourseDetailsPage/>}/>
               <Route path="/cart" element={<CartPage/>}/>
+              <Route path="/wishlist" element={<WishlistPage/>} />
         </Route>
 
         <Route element={<ProtectedRoute role="instructor"/>}>
@@ -74,6 +76,10 @@ const App = () => {
           <Route path="/instructor/my-courses" element={<CoursesPage/>}/>
           <Route path="/instructor/my-courses/:courseId" element={<SingleCoursePage/>}/>
           <Route path="/instructor/my-courses/:courseId/edit" element={<EditCoursePage/>}/>
+          <Route path="/instructor/courses" element={<UserCoursesPage/>}/>
+              <Route path="/instructor/courses/:courseId" element={<UserCourseDetailsPage/>}/>
+              <Route path="/instructor/cart" element={<CartPage/>}/>
+              <Route path="/instructor/wishlist" element={<WishlistPage/>} />
         </Route>
 
         <Route path="/admin/login" element={<AdminLoginPage/>}/>
@@ -87,6 +93,7 @@ const App = () => {
             <Route path="instructor-applications" element={<InstructorApplicationsPage/>}/>
             </Route>
         </Route>
+        <Route path="*" element={<NotFound/>} /> 
       </Routes>
     </Router>
   );

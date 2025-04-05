@@ -1,6 +1,6 @@
 import type React from "react"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -12,10 +12,10 @@ import { Card, CardContent } from "@/components/ui/card"
 import {Plus, Image, X, Video, Upload } from "lucide-react"
 
 export const advancedInformationSchema = z.object({
-  thumbnail: z.union([z.instanceof(File), z.undefined()]).refine((val) => val !== null,{
+  thumbnail: z.union([z.instanceof(File), z.undefined(), z.string()]).refine((val) => val !== null,{
       message: "Thumbnail image is required", 
     }),
-  trailer: z.union([z.instanceof(File), z.undefined()]).optional(),
+  trailer: z.union([z.instanceof(File), z.undefined(), z.string()]).optional(),
   description: z.string({message:'Description is required'}).min(50, "Description should be at least 50 characters long"),
   teachItems: z
     .array(
@@ -64,6 +64,20 @@ const AdvancedInformation = ({ defaultValues, onSubmit, onBack }: AdvancedInform
     name: "teachItems",
   })
 
+
+  useEffect(()=>{
+    if(defaultValues){
+      if(defaultValues.thumbnail){
+        console.log(defaultValues.thumbnail)
+        setThumbnailPreview(defaultValues.thumbnail as string)
+      }
+
+      if(defaultValues.trailer){
+        setThumbnailPreview(defaultValues.trailer as string)
+      }
+      
+    }
+  }, [defaultValues])
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     const file = e.target.files?.[0]

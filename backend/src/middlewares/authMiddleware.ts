@@ -1,14 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 import { IUser } from "../models/User";
-import { File } from "buffer";
-import { Multer } from "multer";
-
-// export interface Request extends Request {
-//   user?: {
-//     id: string;
-//   };
-// }
+import { StatusCodes } from "http-status-codes";
 
 declare module "express-serve-static-core"{
   interface Request {
@@ -18,29 +11,35 @@ declare module "express-serve-static-core"{
  }
 
 export const authMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
+  roles:string[],
 ) => {
-  try {
-    const accessToken =
-      req.cookies.accessToken || req.header("Authorization")?.split(" ")[1];
-    if (!accessToken)
-      res.status(401).json({ error: "Unauthorized: No token provided" });
+  return (  req: Request,res: Response,next: NextFunction) => {
+      try {
+        const accessToken =
+          req.cookies.accessToken || req.header("Authorization")?.split(" ")[1];
+        if (!accessToken)
+          res.status(401).json({ error: "Unauthorized: No token provided" });
+
+        const decoded = jwt.verify(
+          accessToken,
+          process.env.ACCESS_TOKEN_SECRET!
+        ) as { userId: string, role:string };
 
 
-    const decoded = jwt.verify(
-      accessToken,
-      process.env.ACCESS_TOKEN_SECRET!
-    ) as { userId: string };
-
-    req.user = { _id: decoded.userId };
-    next();
-  } catch (error) {
-    if (error instanceof TokenExpiredError) {
-      res.status(401).json({ error: "Token has expired" });
-      return;
+        if(roles.length && !roles.includes(decoded.role)){
+          res.status(StatusCodes.FORBIDDEN).json({message: "permisson denied"})
+          return
+        }
+    
+        req.user = { _id: decoded.userId };
+        next();
+      } catch (error) {
+        if (error instanceof TokenExpiredError) {
+          res.status(401).json({ error: "Token has expired" });
+          return;
+        }
+        res.status(403).json({ error: "Invalid token" });
+      }
     }
-    res.status(403).json({ error: "Invalid token" });
-  }
+  
 };

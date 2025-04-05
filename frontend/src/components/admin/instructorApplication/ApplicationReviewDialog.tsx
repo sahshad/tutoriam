@@ -66,11 +66,17 @@ export function ApplicationReviewDialog({
             </div>
             <div>
               <h4 className="text-sm font-medium text-muted-foreground">Expertise</h4>
-              <p className="text-sm">{application.preferredSubjects[0]}</p>
+              {application.preferredSubjects.map((subject:any) => (
+                    <p>{subject}</p>
+                  ))}
+              {/* <p className="text-sm">{application.preferredSubjects[0]}</p> */}
             </div>
             <div>
               <h4 className="text-sm font-medium text-muted-foreground">Language</h4>
-              <p className="text-sm">{application.teachingLanguages[0]}</p>
+              {application.teachingLanguages.map((language:any) => (
+                    <p>{language}</p>
+                  ))}
+              {/* <p className="text-sm">{application.teachingLanguages[0]}</p> */}
             </div>
             <div>
               <h4 className="text-sm font-medium text-muted-foreground">Submitted Date</h4>
@@ -78,6 +84,14 @@ export function ApplicationReviewDialog({
             </div>
           </div>
 
+          <div>
+            <h4 className="text-sm font-medium text-muted-foreground">skills</h4>
+            {application.skills.map((skill:any) => (
+              <p className="text-sm">
+              {skill}
+              </p>
+            ))}
+          </div>
           <div>
             <h4 className="text-sm font-medium text-muted-foreground">About</h4>
             <p className="text-sm">
@@ -92,6 +106,10 @@ export function ApplicationReviewDialog({
               {application.experience ||
                 "I have taught several workshops and online courses. I've mentored junior professionals and have received positive feedback on my teaching style and ability to explain complex concepts in simple terms."}
             </p>
+          </div>
+          <div>
+            <p>id card</p>
+            <img className="w-30" src={application.idCardImageUrl}></img>
           </div>
 
           {application.adminApproval.status === "rejected" && application.adminApproval.reason && (

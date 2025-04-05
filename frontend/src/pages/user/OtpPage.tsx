@@ -1,4 +1,4 @@
-import OtpVerification from '@/components/user/otp/OtpVerificaion'
+import OtpVerification from '@/components/user/login/otp-verificaion'
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 

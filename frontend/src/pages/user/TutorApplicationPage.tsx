@@ -1,5 +1,5 @@
-import TutorApplicationForm from "@/components/user/becomeInstructorForms/TutorApplicationForm"
-import Header from "@/components/user/home/Header"
+import TutorApplicationForm from "@/components/user/become-instructor/instructor-application"
+import Header from "@/components/user/home/header"
 
 const TutorApplicationPage = () => {
   return (

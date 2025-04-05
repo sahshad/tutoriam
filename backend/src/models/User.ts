@@ -10,7 +10,7 @@ export interface IUser extends Document {
   googleId?:string
   status:string;
   role: string;
-  title: string;
+  title?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,7 +23,7 @@ const UserSchema = new Schema<IUser>(
     phoneNo: {type:String},
     profileImageUrl: { type: String },
     googleId:{type:String},
-    role: { type: String, enum: ["user", "instructor"], default: "user" },
+    role: { type: String, enum: ["user", "instructor", "admin"], default: "user" },
     status: {type:String, enum: ["active", "blocked"], default:"active"},
     title: { type: String },
   },

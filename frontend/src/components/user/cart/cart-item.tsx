@@ -15,7 +15,7 @@ export function CartItem({ item, onRemove, onMoveToWishlist }: CartItemProps) {
     <div className="grid grid-cols-1 gap-4 rounded-lg border p-4 sm:grid-cols-12">
       <div className="col-span-6 flex gap-4">
         <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
-          <img src={item.image || "/placeholder.svg"} alt={item.title}  className="object-cover" />
+          <img src={item.thumbnail || "/placeholder.svg"} alt={item.title}  className="object-cover" />
         </div>
         <div className="flex flex-col">
           <Link to={`/courses/${item.id}`} className="font-medium hover:underline">
@@ -46,16 +46,15 @@ export function CartItem({ item, onRemove, onMoveToWishlist }: CartItemProps) {
             </div>
             <span className="mx-2">•</span>
             <span>
-              {item.reviewCount.toLocaleString()} {item.reviewCount === 1 ? "review" : "reviews"}
+              {/* {item.reviewCount.toLocaleString()} {item.reviewCount === 1 ? "review" : "reviews"} */}
             </span>
           </div>
           <div className="mt-1 text-sm">
             <span>Course by: </span>
-            <span className="text-muted-foreground">{item.instructor}</span>
+            <span className="text-muted-foreground">{item.instructorId.name}</span>
           </div>
         </div>
       </div>
-
       <div className="col-span-3 flex items-center justify-center sm:justify-center">
         <div className="flex flex-col items-start sm:items-center">
           {item.originalPrice && item.originalPrice > item.price && (

@@ -39,8 +39,7 @@ const extractPublicIdFromUrl = (secureUrl: string): string | null => {
 
 
   const extractPublicIdFromVideoUrl = (secureUrl: string): string | null => {
-    // Regex for extracting the public ID from a Cloudinary video URL
-    const regex = /\/video\/upload\/.*?\/(.*?)\.(mp4|webm|ogg)/;
+    const regex = /\/video\/upload\/(?:v\d+\/)?(.*?)(?:\.(mp4|webm|ogg))$/;
     const match = secureUrl.match(regex);
   
     if (match && match[1]) {
@@ -54,6 +53,7 @@ const extractPublicIdFromUrl = (secureUrl: string): string | null => {
   export const deleteVideoFromCloudinary = async (videoUrl: string): Promise<boolean> => {
     try {
       const publicId = extractPublicIdFromVideoUrl(videoUrl);
+      console.log(publicId, videoUrl)
       if (!publicId) {
         console.log('Cannot extract public_id from video URL');
         return false;
@@ -118,10 +118,9 @@ export const uploadImageToCloudinary = async (
 export const uploadVideoToCloudinary = async (
   buffer: Buffer,
   folder: string
-): Promise<string | null> => {
+): Promise<{url:string, duration:string} | null> => {
   try {
     const result = await new Promise<UploadApiResponse>((resolve, reject) => {
-      // Upload video stream
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           resource_type: "video", 
@@ -143,7 +142,11 @@ export const uploadVideoToCloudinary = async (
       }
     });
 
-    return result ? result.secure_url : null;
+    
+  if(result){
+    return {url: result.secure_url , duration: result.duration }
+  }
+    return null
   } catch (error: any) {
     console.error("Error uploading video to Cloudinary:", error);
     throw new Error(`Error uploading video: ${error.message}`);

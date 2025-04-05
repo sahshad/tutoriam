@@ -104,7 +104,7 @@ export function CourseCard({ course:initialCourse  }: CourseCardProps) {
 
         <div className="flex items-center justify-between">
           <div>
-            {Number(course.price) === 0 ? (
+            {Number(course.price) === 0  || course.isFree === true ? (
               <span className="font-bold">Free</span>
             ) : (
               <span className="font-bold">₹{course.price?.toLocaleString()}</span>

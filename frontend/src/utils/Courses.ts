@@ -3,7 +3,7 @@ import { BasicInformationType } from "@/components/instructor/create_course/Basi
 import { CurriculumType } from "@/components/instructor/create_course/Curriculum";
 import { PublishType } from "@/components/instructor/create_course/PublishCourse";
 
- export const createLessonData = (lesson:any, moduleId?:string, ) => {
+export const createLessonData = (lesson:any, moduleId?:string, ) => {
     const lessonData = new FormData();
 
   if(moduleId)lessonData.append("moduleId", moduleId);
@@ -126,7 +126,7 @@ export const createAdvancedInformationData = (data: any): AdvancedInformationTyp
               id: index + 1, 
               content: JSON.parse(item).content,
           })),
-          thumbnail: undefined,
-          trailer:undefined,
+          thumbnail: data.thumbnail,
+          trailer:data.trailer,
       };
   }

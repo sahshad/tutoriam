@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Loader } from 'lucide-react';
 
 const priceValidation = z
   .string()
@@ -49,9 +50,10 @@ interface PublishCourseFormProps {
   defaultValues?: Partial<PublishType>;
   onSubmit: (data: PublishType) => void;
   onBack: () => void;
+  isSubmitting:boolean
 }
 
-const PublishCourse = ({ defaultValues, onSubmit, onBack }: PublishCourseFormProps) => {
+const PublishCourse = ({ defaultValues, onSubmit, onBack, isSubmitting }: PublishCourseFormProps) => {
   const form = useForm<PublishType>({
     resolver: zodResolver(publishSchema),
     defaultValues: defaultValues || {
@@ -172,7 +174,16 @@ const PublishCourse = ({ defaultValues, onSubmit, onBack }: PublishCourseFormPro
               <Button type="button" variant="outline" onClick={onBack}>
                 Prev Step
               </Button>
-              <Button type="submit">Submit and create</Button>
+              <Button type="submit" disabled={isSubmitting} >{isSubmitting ? "Submitting..." : "Submit and create"}</Button>
+              {/* <Button type="submit" disabled={isSubmitting} className="relative">
+                {isSubmitting ? (
+                  <div className="absolute inset-0 flex justify-center items-center">
+                    <Loader className="w-5 h-5 animate-spin text-white" />
+                  </div>
+                ) : (
+                  "Submit and create"
+                )}
+              </Button> */}
             </div>
           </form>
         </Form>

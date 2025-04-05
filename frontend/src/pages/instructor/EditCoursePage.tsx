@@ -21,8 +21,8 @@
 import { toast } from "sonner";
 
   export default function EditCoursePage() {
-    const { courseId } = useParams();  // React Router's useParams to get dynamic route params
-    const navigate = useNavigate();  // React Router's useNavigate for navigation
+    const { courseId } = useParams();  
+    const navigate = useNavigate();  
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,7 +32,6 @@ import { toast } from "sonner";
       message: string;
     } | null>(null);
 
-    // Form state
     const [basicInformation, setBasicInformation] = useState<Partial<BasicInformationType>>({});
     const [advancedInformation, setAdvancedInformation] = useState<Partial<AdvancedInformationType>>({});
     const [curriculum, setCurriculum] = useState<Partial<CurriculumType>>({});
@@ -62,7 +61,7 @@ import { toast } from "sonner";
           setPrevPublishData(createPublishData(courseData));
         } catch (error) {
           console.error("Failed to fetch course data:", error);
-          // navigate("/my-courses");  // Redirect to courses list
+          navigate("/instructor/my-courses"); 
         } finally {
           setIsLoading(false);
         }
@@ -72,9 +71,6 @@ import { toast } from "sonner";
     }, [courseId, navigate]);
 
   
-
-
-    // Form submission handlers
     const handleBasicInfoSubmit = (data: BasicInformationType) => {
       setBasicInformation(data);
       setCurrentStep(2);
@@ -140,21 +136,19 @@ import { toast } from "sonner";
       const newCurriculum = curriculum;
       const oldCurriculum = prevCurriculum;
 
-      // 1. Handle Module Updates and Deletions
       if(oldCurriculum.sections){
       for (const module of oldCurriculum.sections) {
         const newModule = newCurriculum.sections?.find((newMod) => newMod.id === module.id);
 
         if (!newModule) {
           console.log(`Module deleted: ${module.id}`);
-          await deleteModule(module.id); // Delete the module
+          await deleteModule(module.id); 
           for (const lesson of module.lectures) {
             console.log(`Lesson deleted: ${lesson.id}`);
-            await deleteLesson(lesson.id); // Delete each lesson
+            await deleteLesson(lesson.id); 
           }
         } else {
-          // If module data changed, update it
-          const updatedModule = getChangedFields(newModule, module, ['lectures']); // Get changed fields
+          const updatedModule = getChangedFields(newModule, module, ['lectures']); 
           if (Object.keys(updatedModule).length > 0) {
             const updatedModuleData = createModuleData(updatedModule)
             console.log(`Module updated: `, module.id ,updatedModuleData);
@@ -166,7 +160,6 @@ import { toast } from "sonner";
             }
           }
 
-          // 2. Handle Lesson Updates and Deletions in the Module
           for (const lesson of module.lectures) {
             const newLesson = newModule.lectures.find((newLsn) => newLsn.id === lesson.id);
             if (!newLesson) {
@@ -178,14 +171,12 @@ import { toast } from "sonner";
                 console.log(error)
               }
             } else {
-              // If lesson content changed, update it
-              const updatedLesson = getChangedFields(newLesson, lesson); // Get changed fields
+              const updatedLesson = getChangedFields(newLesson, lesson); 
             if (Object.keys(updatedLesson).length > 0) {
-              // updatedLesson.id = newLesson.id; // Include the id
               try {
                 console.log(`Lesson updated: `, updatedLesson);
               const updatedLessonData = createLessonData(updatedLesson)
-              const res = await updateLesson(newLesson.id, updatedLessonData); // Un-comment when actual update is needed
+              const res = await updateLesson(newLesson.id, updatedLessonData); 
               console.log(res)
               } catch (error) {
                 console.log(error)
@@ -194,10 +185,8 @@ import { toast } from "sonner";
             }
           }
 
-          // 3. Handle New Lessons
           for (const newLesson of newModule.lectures) {
             if (!module.lectures.find((lsn:any) => lsn.id === newLesson.id)) {
-              // If a new lesson is added, create it
              try {
               const lessonData = createLessonData(newLesson,newModule.id )
 
@@ -212,10 +201,8 @@ import { toast } from "sonner";
       }
   }
 
-      // 4. Handle New Modules
       for (const newModule of newCurriculum.sections ?? []) {
         if (!oldCurriculum.sections?.find((mod) => mod.id === newModule.id)) {
-          // If a new module is added, create it and its lessons
           const moduleData = createModuleData(newModule, courseId)
           
           const moduleRes = await createModule(moduleData);
@@ -296,10 +283,8 @@ import { toast } from "sonner";
         }
 
 
-        // 2. Handle modules and lessons comparison (updates, creations, deletions)
         await compareAndUpdateModulesAndLessons();
 
-        // setSubmissionStatus({ success: true, message: "Course updated successfully!" });
 
       toast.success('course updated successfully', {position:"top-right"})
       navigate("/instructor/my-courses")
@@ -339,7 +324,6 @@ import { toast } from "sonner";
           <PageHeader />
 
           <main className="flex-1 overflow-y-auto p-6 pb-16">
-            {/* Course Steps */}
             <Card className="mb-6">
               <CardContent className="p-0">
                 <div className="flex flex-col md:flex-row">
@@ -384,7 +368,6 @@ import { toast } from "sonner";
               </div>
             </div>
 
-            {/* Submission Status */}
             {submissionStatus && (
               <div
                 className={`mb-6 p-4 rounded-md ${
@@ -395,12 +378,11 @@ import { toast } from "sonner";
               </div>
             )}
 
-            {/* Form Sections */}
             {currentStep === 1 && (
               <BasicInformation
                 defaultValues={basicInformation as BasicInformationType}
                 onSubmit={handleBasicInfoSubmit}
-                onCancel={() => navigate(`/course/${courseId}`)}  // Use navigate() for redirection
+                onCancel={() => navigate(`/course/${courseId}`)}  
               />
             )}
 
@@ -425,6 +407,7 @@ import { toast } from "sonner";
                 defaultValues={publish as PublishType}
                 onSubmit={handlePublishSubmit}
                 onBack={() => setCurrentStep(3)}
+                isSubmitting={isSubmitting}
               />
             )}
 

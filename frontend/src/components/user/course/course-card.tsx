@@ -1,4 +1,3 @@
-import React from "react"
 import { Star } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
@@ -16,9 +15,8 @@ export function CourseCard({ course }: CourseCardProps) {
   return (
     <Link to={`/courses/${_id}`} className="group flex h-full flex-col overflow-hidden rounded-lg border transition-all hover:shadow-md">
       <div className="relative aspect-video overflow-hidden">
-        {/* Replaced next/image with standard <img> */}
         <img
-          src={thumbnail || "/placeholder.svg"} // Default to placeholder image if no thumbnail
+          src={thumbnail || "/placeholder.svg"}
           alt={title}
           className="object-cover transition-transform duration-300 group-hover:scale-105 w-full h-full"
         />
@@ -39,7 +37,7 @@ export function CourseCard({ course }: CourseCardProps) {
             <span className="text-sm font-medium">{rating}</span>
             <span className="text-xs text-muted-foreground">({enrollmentCount?.toLocaleString()} students)</span>
           </div>
-          <div className="text-lg font-bold text-black">
+          <div className="text-lg font-bold ">
   {Number(price) === 0 ? "Free" : `₹${price}`}
 </div>
         </div>

@@ -35,7 +35,7 @@ export default function CourseHeader({ title, subtitle, rating, reviewCount, ins
         </div>
 
         <div className="flex items-center">
-          <span className="text-sm">Created by:</span>
+          <span className="text-sm">Created by :</span>
           <span className="ml-1 font-medium">{instructor.name}</span>
         </div>
       </div>

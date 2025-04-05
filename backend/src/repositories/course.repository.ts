@@ -24,9 +24,13 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
       ], {new:true})
   }
 
-  async getAllCourses(): Promise<ICourse[] | null> {
-      return await Course.find({isPublic:true})
+  async getAllCourses(filter:any, skip:any, limit:any, sort:any): Promise<ICourse[] | null> {
+      return await Course.find(filter).skip(skip).limit(limit).sort(sort)
   }
+
+  async getCoursescount (filter:any):Promise<number>  {
+    return await Course.countDocuments(filter);
+  };
 
   async getCourseWithModulesAndLessons(courseId: string): Promise<ICourse | null> {
     const result = await Course.aggregate([
@@ -58,6 +62,22 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
       },
 
       {
+        $lookup: {
+          from: "users", // Assuming the instructor data is in the "instructors" collection
+          localField: "instructorId",
+          foreignField: "_id",
+          as: "instructor", // This will be the populated field
+        },
+      },
+  
+      {
+        $unwind: {
+          path: "$instructor", // Unwind the instructor data to embed it directly
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+
+      {
         $group: {
           _id: "$_id",
           title: { $first: "$title" },
@@ -74,6 +94,7 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
           welcomeMessage: { $first: "$welcomeMessage" },
           congratulationsMessage: { $first: "$congratulationsMessage" },
           instructorId: { $first: "$instructorId" },
+          instructor:{$first: "$instructor"},
           price: { $first: "$price" },
           discountPrice: { $first: "$discountPrice" },
           rating: { $first: "$rating" },

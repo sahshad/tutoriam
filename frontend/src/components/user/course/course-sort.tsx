@@ -1,5 +1,3 @@
-"use client"
-
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ChevronDown } from "lucide-react"
@@ -14,14 +12,18 @@ const sortOptions = [
   { label: "Price: High to Low", value: "price-desc" },
 ]
 
-export function CourseSort() {
-  const [selectedSort, setSelectedSort] = useState(sortOptions[0])
+ interface CourseSortProps {
+  sortBy:string
+  setSortBy: (value: string) => void
+ }
+export function CourseSort({sortBy, setSortBy}:CourseSortProps) {
+  // const [selectedSort, setSelectedSort] = useState(sortOptions[0])
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="w-[160px] justify-between">
-          <span>Sort by: {selectedSort.label}</span>
+          <span>Sort by: {sortBy}</span>
           <ChevronDown className="h-4 w-4 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
@@ -29,8 +31,8 @@ export function CourseSort() {
         {sortOptions.map((option) => (
           <DropdownMenuItem
             key={option.value}
-            onClick={() => setSelectedSort(option)}
-            className={selectedSort.value === option.value ? "bg-muted" : ""}
+            onClick={() => setSortBy(option.value)}
+            // className={selectedSort.value === option.value ? "bg-muted" : ""}
           >
             {option.label}
           </DropdownMenuItem>

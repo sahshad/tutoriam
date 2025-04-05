@@ -52,7 +52,7 @@ export class UserService implements IUserService {
       }
       return updatedUser
     } catch (error) {
-      throw new Error("error while changing password");
+      throw new Error("incorrect given password");
     }
   }
 
@@ -72,8 +72,9 @@ export class UserService implements IUserService {
 
   async becomeInstructor(instructorData:Partial<IInstructor>): Promise<IInstructor|null> {
     const instructorExists = await this.instructorRepository.findInstructorByUserId( instructorData.userId as string);
-    if (instructorExists) 
-      throw new Error("you already applied to become an instructor");
+    //@ts-ignore
+    if (instructorExists?.adminApproval.status === "pending")
+      throw new Error("your application is already in pending");
     const instructor = await this.instructorRepository.createInstructor(instructorData)
       if(!instructor)
         throw new Error("cannot apply to become an instructor. please try again")

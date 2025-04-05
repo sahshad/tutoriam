@@ -10,10 +10,10 @@ const router = express.Router();
 const adminController = container.get<IAdminController>(TYPES.AdminController)
 const InstructorController = container.get<IInstructorController>(TYPES.InstructorController)
 
-router.use(authMiddleware);
-router.get("/users",adminController.getUsers);
-router.patch("/users/:userId/status", adminController.toggleUserStatus)
-router.get("/instructors/applications",InstructorController.getInstructorApplications)
-router.patch("/instructors/application/:instructorId/status",adminController.reviewInstructor)
+router.get("/dashboard", authMiddleware(["admin"]), adminController.getDashboard)
+router.get("/users",authMiddleware(["admin"]),adminController.getUsers);
+router.patch("/users/:userId/status",authMiddleware(["admin"]), adminController.toggleUserStatus)
+router.get("/instructors/applications",authMiddleware(["admin"]),InstructorController.getInstructorApplications)
+router.patch("/instructors/application/:instructorId/status",authMiddleware(["admin"]),adminController.reviewInstructor)
 
 export default router;

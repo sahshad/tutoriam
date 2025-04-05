@@ -5,4 +5,5 @@ export interface IAdminController {
   toggleUserStatus:RequestHandler
   reviewInstructor:RequestHandler
   getInstructors:RequestHandler
+  getDashboard:RequestHandler
 }

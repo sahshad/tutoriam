@@ -6,6 +6,7 @@ import { TYPES } from "../di/types";
 import { IInstructor } from "../models/Instructor";
 import { IInstructorRepository } from "../core/interfaces/repository/IInstructorRepository";
 import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
+import { AdminDashboardStats } from "../core/types/userTypes";
 
 @injectable()
 export class AdminService implements IAdminService {
@@ -13,6 +14,10 @@ export class AdminService implements IAdminService {
     @inject(TYPES.InstructorRepository) private instructorRepository: IInstructorRepository,
     @inject(TYPES.UserRepository) private userRepository : IUserRepository
 ){}
+
+  getDashboardDetails = async() :Promise<AdminDashboardStats>=>{
+    return await this.userRepository.getAdminDashboardData()
+  }
 
     getUsers = async():Promise<IUser[]> =>{
     try {
