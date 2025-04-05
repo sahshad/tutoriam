@@ -102,22 +102,46 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
     return course
  }
 
- async getAllCourses({page=1, limit=12, search='', sortBy='createdAt', sortOrder='asc' }): Promise<PaginatedCoursesResponse | null> {
+ async getAllCourses({page=1, limit=12, searchQuery='', sortBy='createdAt', subCategory = ['all'],  }): Promise<PaginatedCoursesResponse | null> {
     const skip = (page - 1) * limit
   const perPage = limit
 
   let filter:any = {};
   filter.isPublic = true
-  if (search) {
+  if (searchQuery) {
     filter.$or = [
-      { title: { $regex: search, $options: 'i' } }, 
-      { description: { $regex: search, $options: 'i' } } 
+      { title: { $regex: searchQuery, $options: 'i' } }, 
+    //   { description: { $regex: searchQuery, $options: 'i' } } 
     ];
   }
 
+    if(subCategory.length > 0 && subCategory[0] !== 'all'){
+        filter.subCategory = { $in: subCategory };
+    }
+
   // Build sort
   const sort:any = {};
-  sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
+  switch(sortBy){
+    case'price-desc' :
+        sort.price = -1
+        break
+    case 'price-asc':
+        sort.price = 1
+        break   
+    case 'trending':
+        sort.enrollmentCount = -1
+    case 'popular':
+        sort.rating = -1    
+        break
+    case 'rating':
+        sort.rating = -1    
+        break
+    case 'newest':
+        sort.createdAt = -1 
+        break
+    default:
+        sort.createdAt = -1        
+  }
 
     const courses = await this.courseRepository.getAllCourses(filter, skip, perPage, sort )
     const totalCourses = await this.courseRepository.getCoursescount(filter)

@@ -1,5 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from '../../ui/tabs'
-import AccountSettings from './AccountSettings'
+import AccountSettings from './account-settings'
 
 const ProfileNavigation = () => {
   return (

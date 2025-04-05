@@ -1,6 +1,6 @@
 import { Button } from "../../ui/button";
 import { ChevronRight } from "lucide-react";
-import CategoryCard from "./CategoryCard";
+import CategoryCard from "./category-card";
 
 const CategorySection = () => {
   return (

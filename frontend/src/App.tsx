@@ -8,7 +8,7 @@ import UserProfile from "./pages/user/UserProfile";
 import { useEffect, useState } from "react";
 import { refreshToken } from "./services/authService";
 import { useDispatch } from "react-redux";
-import ProtectedRoute from "./components/user/auth/ProtectedRoute";
+import ProtectedRoute from "./components/user/auth/protected-routes";
 import DashboardLayout from "./components/admin/layout/DashboardLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
 import UsersPage from "./pages/admin/UsersPage";

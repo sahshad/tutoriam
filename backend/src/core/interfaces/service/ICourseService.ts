@@ -5,9 +5,9 @@ import { IBaseService } from "./IBaseService";
 interface getAllCoursesArgument {
     page:number
     limit:number
-    search:string
     sortBy:string
-    sortOrder:string
+    searchQuery: string
+    subCategory: string[]
 }
 
 export interface ICourseService extends IBaseService<ICourse> {

@@ -5,7 +5,6 @@ import { TYPES } from "../di/types";
 import { IInstructorService } from "../core/interfaces/service/IInstructorService";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
-import { Instructor } from "../models/Instructor";
 
 @injectable()
 export class InstructorController implements IInstructorController {

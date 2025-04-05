@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search } from "lucide-react"
+import { use, useEffect, useState } from "react"
 
 interface CourseFiltersProps {
   sortBy: string
@@ -27,6 +28,15 @@ export function CourseFilters({
   searchQuery,
   setSearchQuery,
 }: CourseFiltersProps) {
+  const [search, setSearch] = useState("")
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchQuery(search)
+    }, 500) 
+
+    return () => clearTimeout(timer)
+  },[search])
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
       <div>
@@ -36,8 +46,8 @@ export function CourseFilters({
           <Input
             placeholder="Search in your courses..."
             className="pl-9"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </div>

@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, use } from "react"
 import { getMyCourses } from "@/services/instructorService"
 import { Course } from "@/types/course"
+import { getAllCourses } from "@/services/courseService"
 
 interface useCoursesProps{
     role:string
@@ -14,6 +15,11 @@ export function useCourses({role}:useCoursesProps) {
   const [subCategory, setSubCategory] = useState("all")
   const [rating, setRating] = useState("4")
   const [searchQuery, setSearchQuery] = useState("")
+  const [userCatagories, setUserCatagories] = useState<string[]>([])
+  const [userSubCatagories, setUserSubCatagories] = useState<string[]>([])
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
+  const [level, setLevel] = useState<string[]>([]);
+  const [duration, setDuration] = useState<string[]>([]);
   const [loading, setLoading] = useState(true) 
 
   const coursesPerPage = 1
@@ -40,12 +46,39 @@ export function useCourses({role}:useCoursesProps) {
     }
   }
 
+  const fetchCoursesFromBackendForUser = async () => {
+    try {
+      setLoading(true)
+      const response = await getAllCourses({
+        page: currentPage,
+        limit: coursesPerPage,
+        searchQuery,
+        category: userCatagories ,
+        subCategory: userSubCatagories,
+        sortBy,
+        priceMin: priceRange[0],
+        priceMax: priceRange[1],
+        level: level.length > 0 ? level : undefined,
+        duration: duration.length > 0 ? duration : undefined,
+      })
+  
+      console.log(response)
+      setCourses(response.coursesWithPagination.courses)
+      setTotalPages(response.coursesWithPagination.totalPages)  
+    } catch (error) {
+      console.error("Error fetching courses:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
     const getCourses = async () => {
       try {
         if(role === 'instructor'){
              await fetchCoursesFromBackend()
-        }else if(role === 'user'){       
+        }else if(role === 'user'){   
+            await fetchCoursesFromBackendForUser()
         }
       } catch (error) {
         console.log(error)
@@ -53,7 +86,7 @@ export function useCourses({role}:useCoursesProps) {
         setLoading(false)}
     }
     getCourses()
-  }, [sortBy, category, searchQuery, currentPage, subCategory])
+  }, [sortBy, category, searchQuery, currentPage, subCategory, userCatagories, userSubCatagories])
 
   // useEffect(() => {
   //   let result = [...courses]
@@ -135,6 +168,16 @@ export function useCourses({role}:useCoursesProps) {
     setRating,
     searchQuery,
     setSearchQuery,
+    userCatagories,
+    setUserCatagories,
+    userSubCatagories,
+    setUserSubCatagories,
+    priceRange,
+    setPriceRange,
+    level,
+    setLevel,
+    duration,
+    setDuration,
     loading,
     setLoading  
   }

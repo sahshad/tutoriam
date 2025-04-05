@@ -46,17 +46,18 @@ export class CourseController implements ICourseController {
     })
 
     getAllCourses = asyncHandler(async (req: Request, res: Response) => {
-        const { page, limit, search, sortBy, sortOrder } = req.query;
+        const { page, limit, sortBy, sortOrder, category, subCategory, searchQuery } = req.query;
+        console.log(subCategory, sortBy, searchQuery)
         const coursesWithPagination = await this.courseService.getAllCourses({
             page: Number(page) || 1,
             limit: Number(limit) || 10,
-            search: search as string || '',
             sortBy: sortBy as string || 'createdAt',
-            sortOrder: sortOrder as string || 'asc'
+            searchQuery: searchQuery as string || '',            
+            subCategory: subCategory as string [] || ['all']
+
         });
 
-
-        res.status(StatusCodes.OK).json({message: "courses fetched successfully", courses:coursesWithPagination?.courses})
+        res.status(StatusCodes.OK).json({message: "courses fetched successfully", coursesWithPagination})
     })
 
     getCourseWithContent = asyncHandler(async(req:Request, res:Response) => {

@@ -1,10 +1,11 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import store  from "../redux/store";
 import { refreshToken } from "../services/authService";
 import {logout  } from '../redux/slices/authSlice'
 
+
 const apiClient = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true, 
 });
 

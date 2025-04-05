@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import Header from "@/components/user/home/Header"
+import Header from "@/components/user/home/header"
 import { Link } from "react-router-dom"
 
 export default function NotFound() {

@@ -45,4 +45,18 @@ export interface Course {
     rating?: string;
     sortBy?: string;
   }
+
+  export interface UserCourseFilterParams {
+    page: number;
+    limit: number;
+    searchQuery: string;
+    category?: string[]; 
+    subCategory?: string[]; 
+    sortBy: string; 
+    priceMin: number; 
+    priceMax: number; 
+    level?: string[]; 
+    duration?: string[]; 
+  }
+  
   

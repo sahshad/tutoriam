@@ -1,6 +1,6 @@
-import Features from '@/components/user/becomeInstructor/Features'
-import HeroSection from '@/components/user/becomeInstructor/HeroSection'
-import Header from '@/components/user/home/Header'
+import Features from '@/components/user/become-instructor/features'
+import HeroSection from '@/components/user/become-instructor/hero-section'
+import Header from '@/components/user/home/header'
 
 const BecomeInstructorPage = () => {
   return (

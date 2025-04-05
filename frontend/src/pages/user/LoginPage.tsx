@@ -1,6 +1,6 @@
-import Header from "@/components/user/login/Header";
-import LoginForm from "@/components/user/login/LoginForm";
-import SignupForm from "@/components/user/login/SignupForm";
+import Header from "@/components/user/login/login-header";
+import LoginForm from "@/components/user/login/login-form";
+import SignupForm from "@/components/user/login/signup-form";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";

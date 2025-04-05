@@ -1,3 +1,4 @@
+import { GetCoursesRequestParams, UserCourseFilterParams } from "@/types/course"
 import apiClient from "@/utils/axiosInstance"
 import axios, { AxiosResponse } from "axios"
 
@@ -10,9 +11,23 @@ export const getCourseById = async(courseId:string)=>{
   }
 }
 
-export const getAllCourses = async() => {
+export const getAllCourses = async({page,limit, searchQuery, category, subCategory, sortBy,level,priceMax,priceMin,duration}:UserCourseFilterParams) => {
     try {
-       const res:AxiosResponse  =  await apiClient.get("/user/courses")
+      console.log(page,limit, searchQuery, category, subCategory, sortBy,level,priceMax,priceMin,duration)
+       const res:AxiosResponse  =  await apiClient.get("/user/courses",{
+        params: {
+          page,
+          limit,
+          searchQuery,
+          category,
+          subCategory,
+          sortBy,
+          level,
+          priceMax,
+          priceMin,
+          duration
+        },
+    })
        return res.data
     } catch (error:unknown) {
         if (axios.isAxiosError(error)) {
