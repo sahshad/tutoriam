@@ -15,36 +15,28 @@ interface CoursePaginationProps {
 }
 
 export function CoursePagination({ currentPage, totalPages, onPageChange }: CoursePaginationProps) {
-  // Don't show pagination if there's only one page
   if (totalPages <= 1) return null
 
-  // Calculate which page numbers to show
   const getPageNumbers = () => {
     const pages = []
 
-    // Always show first page
     pages.push(1)
 
-    // Calculate range around current page
     const start = Math.max(2, currentPage - 1)
     const end = Math.min(totalPages - 1, currentPage + 1)
 
-    // Add ellipsis after first page if needed
     if (start > 2) {
       pages.push("ellipsis-start")
     }
 
-    // Add pages in range
     for (let i = start; i <= end; i++) {
       pages.push(i)
     }
 
-    // Add ellipsis before last page if needed
     if (end < totalPages - 1) {
       pages.push("ellipsis-end")
     }
 
-    // Always show last page if more than one page
     if (totalPages > 1) {
       pages.push(totalPages)
     }

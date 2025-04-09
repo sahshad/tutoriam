@@ -29,6 +29,7 @@ import UserCourseDetailsPage from "./pages/user/UserCourseDetails";
 import CartPage from "./pages/user/CartPage";
 import WishlistPage from "./pages/user/WishlistPage";
 import NotFound from "./pages/user/NotFound";
+import CategoriesPage from "./pages/admin/category-page";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -90,7 +91,8 @@ const App = () => {
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="users" element={<UsersPage/>}/>
             <Route path="tutors" element={<TutorsPage/>}/>
-            <Route path="instructor-applications" element={<InstructorApplicationsPage/>}/>
+            <Route path="applications" element={<InstructorApplicationsPage/>}/>
+            <Route path="categories" element={<CategoriesPage/>}/>
             </Route>
         </Route>
         <Route path="*" element={<NotFound/>} /> 

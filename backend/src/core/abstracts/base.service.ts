@@ -6,6 +6,7 @@ export abstract class BaseService<T extends Document> implements IBaseService<T>
   constructor(protected repository: IBaseRepository<T>) {}
 
   async create(data: Partial<T>): Promise<T | null> {
+    console.log(this.repository)
     return await this.repository.create(data);
   }
 

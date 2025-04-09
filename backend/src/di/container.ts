@@ -54,6 +54,12 @@ import { IWishlistService } from "../core/interfaces/service/IWishlistService";
 import { WishlistService } from "../services/wishlist.service";
 import { IWishlistRepository } from "../core/interfaces/repository/IWishlistRepository";
 import { WishlistRepository } from "../repositories/wishlist.repository";
+import { ICategoryController } from "../core/interfaces/controller/ICategoryController";
+import { CategoryService } from "../services/category.service";
+import { CategoryRepository } from "../repositories/category.repository";
+import { ICategoryRepository } from "../core/interfaces/repository/ICategoryRepository";
+import { ICategoryService } from "../core/interfaces/service/ICategoryService";
+import { CategoryController } from "../controllers/category.controller";
 
 const container = new Container()
 
@@ -92,5 +98,9 @@ container.bind<ICartRepository>(TYPES.CartRepository).to(CartRepository)
 container.bind<IWishlistController>(TYPES.WishlistController).to(WishlistController)
 container.bind<IWishlistService>(TYPES.WishlistService).to(WishlistService)
 container.bind<IWishlistRepository>(TYPES.WishlistRepository).to(WishlistRepository)
+
+container.bind<ICategoryController>(TYPES.CategoryController).to(CategoryController)
+container.bind<ICategoryService>(TYPES.CategoryService).to(CategoryService)
+container.bind<ICategoryRepository>(TYPES.CategoryRepository).to(CategoryRepository)
 
 export default container

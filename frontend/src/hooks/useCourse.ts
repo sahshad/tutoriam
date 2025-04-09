@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from "react"
+import { useState, useEffect } from "react"
 import { getMyCourses } from "@/services/instructorService"
 import { Course } from "@/types/course"
 import { getAllCourses } from "@/services/courseService"

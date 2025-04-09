@@ -4,10 +4,11 @@ import { ILessonService } from "../core/interfaces/service/ILessonService";
 import { ILesson, Lesson } from "../models/Lesson";
 import { TYPES } from "../di/types";
 import { deleteVideoFromCloudinary, uploadVideoToCloudinary } from "../utils/clodinaryServices";
+import { ILessonRepository } from "../core/interfaces/repository/ILessonRepository ";
 
 @injectable()
 export class LessonService extends BaseService<ILesson> implements ILessonService {
-  constructor(@inject(TYPES.LessonRepository) private lessonRepository: ILessonService) {
+  constructor(@inject(TYPES.LessonRepository) private lessonRepository: ILessonRepository) {
     super(lessonRepository);
   }
 

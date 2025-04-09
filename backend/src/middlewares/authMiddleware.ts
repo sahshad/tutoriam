@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 import { IUser } from "../models/User";
 import { StatusCodes } from "http-status-codes";
+import { decode } from "punycode";
 
 declare module "express-serve-static-core"{
   interface Request {
@@ -14,17 +15,18 @@ export const authMiddleware = (
   roles:string[],
 ) => {
   return (  req: Request,res: Response,next: NextFunction) => {
-      try {
-        const accessToken =
-          req.cookies.accessToken || req.header("Authorization")?.split(" ")[1];
-        if (!accessToken)
-          res.status(401).json({ error: "Unauthorized: No token provided" });
-
-        const decoded = jwt.verify(
-          accessToken,
-          process.env.ACCESS_TOKEN_SECRET!
-        ) as { userId: string, role:string };
-
+    try {
+      const accessToken =
+      req.cookies.accessToken || req.header("Authorization")?.split(" ")[1];
+      if (!accessToken)
+        res.status(401).json({ error: "Unauthorized: No token provided" });
+      
+      const decoded = jwt.verify(
+        accessToken,
+        process.env.ACCESS_TOKEN_SECRET!
+      ) as { userId: string, role:string };
+      
+      console.log(roles, decoded.role)
 
         if(roles.length && !roles.includes(decoded.role)){
           res.status(StatusCodes.FORBIDDEN).json({message: "permisson denied"})

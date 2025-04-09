@@ -13,7 +13,7 @@ export const getCourseById = async(courseId:string)=>{
 
 export const getAllCourses = async({page,limit, searchQuery, category, subCategory, sortBy,level,priceMax,priceMin,duration}:UserCourseFilterParams) => {
     try {
-      console.log(page,limit, searchQuery, category, subCategory, sortBy,level,priceMax,priceMin,duration)
+      // console.log(page,limit, searchQuery, category, subCategory, sortBy,level,priceMax,priceMin,duration)
        const res:AxiosResponse  =  await apiClient.get("/user/courses",{
         params: {
           page,

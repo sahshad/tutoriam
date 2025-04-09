@@ -7,7 +7,10 @@ export abstract class BaseRepository<T extends Document>
   constructor(protected model: Model<T>) {}
 
   async create(data: Partial<T>): Promise<T | null> {
-    return await this.model.create(data);
+    console.log(this.model)
+    const category = await this.model.create(data);
+    console.log(category)
+    return category
   }
 
   async findById(id: string): Promise<T | null> {
@@ -38,7 +41,10 @@ export abstract class BaseRepository<T extends Document>
   }
 
   async findOne(data: Partial<T>): Promise<T | null> {
-    console.log(data)
     return await this.model.findOne(data as FilterQuery<T>);
+  }
+
+  async countDocuments(filter: FilterQuery<T>): Promise<number> {
+    return await this.model.countDocuments(filter);
   }
 }
