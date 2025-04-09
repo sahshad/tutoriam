@@ -7,8 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Card, CardContent } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useEffect, useState } from "react"
+import { useCategory } from "@/hooks/useCategory"
+import { fetchListedCategories } from "@/services/categoryService"
+import { Category } from "@/types/category"
 
-// Basic Information validation schema
 export const basicInformationSchema = z.object({
   title: z
     .string({ message: "Please enter a title" })
@@ -52,6 +55,32 @@ const BasicInformation = ({ defaultValues, onSubmit, onCancel }: BasicInformatio
       durationUnit: "day",
     },
   })
+
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [subCategories, setSubCategories] = useState<any[]>([]); 
+  const [categories, setCategories]= useState<Category[] >([])
+
+  useEffect(()=> {
+    const fetchCategories = async () => {
+      try {
+        const {categories} = await fetchListedCategories()
+        setCategories(categories)
+        console.log(categories)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchCategories()
+  },[])
+
+  useEffect(() => {
+    if (selectedCategory) {
+      const category = categories.find(cat => cat._id === selectedCategory);
+      if (category) {
+        setSubCategories(category.subcategories); 
+      }
+    }
+  }, [selectedCategory, categories]);
 
   return (
     <ScrollArea>
@@ -104,17 +133,23 @@ const BasicInformation = ({ defaultValues, onSubmit, onCancel }: BasicInformatio
                 render={({ field }) => (
                   <FormItem className="space-y-2">
                     <FormLabel>Course Category</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}  >
+                    <Select onValueChange={(value) => {
+                      setSelectedCategory(value)
+                      field.onChange(value)
+                    }} defaultValue={field.value}  >
                       <FormControl>
                         <SelectTrigger className="w-full md:w-64">
                           <SelectValue placeholder="Select..." />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="development">Development</SelectItem>
+                        {categories.map(category => (
+                          <SelectItem key={category._id} value={category._id}  >{category.name}</SelectItem>
+                        ))}
+                        {/* <SelectItem value="development">Development</SelectItem>
                         <SelectItem value="business">Business</SelectItem>
                         <SelectItem value="design">Design</SelectItem>
-                        <SelectItem value="marketing">Marketing</SelectItem>
+                        <SelectItem value="marketing">Marketing</SelectItem> */}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -135,10 +170,13 @@ const BasicInformation = ({ defaultValues, onSubmit, onCancel }: BasicInformatio
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="web">Web Development</SelectItem>
+                        {subCategories.map(subCat => (
+                          <SelectItem key={subCat._id} value={subCat._id}>{subCat.name}</SelectItem>
+                        ))}
+                        {/* <SelectItem value="web">Web Development</SelectItem>
                         <SelectItem value="mobile">Mobile Development</SelectItem>
                         <SelectItem value="game">Game Development</SelectItem>
-                        <SelectItem value="database">Database Design</SelectItem>
+                        <SelectItem value="database">Database Design</SelectItem> */}
                       </SelectContent>
                     </Select>
                     <FormMessage />

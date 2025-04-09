@@ -1,8 +1,12 @@
 import { Button } from "@/components/ui/button"
 import Header from "@/components/user/home/header"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function NotFound() {
+const navigate = useNavigate()
+  const handleBackClick = async () => {
+    navigate(-1)
+  }
   return (
     <div className="min-h-screen flex flex-col">
         <Header/>
@@ -14,12 +18,11 @@ export default function NotFound() {
             Something went wrong. It's look that your requested could not be found. It's look like the link is broken or
             the page is removed.
           </p>
-          <Button asChild className="bg-orange-500 hover:bg-orange-600">
-            <Link to="/">Go Back</Link>
+          <Button onClick={handleBackClick} className="">
+            Go Back
           </Button>
         </div>
         <div className="relative">
-          {/* <img src="/placeholder.svg?height=400&width=500" alt="404 Error Illustration" className="max-w-full h-auto" /> */}
         </div>
       </div>
       <footer className="border-t py-6 text-center text-sm text-muted-foreground">

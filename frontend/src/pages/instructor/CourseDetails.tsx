@@ -69,7 +69,7 @@ const SingleCoursePage: React.FC = () => {
           <CourseHeader course={course} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-            <CourseStats course={course} />
+            <CourseStats course={{ ...course, instructor: {} }} />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">

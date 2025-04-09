@@ -1,3 +1,4 @@
+import { Category } from "../models/Category";
 import { Course } from "../models/Course";
 
 export const TYPES = {
@@ -11,6 +12,7 @@ export const TYPES = {
   LessonController: Symbol.for("LessonController"),
   CartController:Symbol.for("CartController"),
   WishlistController:Symbol.for("WishlistController"),
+  CategoryController: Symbol.for("CategoryController"),
 
   // Services
   AdminService: Symbol.for("AdminService"),
@@ -22,6 +24,7 @@ export const TYPES = {
   LessonService: Symbol.for("LessonService"),
   CartService:Symbol.for("CartService"),
   WishlistService:Symbol.for("WishlistService"),
+  CategoryService: Symbol.for("CategoryService"),
 
   // Repositories
   AdminRepository: Symbol.for("AdminRepository"),
@@ -32,6 +35,7 @@ export const TYPES = {
   ModuleRepository: Symbol.for("ModuleRepository"),
   LessonRepository: Symbol.for("LessonRepository"),
   CartRepository:Symbol.for("CartRepository"),
-  WishlistRepository:Symbol.for("WishlistRepository")
+  WishlistRepository:Symbol.for("WishlistRepository"),
+  CategoryRepository: Symbol.for("CategoryRepository"),
   
 };

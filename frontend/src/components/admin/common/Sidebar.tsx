@@ -5,6 +5,7 @@ import {
   BarChart3,
   Book,
   BookOpen,
+  ChartBarStacked,
   GraduationCap,
   LogOutIcon,
   Settings,
@@ -47,14 +48,19 @@ const sidebarItems = [
     icon: Tag,
   },
   {
+    title: "Applications",
+    href: "/admin/applications",
+    icon: Book,
+  },
+  {
+    title: "Category",
+    href: "/admin/categories",
+    icon: ChartBarStacked,
+  },
+  {
     title: "Settings",
     href: "/admin/settings",
     icon: Settings,
-  },
-  {
-    title: "Applications",
-    href: "/admin/instructor-applications",
-    icon: Book,
   },
 ];
 

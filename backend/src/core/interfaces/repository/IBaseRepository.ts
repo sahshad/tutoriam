@@ -1,3 +1,5 @@
+import { FilterQuery } from "mongoose";
+
 export interface IBaseRepository<T> {
     create(data: Partial<T>): Promise<T | null>;
     findById(id: string): Promise<T | null>;
@@ -6,4 +8,5 @@ export interface IBaseRepository<T> {
     delete(id: string): Promise<T | null>;
     findAll(): Promise<T[] | null>;
     findOne(data: Partial<T>): Promise<T | null>;
+    countDocuments(filter: FilterQuery<T>): Promise<number>;
   }

@@ -6,12 +6,14 @@ import { ICourseController } from "../core/interfaces/controller/ICourseControll
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { IModuleController } from "../core/interfaces/controller/IModuleController";
 import { ILessonController } from "../core/interfaces/controller/ILessonController";
+import { ICategoryController } from "../core/interfaces/controller/ICategoryController";
 
 const router = express.Router();
 
 const courseController  = container.get<ICourseController>(TYPES.CourseController)
 const moduleController = container.get<IModuleController>(TYPES.ModuleController)
 const lessonController = container.get<ILessonController>(TYPES.LessonController)
+const categoryController = container.get<ICategoryController>(TYPES.CategoryController)
 
 // router.use(authMiddleware);
 router.post(
@@ -41,5 +43,6 @@ router.delete("/modules/:moduleId", authMiddleware(["instructor"]), moduleContro
 router.put("/lessons/:lessonId", authMiddleware(["instructor"]), upload.single("content"), lessonController.updateLesson);
 router.delete("/lessons/:lessonId", authMiddleware(["instructor"]), lessonController.deleteLesson);
 
+router.get("/categories", authMiddleware(["instructor"]), categoryController.getListedCategories)
 
 export default router;
