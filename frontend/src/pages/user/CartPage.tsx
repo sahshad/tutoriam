@@ -1,35 +1,23 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
-// import { useToast } from "@/hooks/use-toast"
 import { Link } from "react-router-dom"
 import { CartItem } from "@/components/user/cart/cart-item"
 import { CartSummary } from "@/components/user/cart/cart-summary"
 import Header from "@/components/user/home/header"
-import { addCourseToWishlist, getCartItems, removeCourseFromCart } from "@/services/userServices"
 import { toast } from "sonner"
-
-interface CartItemType {
-  _id: string;
-  price: number;
-  thumbnail:string
-  
-}
+import { fetchCartItems, moveToWishlist, removeFromCart } from "@/redux/thunks/cartThunk"
+import { useAppDispatch, useAppSelector } from "@/redux/store"
 
 export default function CartPage() {
-//   const { toast } = useToast()
-  const [cartItems, setCartItems] = useState<CartItemType[]>([]);
-  const [couponCode, setCouponCode] = useState("")
-  const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null)
-  const [isApplyingCoupon, setIsApplyingCoupon] = useState(false)
-
+  const dispatch = useAppDispatch()
+  const cartItems = useAppSelector((state) => state.cart.cartItems);
+  
   useEffect(() => {
     const getCartData = async () => {
       try {
-        const res = await getCartItems()
-        console.log(res.cart.courses)
-        setCartItems(res.cart.courses)
+        dispatch(fetchCartItems())
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     }
 
@@ -38,62 +26,37 @@ export default function CartPage() {
 
   const handleRemoveItem = async (_id: string) => {
     try {
-      const res = await removeCourseFromCart(_id)
-      console.log(res)
-      setCartItems(cartItems.filter((item) => item._id !== _id))
+      await dispatch(removeFromCart(_id))
       toast.success("course removed from cart", {position:"top-right"})
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
     
   }
 
   const handleMoveToWishlist = async(_id: string) => {
-    
     try {
-      const res = await addCourseToWishlist(_id)
-      const resp = await removeCourseFromCart(_id)
-      toast.success("course moved to wishlist successfully", {position:"top-right"})
-      setCartItems(cartItems.filter((item) => item._id !== _id))
+      const result = await dispatch(moveToWishlist(_id))
+      if(result.meta.requestStatus === "fulfilled"){
+        toast.success("course moved to wishlist successfully", {position:"top-right"})
+      }else{
+        throw new Error("course is alredy in your wishlist")
+      }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast.error("course is alredy in your wishlist", {position:"top-right"})
     }
-    
-    // toast({
-    //   title: "Moved to wishlist",
-    //   description: "The course has been moved to your wishlist.",
-    // })
-  }
-
-  const handleApplyCoupon = () => {
-    if (!couponCode.trim()) return
-
-    setIsApplyingCoupon(true)
-
-    setTimeout(() => {
-      setAppliedCoupon(couponCode)
-      setCouponCode("")
-      setIsApplyingCoupon(false)
-    //   toast({
-    //     title: "Coupon applied",
-    //     description: `Discount code "${couponCode}" has been applied to your order.`,
-    //   })
-    }, 1000)
   }
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0)
-  const discount = appliedCoupon ? subtotal * 0.08 : 0 // 8% discount
-  const taxes = (subtotal - discount) * 0.29 // 29% tax
-  const total = subtotal - discount + taxes
+  const tax = subtotal * 0.18;
 
   return (
     <>
     <Header/>
     <div className="container mx-auto px-[4%] py-8">
 
-
-      <h1 className="mb-8 text-2xl font-bold sm:text-xl">
+      <h1 className="mb-8 text-2xl font-semibold sm:text-sm">
         Shopping Cart {cartItems.length > 0 && `(${cartItems.length})`}
       </h1>
 
@@ -108,12 +71,11 @@ export default function CartPage() {
       ) : (
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <div className="mb-4 hidden grid-cols-12 gap-4 rounded-lg bg-muted p-4 sm:grid">
-              <div className="col-span-6 font-medium">COURSE</div>
-              <div className="col-span-3 text-center font-">PRICE</div>
-              <div className="col-span-3 text-center font-medium">ACTION</div>
+            <div className="mb-4 hidden grid-cols-12 gap-4 rounded-lg bg-muted py-3 px-5 sm:grid">
+              <div className="col-span-6 font-semibold text-sm ">Course</div>
+              <div className="col-span-3 text-center font-semibold text-sm ">Price</div>
+              <div className="col-span-3 text-center font-semibold text-sm  ">Action</div>
             </div>
-
             <div className="space-y-4">
               {cartItems.map((item :any) => (
                 <CartItem
@@ -129,14 +91,8 @@ export default function CartPage() {
           <div className="lg:col-span-1">
             <CartSummary
               subtotal={subtotal}
-              discount={discount}
-              taxes={taxes}
-              total={total}
-              couponCode={couponCode}
-              setCouponCode={setCouponCode}
-              onApplyCoupon={handleApplyCoupon}
-              isApplyingCoupon={isApplyingCoupon}
-              appliedCoupon={appliedCoupon}
+              taxes={tax}
+              total={subtotal}
             />
           </div>
         </div>

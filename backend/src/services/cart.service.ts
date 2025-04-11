@@ -12,24 +12,27 @@ export class CartService implements ICartService {
     async addItemToCart(userId: string, courseId: string): Promise<ICart | null> {
         const courseObjectId = new mongoose.Types.ObjectId(courseId);
         let  cart = await this.cartRepository.findOne({userId});
-        if(!cart)
+        if(!cart){
             cart = await this.cartRepository.create({userId})
+        }
 
         if (cart?.courses.map(course => course.toString()).includes(courseObjectId.toString())) {
             throw new Error("This course is already in your cart.");
         }
 
         const updatedCart = this.cartRepository.addItemToCart(userId, courseId)
-        if(!updatedCart)
+        if(!updatedCart){
             throw new Error("cannot add course into the cart , please try again")
+        }
         return updatedCart
     }
 
     async getCartItems(userId: string): Promise<ICart | null> {
         let cart = await this.cartRepository.getCartItems(userId)
-        if(!cart)
+        if(!cart){
             cart = await this.cartRepository.create({userId: userId})
-        console.log(cart)
+        }
+        
         return cart
     }
     async removeItemFromCart(userId: string, courseId: string): Promise<ICart | null> {

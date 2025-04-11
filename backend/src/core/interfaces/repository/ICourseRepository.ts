@@ -7,4 +7,5 @@ export interface ICourseRepository extends IBaseRepository<ICourse> {
   updateCoursePublishStatus(courseId:string):Promise<ICourse|null>
   getAllCourses(filter:any, skip:any, perPage:any, sort:any):Promise<ICourse[] | null>
   getCoursescount (filter:any):Promise<number>
+  getCoursesByIds(courseIds:string[]):Promise<ICourse[] | null>
 }

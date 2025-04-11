@@ -1,4 +1,3 @@
-import axios from "axios";
 import { setAuthData, logout } from "../redux/slices/authSlice";
 import { AppDispatch } from "../redux/store";
 import apiClient from "@/utils/axiosInstance";
@@ -59,7 +58,7 @@ export const login = async (
   email: string,
   password: string,
   role:string,
-  dispatch: AppDispatch
+  dispatch: AppDispatch,
 ) => {
   try {
     const response = await apiClient.post(

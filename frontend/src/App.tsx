@@ -30,15 +30,19 @@ import CartPage from "./pages/user/CartPage";
 import WishlistPage from "./pages/user/WishlistPage";
 import NotFound from "./pages/user/NotFound";
 import CategoriesPage from "./pages/admin/category-page";
+import { useAppDispatch } from "./redux/store";
+import { fetchCartItems } from "./redux/thunks/cartThunk";
 
 const App = () => {
   const dispatch = useDispatch();
+  const appDispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchUser = async () => {
         try {
           await refreshToken(dispatch);
+          appDispatch(fetchCartItems())
         } catch (error) {
           console.log("Error during token refresh", error);
         } finally {
@@ -55,6 +59,8 @@ const App = () => {
     <Router>
       <Toaster richColors/>
       <Routes>
+        <Route path="/payment-success" element={<div> payment success</div>}/>
+        <Route path="/payment-cancel" element={<div> payment cancelled</div>}/>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/verify-otp" element={<OtpPage />} />
         <Route path="/" element={<HomePage />} />

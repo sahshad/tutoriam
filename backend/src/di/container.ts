@@ -60,6 +60,14 @@ import { CategoryRepository } from "../repositories/category.repository";
 import { ICategoryRepository } from "../core/interfaces/repository/ICategoryRepository";
 import { ICategoryService } from "../core/interfaces/service/ICategoryService";
 import { CategoryController } from "../controllers/category.controller";
+import { IPaymentController } from "../core/interfaces/controller/IPaymentController";
+import { PaymentController } from "../controllers/payment.controller";
+import { IPaymentService } from "../core/interfaces/service/IPaymentService";
+import { PaymentService } from "../services/payment.service";
+import { IWebhookController } from "../core/interfaces/controller/IWebhookController";
+import { WebhookController } from "../controllers/webhook.controller";
+import { IWebhookService } from "../core/interfaces/service/IWebhookService";
+import { WebhookService } from "../services/webhook.service";
 
 const container = new Container()
 
@@ -102,5 +110,11 @@ container.bind<IWishlistRepository>(TYPES.WishlistRepository).to(WishlistReposit
 container.bind<ICategoryController>(TYPES.CategoryController).to(CategoryController)
 container.bind<ICategoryService>(TYPES.CategoryService).to(CategoryService)
 container.bind<ICategoryRepository>(TYPES.CategoryRepository).to(CategoryRepository)
+
+container.bind<IPaymentController>(TYPES.PaymentController).to(PaymentController)
+container.bind<IPaymentService>(TYPES.PaymentService).to(PaymentService)
+
+container.bind<IWebhookController>(TYPES.WebhookController).to(WebhookController)
+container.bind<IWebhookService>(TYPES.WebhookService).to(WebhookService)
 
 export default container

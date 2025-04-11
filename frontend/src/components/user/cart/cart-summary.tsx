@@ -1,57 +1,62 @@
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { useAppSelector } from "@/redux/store"
+import { makePayment } from "@/services/paymentService"
+import { stat } from "fs"
 
 interface CartSummaryProps {
   subtotal: number
-  discount: number
+  // discount: number
   taxes: number
   total: number
-  couponCode: string
-  setCouponCode: (code: string) => void
-  onApplyCoupon: () => void
-  isApplyingCoupon: boolean
-  appliedCoupon: string | null
 }
 
 export function CartSummary({
   subtotal,
-  discount,
+  // discount,
   taxes,
   total,
-  couponCode,
-  setCouponCode,
-  onApplyCoupon,
-  isApplyingCoupon,
-  appliedCoupon,
 }: CartSummaryProps) {
+
+  const cartItems = useAppSelector(state => state.cart.cartItems)
+
+  const courseIds = cartItems.map(item => item._id)
+
+  const handleCheckout = async () => {
+    console.log(courseIds)
+    try {
+     await makePayment(courseIds)
+    } catch (error) {
+      
+    }
+  }
   return (
     <div className="rounded-lg border p-6">
-      <h2 className="mb-4 text-lg font-semibold">Order Summary</h2>
+      <h2 className="mb-4  font-semibold">Order Summary</h2>
 
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center text-sm justify-between">
           <span className="text-muted-foreground">Subtotal</span>
-          <span>₹ {subtotal.toFixed(2)} INR</span>
+          <span className="text-sm font-semibold">₹ {subtotal.toFixed(2)} </span>
         </div>
 
-        {discount > 0 && (
-          <div className="flex items-center justify-between">
+        {/* {discount > 0 && (
+          <div className="flex items-center text-sm justify-between">
             <span className="text-muted-foreground">Coupon Discount</span>
-            <span className="text-green-600">-₹ {discount.toFixed(2)} INR</span>
+            <span className="text-green-600">-₹ {discount.toFixed(2)} </span>
           </div>
-        )}
+        )} */}
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center text-sm justify-between">
           <span className="text-muted-foreground">Taxes</span>
-          <span>₹ {taxes.toFixed(2)} INR</span>
+          <span className="font-semibold">₹ {taxes.toFixed(2)} </span>
         </div>
 
         <Separator />
 
-        <div className="flex items-center justify-between font-medium">
+        <div className="flex items-center text-sm justify-between font-medium">
           <span>Total:</span>
-          <span className="text-xl">₹ {total.toFixed(2)} INR</span>
+          <span className="text-lg">₹ {total.toFixed(2)} </span>
         </div>
       </div>
 
@@ -78,7 +83,7 @@ export function CartSummary({
           )}
         </div> */}
 
-        <Button className="w-full bg-black text-white hover:bg-black/90">Proceed To Checkout</Button>
+        <Button onClick={handleCheckout} className="w-full bg-black text-white hover:bg-black/90">Proceed To Checkout</Button>
 
         <div className="text-center text-xs text-muted-foreground">
           By completing your purchase you agree to our{" "}

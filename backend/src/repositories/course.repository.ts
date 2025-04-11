@@ -32,6 +32,9 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
     return await Course.countDocuments(filter);
   };
 
+  async getCoursesByIds(courseIds:string[]):Promise<ICourse[] | null> {
+    return await Course.find({_id:{$in:courseIds}})
+  }
   async getCourseWithModulesAndLessons(courseId: string): Promise<ICourse | null> {
     const result = await Course.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(courseId) } },
@@ -63,16 +66,16 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
 
       {
         $lookup: {
-          from: "users", // Assuming the instructor data is in the "instructors" collection
+          from: "users",
           localField: "instructorId",
           foreignField: "_id",
-          as: "instructor", // This will be the populated field
+          as: "instructor",
         },
       },
   
       {
         $unwind: {
-          path: "$instructor", // Unwind the instructor data to embed it directly
+          path: "$instructor", 
           preserveNullAndEmptyArrays: true,
         },
       },
