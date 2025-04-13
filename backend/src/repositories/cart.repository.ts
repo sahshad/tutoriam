@@ -14,7 +14,13 @@ export class CartRepository extends BaseRepository<ICart> implements ICartReposi
             { userId: new mongoose.Types.ObjectId(userId) }, 
             { $addToSet: { courses: courseObjectId } }, 
             { new: true } 
-        );
+        ).populate({
+            path: 'courses', 
+            populate: {
+              path: 'instructorId', 
+              model: 'User'
+            }
+          });
     }
 
     

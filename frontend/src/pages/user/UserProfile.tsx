@@ -26,7 +26,7 @@ const UserProfile = () => {
         <div className='px-[10%]'>
         <ProfileHeader/>
         <ProfileNavigation/>
-        <ChangePassword/>
+        {/* <ChangePassword/> */}
         </div>
         </div>
     </div>

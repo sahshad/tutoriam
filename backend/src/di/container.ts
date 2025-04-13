@@ -60,6 +60,26 @@ import { CategoryRepository } from "../repositories/category.repository";
 import { ICategoryRepository } from "../core/interfaces/repository/ICategoryRepository";
 import { ICategoryService } from "../core/interfaces/service/ICategoryService";
 import { CategoryController } from "../controllers/category.controller";
+import { IPaymentController } from "../core/interfaces/controller/IPaymentController";
+import { PaymentController } from "../controllers/payment.controller";
+import { IPaymentService } from "../core/interfaces/service/IPaymentService";
+import { PaymentService } from "../services/payment.service";
+import { IWebhookController } from "../core/interfaces/controller/IWebhookController";
+import { WebhookController } from "../controllers/webhook.controller";
+import { IWebhookService } from "../core/interfaces/service/IWebhookService";
+import { WebhookService } from "../services/webhook.service";
+import { IOrderController } from "../core/interfaces/controller/IOrderController";
+import { OrderController } from "../controllers/order.controller";
+import { IOrderService } from "../core/interfaces/service/IOrderService";
+import { OrderService } from "../services/order.service";
+import { IOrderRepository } from "../core/interfaces/repository/IOrderRespoitory";
+import { OrderRepository } from "../repositories/order.repository";
+import { IEnrollmentController } from "../core/interfaces/controller/IEnrollmentController";
+import { EnrollmentController } from "../controllers/enrollment.controller";
+import { IEnrollmentService } from "../core/interfaces/service/IEnrollmentService";
+import { EnrollmentService } from "../services/enrollment.service";
+import { IEnrollmentRepository } from "../core/interfaces/repository/IEnrollmentRepository";
+import { EnrollmentRepository } from "../repositories/enrollment.repository";
 
 const container = new Container()
 
@@ -102,5 +122,19 @@ container.bind<IWishlistRepository>(TYPES.WishlistRepository).to(WishlistReposit
 container.bind<ICategoryController>(TYPES.CategoryController).to(CategoryController)
 container.bind<ICategoryService>(TYPES.CategoryService).to(CategoryService)
 container.bind<ICategoryRepository>(TYPES.CategoryRepository).to(CategoryRepository)
+
+container.bind<IOrderController>(TYPES.OrderController).to(OrderController)
+container.bind<IOrderService>(TYPES.OrderService).to(OrderService)
+container.bind<IOrderRepository>(TYPES.OrderRepository).to(OrderRepository)
+
+container.bind<IEnrollmentController>(TYPES.EnrollmentController).to(EnrollmentController)
+container.bind<IEnrollmentService>(TYPES.EnrollmentService).to(EnrollmentService)
+container.bind<IEnrollmentRepository>(TYPES.EnrollmentRepository).to(EnrollmentRepository)
+
+container.bind<IPaymentController>(TYPES.PaymentController).to(PaymentController)
+container.bind<IPaymentService>(TYPES.PaymentService).to(PaymentService)
+
+container.bind<IWebhookController>(TYPES.WebhookController).to(WebhookController)
+container.bind<IWebhookService>(TYPES.WebhookService).to(WebhookService)
 
 export default container

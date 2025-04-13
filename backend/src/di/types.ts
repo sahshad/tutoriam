@@ -1,8 +1,7 @@
-import { Category } from "../models/Category";
-import { Course } from "../models/Course";
 
 export const TYPES = {
-  // Controllers
+
+  // CONTROLLERS
   AdminController: Symbol.for("AdminController"),
   UserController: Symbol.for("UserController"),
   AuthController: Symbol.for("AuthController"),
@@ -13,8 +12,12 @@ export const TYPES = {
   CartController:Symbol.for("CartController"),
   WishlistController:Symbol.for("WishlistController"),
   CategoryController: Symbol.for("CategoryController"),
+  PaymentController: Symbol.for("PaymentController"),
+  WebhookController: Symbol.for("WebhookController"),
+  OrderController: Symbol.for("OrderController"),
+  EnrollmentController: Symbol.for("EnrollmentController"),
 
-  // Services
+  // SERVICES
   AdminService: Symbol.for("AdminService"),
   UserService: Symbol.for("UserService"),
   AuthService: Symbol.for("AuthService"),
@@ -25,8 +28,12 @@ export const TYPES = {
   CartService:Symbol.for("CartService"),
   WishlistService:Symbol.for("WishlistService"),
   CategoryService: Symbol.for("CategoryService"),
+  PaymentService: Symbol.for("PaymentService"),
+  WebhookService: Symbol.for("WebhookService"),
+  OrderService: Symbol.for("OrderService"),
+  EnrollmentService: Symbol.for("EnrollmentService"),
 
-  // Repositories
+  // REPOSITORIES
   AdminRepository: Symbol.for("AdminRepository"),
   UserRepository: Symbol.for("UserRepository"),
   AuthRepository: Symbol.for("AuthRepository"),
@@ -37,5 +44,7 @@ export const TYPES = {
   CartRepository:Symbol.for("CartRepository"),
   WishlistRepository:Symbol.for("WishlistRepository"),
   CategoryRepository: Symbol.for("CategoryRepository"),
+  OrderRepository: Symbol.for("OrderRepository"),
+  EnrollmentRepository: Symbol.for("EnrollmentRepository"),
   
 };

@@ -12,13 +12,13 @@ interface CartItemProps {
 
 export function CartItem({ item, onRemove, onMoveToWishlist }: CartItemProps) {
   return (
-    <div className="grid grid-cols-1 gap-4 rounded-lg border p-4 sm:grid-cols-12">
+    <div className="grid grid-cols-1 gap-4 rounded-lg border p-3 sm:grid-cols-12">
       <div className="col-span-6 flex gap-4">
-        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
+        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md flex">
           <img src={item.thumbnail || "/placeholder.svg"} alt={item.title}  className="object-cover" />
         </div>
         <div className="flex flex-col">
-          <Link to={`/courses/${item.id}`} className="font-medium hover:underline">
+          <Link to={`/courses/${item._id}`} className="font-medium text-md hover:underline">
             {item.title}
           </Link>
           <div className="mt-1 flex items-center text-sm text-muted-foreground">
@@ -31,7 +31,7 @@ export function CartItem({ item, onRemove, onMoveToWishlist }: CartItemProps) {
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className={`h-4 w-4 ${
+                    className={`h-3 w-3 ${
                       i < Math.floor(item.rating) ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"
                     }`}
                   >
@@ -49,10 +49,10 @@ export function CartItem({ item, onRemove, onMoveToWishlist }: CartItemProps) {
               {/* {item.reviewCount.toLocaleString()} {item.reviewCount === 1 ? "review" : "reviews"} */}
             </span>
           </div>
-          <div className="mt-1 text-sm">
+          {/* <div className="mt-1 text-sm">
             <span>Course by: </span>
             <span className="text-muted-foreground">{item.instructorId.name}</span>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="col-span-3 flex items-center justify-center sm:justify-center">
@@ -60,18 +60,18 @@ export function CartItem({ item, onRemove, onMoveToWishlist }: CartItemProps) {
           {item.originalPrice && item.originalPrice > item.price && (
             <span className="text-sm text-muted-foreground line-through">${item.originalPrice.toFixed(2)}</span>
           )}
-          <span className="text-lg font-bold">${item.price.toFixed(2)}</span>
+          <span className="text-md font-bold">₹{item?.price?.toFixed(2)}</span>
         </div>
       </div>
 
       <div className="col-span-3 flex items-center justify-between gap-2 sm:justify-center">
-        <Button variant="outline" size="sm" className="w-full" onClick={onMoveToWishlist}>
+        <Button variant="outline" size="sm" className="" onClick={onMoveToWishlist}>
           Move To Wishlist
         </Button>
         <Button
           variant="ghost"
           size="icon"
-          className="flex-shrink-0 text-red-500 hover:bg-red-50 hover:text-red-600"
+          className="flex-shrink-0"
           onClick={onRemove}
         >
           <Trash2 className="h-5 w-5" />

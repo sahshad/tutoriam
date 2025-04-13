@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,12 +23,15 @@ import { userLogout } from "@/services/authService";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import ThemeToggle from "@/components/common/ThemeToggle";
+import { useAppSelector } from "@/redux/store";
 
 const Header = () => {
   const user = useSelector((state: any) => state.auth.user);
+  const cartCount = useAppSelector(state => state.cart.cartItems.length)
   const isAdmin = localStorage.getItem("adminLoggedIn");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [sidebarOpen, setSidebarOpen] = useState(false); 
 
@@ -52,6 +55,8 @@ const Header = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const isActive = (path: string) => location.pathname === path;
+
   return (
     <header className="border-b">
       <div className="bg-black text-white px-4 sm:px-[2%]">
@@ -65,33 +70,33 @@ const Header = () => {
           </Button>
 
           <nav className="hidden sm:flex items-center space-x-6 flex-wrap">
-            <Link
+          <Link
               to="/"
-              className="text-sm font-medium text-white hover:text-white/80"
+              className={`text-sm font-medium ${isActive("/") ? "text-white" : "text-white/70"} hover:text-white`}
             >
               Home
             </Link>
             <Link
               to="/courses"
-              className="text-sm font-medium text-white/70 hover:text-white"
+              className={`text-sm font-medium ${isActive("/courses") ? "text-white" : "text-white/70"} hover:text-white`}
             >
               Courses
             </Link>
             <Link
               to="/about"
-              className="text-sm font-medium text-white/70 hover:text-white"
+              className={`text-sm font-medium ${isActive("/about") ? "text-white" : "text-white/70"} hover:text-white`}
             >
               About
             </Link>
             <Link
               to="/contact"
-              className="text-sm font-medium text-white/70 hover:text-white"
+              className={`text-sm font-medium ${isActive("/contact") ? "text-white" : "text-white/70"} hover:text-white`}
             >
               Contact
             </Link>
             <Link
               to="/become-instructor"
-              className="text-sm font-medium text-white/70 hover:text-white"
+              className={`text-sm font-medium ${isActive("/become-instructor") ? "text-white" : "text-white/70"} hover:text-white`}
             >
               Become an Instructor
             </Link>
@@ -163,9 +168,21 @@ const Header = () => {
               </Button>
               </Link>
               <Link to={"/cart"}>
-              <Button variant="ghost" size="icon" aria-label="Cart" className="sm:flex hidden">
-                <ShoppingCart className="h-5 w-5" />
-              </Button>
+              <div className="relative">
+    <Button
+      variant="ghost"
+      size="icon"
+      aria-label="Cart"
+      className="sm:flex hidden"
+    >
+      <ShoppingCart className="h-5 w-5" />
+    </Button>
+    {cartCount > 0 && (
+      <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
+        {cartCount}
+      </span>
+    )}
+  </div>
               </Link>
 
               <Link to={user.role === "instructor" ? "/instructor/dashboard" : "/profile"}>

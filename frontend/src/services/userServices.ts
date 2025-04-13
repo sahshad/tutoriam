@@ -1,8 +1,6 @@
 import { updateUser } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
 import apiClient from "@/utils/axiosInstance";
-import { Theater } from "lucide-react";
-
 
 export const updateProfile = async (
   formData: FormData,

@@ -9,6 +9,7 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
   }
 
   async getCoursesByInstructorId(instructorId: string): Promise<ICourse[] | null> {
+    console.log(instructorId)
     return await Course.find({ instructorId });
   }
 
@@ -25,13 +26,20 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
   }
 
   async getAllCourses(filter:any, skip:any, limit:any, sort:any): Promise<ICourse[] | null> {
-      return await Course.find(filter).skip(skip).limit(limit).sort(sort)
+    console.log(filter)
+      return await Course.find(filter).skip(skip).limit(limit).sort(sort).populate({
+        path: 'categoryId',
+        select: 'name',
+      })
   }
 
   async getCoursescount (filter:any):Promise<number>  {
     return await Course.countDocuments(filter);
   };
 
+  async getCoursesByIds(courseIds:string[]):Promise<ICourse[] | null> {
+    return await Course.find({_id:{$in:courseIds}})
+  }
   async getCourseWithModulesAndLessons(courseId: string): Promise<ICourse | null> {
     const result = await Course.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(courseId) } },
@@ -63,16 +71,16 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
 
       {
         $lookup: {
-          from: "users", // Assuming the instructor data is in the "instructors" collection
+          from: "users",
           localField: "instructorId",
           foreignField: "_id",
-          as: "instructor", // This will be the populated field
+          as: "instructor",
         },
       },
   
       {
         $unwind: {
-          path: "$instructor", // Unwind the instructor data to embed it directly
+          path: "$instructor", 
           preserveNullAndEmptyArrays: true,
         },
       },

@@ -10,6 +10,8 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useAppDispatch } from "@/redux/store";
+import { fetchCartItems } from "@/redux/thunks/cartThunk";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -24,7 +26,8 @@ type FormData = z.infer<typeof formSchema>;
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const dispactch = useDispatch();
+  const dispatch = useDispatch();
+  const appDispatch = useAppDispatch()
   const navigate = useNavigate();
 
   const {
@@ -37,8 +40,9 @@ const LoginForm = () => {
 
   const onSubmit = async (data: FormData) => {
     const { email, password } = data;
-    const role = "user";
-    const response = await login(email, password, role, dispactch);
+    const role = "";
+    const response = await login(email, password, role, dispatch);
+    appDispatch(fetchCartItems())
     console.log(response)
     if (response.status === 200) {
       navigate("/");

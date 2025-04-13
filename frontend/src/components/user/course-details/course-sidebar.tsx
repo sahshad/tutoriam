@@ -1,8 +1,9 @@
-import { useState } from "react"
-import { Clock, BarChart, Users, Globe, FileText, CheckCircle, Gift } from "lucide-react"
+import { Clock, BarChart, Users, Globe, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { addCourseToCart, addCourseToWishlist } from "@/services/userServices"
+import { addCourseToWishlist } from "@/services/userServices"
 import { toast } from "sonner"
+import { useAppDispatch } from "@/redux/store"
+import { addToCart } from "@/redux/thunks/cartThunk"
 
 export default function CourseSidebar({
   id,
@@ -13,13 +14,13 @@ export default function CourseSidebar({
   language,
   subtitleLanguage,
 }: any) {
-  const [daysLeft, setDaysLeft] = useState(2)
+  const dispatch = useAppDispatch()
 
   const handleAddToCart = async () => {
     try {
-      const res = await addCourseToCart(id)
+      const result = await dispatch(addToCart(id))
       toast.success("course added to cart", {position:"top-right"})
-      console.log(res)
+      console.log(result)
     } catch (error:any) {
       toast.error(error.data.message ||"error while adding course to cart", {position:"top-right"})
     }
@@ -29,7 +30,6 @@ export default function CourseSidebar({
     try {
       const res = await addCourseToWishlist(id)
       toast.success("course added to wishlist", {position:"top-right"})
-      console.log(res)
     } catch (error:any) {
       toast.error(error.data.message ||"error while adding course to cart", {position:"top-right"})
     }

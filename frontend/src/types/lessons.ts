@@ -1,12 +1,14 @@
 export interface Lesson {
-    _id: string;
-    moduleId: string;
-    title: string;
-    contentType: string;
-    videoUrl?: string;
-    order: number;
-    attachments?: string[];
-    createdAt?: Date;
-    updatedAt?: Date;
-  }
-  
+  _id: string;
+  moduleId: string;
+  courseId: string;
+  title: string;
+  contentType: string;
+  videoUrl?: string;
+  duration: string;
+  description: string;
+  order: number;
+  attachments?: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}

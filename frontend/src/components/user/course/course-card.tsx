@@ -10,7 +10,7 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ course }: CourseCardProps) {
-  const { _id, title, thumbnail, price, category, rating, enrollmentCount } = course
+  const { _id, title, thumbnail, price, categoryId, rating, enrollmentCount } = course
 
   return (
     <Link to={`/courses/${_id}`} className="group flex h-full flex-col overflow-hidden rounded-lg border transition-all hover:shadow-md">
@@ -27,7 +27,7 @@ export function CourseCard({ course }: CourseCardProps) {
             variant="outline"
             className={cn("border-0 px-2 py-0.5 text-xs font-medium uppercase")}
           >
-            {category}
+            {categoryId.name}
           </Badge>
         </div>
         <h3 className="mb-2 line-clamp-2 flex-1 font-medium leading-tight">{title}</h3>

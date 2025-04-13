@@ -26,8 +26,6 @@ export const authMiddleware = (
         process.env.ACCESS_TOKEN_SECRET!
       ) as { userId: string, role:string };
       
-      console.log(roles, decoded.role)
-
         if(roles.length && !roles.includes(decoded.role)){
           res.status(StatusCodes.FORBIDDEN).json({message: "permisson denied"})
           return

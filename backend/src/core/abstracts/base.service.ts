@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import { Document, FilterQuery } from "mongoose";
 import { IBaseRepository } from "../interfaces/repository/IBaseRepository";
 import { IBaseService } from "../interfaces/service/IBaseService";
 
@@ -37,4 +37,8 @@ export abstract class BaseService<T extends Document> implements IBaseService<T>
   async findOne(data: Partial<T>): Promise<T | null> {
     return await this.repository.findOne(data);
   }
+
+  // async findOneAndUpadate(filter: FilterQuery<T>, data: Partial<T>): Promise<T | null>{
+  //   return await this.repository.findOneAndUpdate(filter, data)
+  // }
 }

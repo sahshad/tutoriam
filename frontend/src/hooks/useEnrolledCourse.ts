@@ -1,0 +1,66 @@
+import { useState, useEffect } from "react";
+import { fetchEnrolledCourses } from "@/services/enrollmentService";
+import { EnrolledCourse } from "@/types/enrollment";
+
+interface UseEnrolledCoursesProps {
+  userId: string;
+}
+
+export function useEnrolledCourses({ userId }: UseEnrolledCoursesProps) {
+  const [enrolledCourses, setEnrolledCourses] = useState<EnrolledCourse[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const coursesPerPage = 12;
+
+  // Filters, sort, search
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState("all"); 
+
+  const getEnrolledCourses = async () => {
+    try {
+      setLoading(true);
+
+      const response = await fetchEnrolledCourses({
+        page: currentPage,
+        limit: coursesPerPage,
+        searchQuery,
+        filter,
+      });
+
+      setEnrolledCourses(response.data); 
+      setTotalPages(response.totalPages);
+    } catch (error) {
+      console.error("Failed to fetch enrolled courses", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch whenever any dependency changes
+  useEffect(() => {
+    if (userId) {
+      getEnrolledCourses();
+    }
+  }, [userId, currentPage, searchQuery, filter]);
+
+  // Reset to page 1 if filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, filter]);
+
+  return {
+    enrolledCourses,
+    loading,
+    currentPage,
+    totalPages,
+    setCurrentPage,
+    refetch: getEnrolledCourses,
+    searchQuery,
+    setSearchQuery,
+    filter,
+    setFilter,
+  };
+}
