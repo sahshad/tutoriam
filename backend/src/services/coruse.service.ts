@@ -48,18 +48,18 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
 
     if(category){
         if(category === 'all'){
-            filter.category = {$exists: true}
+            filter.categoryId = {$exists: true}
         }else{
-        filter.category = category
+        filter.categoryId = category
         }
     }
 
     if(subCategory){
         if(subCategory === 'all'){
-            filter.subCategory = {$exists: true}
+            filter.subCategoryId = {$exists: true}
         }
         else{
-            filter.subCategory = subCategory
+            filter.subCategoryId = subCategory
         }
     }
 

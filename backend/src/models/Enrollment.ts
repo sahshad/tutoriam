@@ -1,12 +1,13 @@
 import mongoose, { Document, ObjectId, Schema } from "mongoose";
 
 export interface IEnrollment extends Document {
-    userId: ObjectId;
-    courseId: ObjectId;
+    userId: ObjectId | string;
+    courseId: ObjectId | string;
     enrolledAt: Date;
     progress: {
-      completedLessons: mongoose.Types.ObjectId[];
-      lastVisited?: mongoose.Types.ObjectId;
+        totalLessons:number
+      completedLessons: mongoose.Types.ObjectId[] ;
+      lastVisited?: mongoose.Types.ObjectId | string
       percentage: number;
     };
     completed: boolean;
@@ -20,6 +21,7 @@ export interface IEnrollment extends Document {
       courseId: { type: Schema.Types.ObjectId, ref: 'Course', required: true },
       enrolledAt: { type: Date, default: Date.now },
       progress: {
+        totalLessons:{type:Number,required:true },
         completedLessons: [{ type: Schema.Types.ObjectId, ref: 'Lesson' }],
         lastVisited: { type: Schema.Types.ObjectId, ref: 'Lesson' },
         percentage: { type: Number, default: 0 }

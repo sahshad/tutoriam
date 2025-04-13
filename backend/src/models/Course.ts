@@ -3,11 +3,11 @@ import mongoose, { ObjectId,Document, Schema } from "mongoose";
 export interface ICourse extends Document {
     title: string;
     subtitle:string;
-    category: string;
-    subCategory: string;
+    categoryId: ObjectId;
+    subCategoryId: ObjectId;
     language: string;
     level: "beginner" | "intermediate" | "advanced";
-    duration: string; 
+    // duration: string; 
     thumbnail: string;
     trailer: string;
     description: string;
@@ -29,16 +29,15 @@ export interface ICourse extends Document {
     updatedAt?: Date;
 }
 
-
 const CourseSchema = new Schema<ICourse>(
     {
       title: { type: String, required: true },
       subtitle:{type:String, required: true},
-      category: { type: String, required: true },
-      subCategory: { type: String, required: true },
+      categoryId: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+      subCategoryId: { type: Schema.Types.ObjectId, required: true },
       language: { type: String, required: true },
       level: { type: String, enum: ["beginner", "intermediate", "advanced"], required: true },
-      duration: { type: String, required: true },
+      // duration: { type: String, required: true },
       thumbnail: { type: String, required: true },
       trailer: { type: String, required: true },
       description: { type: String, required: true },

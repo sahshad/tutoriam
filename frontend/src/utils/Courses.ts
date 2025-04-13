@@ -3,9 +3,9 @@ import { BasicInformationType } from "@/components/instructor/create_course/Basi
 import { CurriculumType } from "@/components/instructor/create_course/Curriculum";
 import { PublishType } from "@/components/instructor/create_course/PublishCourse";
 
-export const createLessonData = (lesson:any, moduleId?:string, ) => {
+export const createLessonData = (lesson:any, courseId?:string,moduleId?:string ) => {
     const lessonData = new FormData();
-
+  if(courseId)lessonData.append("courseId", courseId)
   if(moduleId)lessonData.append("moduleId", moduleId);
   if(lesson.id)lessonData.append("order",lesson.id)
   if(lesson.name)lessonData.append("title", lesson.name);
@@ -54,8 +54,6 @@ export const createLessonData = (lesson:any, moduleId?:string, ) => {
       if(basicInformation.topic)courseDate.append("topic", basicInformation.topic || "")
       if(basicInformation.language)courseDate.append("language", basicInformation.language || "")
       if(basicInformation.level)courseDate.append("level", basicInformation.level || "")
-      if(basicInformation.duration)courseDate.append("duration", basicInformation.duration || "")
-      if(basicInformation.durationUnit)courseDate.append("durationUnit", basicInformation.durationUnit || "")
     }
     
     if(advancedInformation && Object.keys(advancedInformation).length > 0){
@@ -114,8 +112,6 @@ export const createBasicInformationData = (data: any): BasicInformationType => {
           topic: data.title, 
           language: data.language,
           level: data.level,
-          duration: data.duration,
-          durationUnit: "month", 
       };
   }
   

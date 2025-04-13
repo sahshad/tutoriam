@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { courseService, type Lesson, type Module, type Course } from "@/lib/api/courseService"
 import { FileText, Layers, CheckCircle } from "lucide-react"
 import StepItem from "@/components/instructor/create_course/common/StepItem"
 import { Sidebar } from "@/components/instructor/common/Sidebar"
-import PageFooter from "@/components/instructor/common/Footer"
 import PublishCourse, { PublishType } from "@/components/instructor/create_course/PublishCourse"
 import Curriculum, { CurriculumType } from "@/components/instructor/create_course/Curriculum"
 import AdvancedInformation, { AdvancedInformationType } from "@/components/instructor/create_course/AdvancedInformation"
@@ -94,7 +91,7 @@ const CreateCoursePage = () => {
       console.log(`moduleCreated ${response}`)
 
         for (let lecture of section.lectures) {
-          const lessonData = createLessonData(lecture,moduleId);
+          const lessonData = createLessonData(lecture,courseId,moduleId);
           const response = await createLesson(lessonData)
       console.log(`lessonCreated ${response}`)
         }

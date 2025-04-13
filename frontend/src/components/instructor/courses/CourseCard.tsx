@@ -81,7 +81,7 @@ export function CourseCard({ course:initialCourse  }: CourseCardProps) {
       </div>
 
       <div className="p-4">
-        <div className="uppercase text-xs font-semibold mb-2">{course.category}</div>
+        <div className="uppercase text-xs font-semibold mb-2">{course.categoryId.name}</div>
 
         <h3 className="font-medium text-sm line-clamp-2 h-10 mb-2">{course.title}</h3>
 

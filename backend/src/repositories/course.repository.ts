@@ -9,6 +9,7 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
   }
 
   async getCoursesByInstructorId(instructorId: string): Promise<ICourse[] | null> {
+    console.log(instructorId)
     return await Course.find({ instructorId });
   }
 
@@ -25,7 +26,11 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
   }
 
   async getAllCourses(filter:any, skip:any, limit:any, sort:any): Promise<ICourse[] | null> {
-      return await Course.find(filter).skip(skip).limit(limit).sort(sort)
+    console.log(filter)
+      return await Course.find(filter).skip(skip).limit(limit).sort(sort).populate({
+        path: 'categoryId',
+        select: 'name',
+      })
   }
 
   async getCoursescount (filter:any):Promise<number>  {

@@ -5,11 +5,10 @@ export interface Course {
     _id: string;
     title: string;
     subtitle: string;
-    category: string;
-    subCategory: string;
+    categoryId: {name:string};
+    subCategoryId: {name: string};
     language: string;
     level: "beginner" | "intermediate" | "advanced";
-    duration: string;
     thumbnail: string;
     trailer: string;
     description: string;
@@ -34,7 +33,7 @@ export interface Course {
 
   export interface FullCourse extends Partial<Course>, Partial<Module>, Partial<Lesson> {
     instructor:{}
-  } 
+  }
 
   export interface GetCoursesRequestParams {
     page?: number;        

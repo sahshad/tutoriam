@@ -40,7 +40,7 @@ const LoginForm = () => {
 
   const onSubmit = async (data: FormData) => {
     const { email, password } = data;
-    const role = "user";
+    const role = "";
     const response = await login(email, password, role, dispatch);
     appDispatch(fetchCartItems())
     console.log(response)

@@ -32,6 +32,8 @@ import NotFound from "./pages/user/NotFound";
 import CategoriesPage from "./pages/admin/category-page";
 import { useAppDispatch } from "./redux/store";
 import { fetchCartItems } from "./redux/thunks/cartThunk";
+import { UserRole } from "./constants/role";
+import WatchCoursePage from "./components/user/watch-course/watch-course-page";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -67,31 +69,36 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
         <Route path="/reset-password" element={<ResetPasswordPage/>}/>
 
-        <Route element={<ProtectedRoute role="user"/>}>
+        <Route element={<ProtectedRoute role={[UserRole.USER]}/>}>
               <Route path="/profile" element={<UserProfile /> } />
               <Route path="/become-instructor" element={<BecomeInstructorPage/>}/>
               <Route path="/become-instructor/application" element={<TutorApplicationForm/>}/>
-              <Route path="/courses" element={<UserCoursesPage/>}/>
-              <Route path="/courses/:courseId" element={<UserCourseDetailsPage/>}/>
-              <Route path="/cart" element={<CartPage/>}/>
-              <Route path="/wishlist" element={<WishlistPage/>} />
+              {/* <Route path="/enrolled-courses" element={}/> */}
+              <Route path="/enrolled-courses/watch/:courseId" element={<WatchCoursePage/>}/>
         </Route>
 
-        <Route element={<ProtectedRoute role="instructor"/>}>
+        <Route element={<ProtectedRoute role={[UserRole.INSTRUCTOR]}/>}>
           <Route path="/instructor/dashboard" element={<InstructorDashboardPage/>}/>
           <Route path="/instructor/create-course" element={<CreateCoursePage/>}/>
           <Route path="/instructor/my-courses" element={<CoursesPage/>}/>
           <Route path="/instructor/my-courses/:courseId" element={<SingleCoursePage/>}/>
           <Route path="/instructor/my-courses/:courseId/edit" element={<EditCoursePage/>}/>
-          <Route path="/instructor/courses" element={<UserCoursesPage/>}/>
+          {/* <Route path="/instructor/courses" element={<UserCoursesPage/>}/>
               <Route path="/instructor/courses/:courseId" element={<UserCourseDetailsPage/>}/>
               <Route path="/instructor/cart" element={<CartPage/>}/>
-              <Route path="/instructor/wishlist" element={<WishlistPage/>} />
+              <Route path="/instructor/wishlist" element={<WishlistPage/>} /> */}
+        </Route>
+
+        <Route element={<ProtectedRoute role={[UserRole.USER,UserRole.INSTRUCTOR ]} />}>
+          <Route path="/courses" element={<UserCoursesPage />} />
+          <Route path="/courses/:courseId" element={<UserCourseDetailsPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
         </Route>
 
         <Route path="/admin/login" element={<AdminLoginPage/>}/>
 
-        <Route element={<ProtectedRoute role="admin"/>}>
+        <Route element={<ProtectedRoute role={[UserRole.ADMIN]}/>}>
             <Route path="/admin" element={<DashboardLayout/>}>
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />

@@ -8,7 +8,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Card, CardContent } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useEffect, useState } from "react"
-import { useCategory } from "@/hooks/useCategory"
 import { fetchListedCategories } from "@/services/categoryService"
 import { Category } from "@/types/category"
 
@@ -26,10 +25,10 @@ export const basicInformationSchema = z.object({
   topic: z.string({message: "Please enter a topic"}).min(5, "Topic should be at least 5 characters long"),
   language: z.string({message:"Please select a language"}).min(1, "Please select a language"),
   level: z.string({message: "Please select a course level"}).min(1, "Please select a course level"),
-  duration: z.string({message: "Please enter course duration"}).min(1, "Please enter course duration"),
-  durationUnit: z.enum(["day", "week", "month"], {
-    errorMap: () => ({ message: "Please select a duration unit" }),
-  }),
+  // duration: z.string({message: "Please enter course duration"}).min(1, "Please enter course duration"),
+  // durationUnit: z.enum(["day", "week", "month"], {
+  //   errorMap: () => ({ message: "Please select a duration unit" }),
+  // }),
 })
 
 export type BasicInformationType = z.infer<typeof basicInformationSchema>
@@ -51,8 +50,8 @@ const BasicInformation = ({ defaultValues, onSubmit, onCancel }: BasicInformatio
       topic: "",
       language: "",
       level: "",
-      duration: "",
-      durationUnit: "day",
+      // duration: "",
+      // durationUnit: "day",
     },
   })
 
@@ -146,10 +145,6 @@ const BasicInformation = ({ defaultValues, onSubmit, onCancel }: BasicInformatio
                         {categories.map(category => (
                           <SelectItem key={category._id} value={category._id}  >{category.name}</SelectItem>
                         ))}
-                        {/* <SelectItem value="development">Development</SelectItem>
-                        <SelectItem value="business">Business</SelectItem>
-                        <SelectItem value="design">Design</SelectItem>
-                        <SelectItem value="marketing">Marketing</SelectItem> */}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -173,10 +168,6 @@ const BasicInformation = ({ defaultValues, onSubmit, onCancel }: BasicInformatio
                         {subCategories.map(subCat => (
                           <SelectItem key={subCat._id} value={subCat._id}>{subCat.name}</SelectItem>
                         ))}
-                        {/* <SelectItem value="web">Web Development</SelectItem>
-                        <SelectItem value="mobile">Mobile Development</SelectItem>
-                        <SelectItem value="game">Game Development</SelectItem>
-                        <SelectItem value="database">Database Design</SelectItem> */}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -249,7 +240,7 @@ const BasicInformation = ({ defaultValues, onSubmit, onCancel }: BasicInformatio
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols- gap-6">
+            {/* <div className="grid grid-cols-1 md:grid-cols- gap-6">
               <div className="space-y-2">
                 <div className="flex gap-10">
                   <div className="">
@@ -291,7 +282,7 @@ const BasicInformation = ({ defaultValues, onSubmit, onCancel }: BasicInformatio
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="flex justify-between pt-4">
               <Button type="button" variant="outline" onClick={onCancel}>

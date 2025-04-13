@@ -1,6 +1,6 @@
 import { IOrder } from "../../../models/Order";
 
-export interface IOrderService {
+export interface IOrderRepository {
     createOrder(userId: string, courseIds: string[], amount: number, paymentIntentId: string): Promise<IOrder>;
-    getUserOrders(userId: string): Promise<IOrder[]>;
-  }
+    getOrdersByUser(userId: string): Promise<IOrder[]>;
+}
