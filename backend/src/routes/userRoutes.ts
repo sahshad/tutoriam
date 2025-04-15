@@ -11,6 +11,8 @@ import { ICartController } from "../core/interfaces/controller/ICartController";
 import { IWishlistController } from "../core/interfaces/controller/IWishlistController";
 import { IInstructorController } from "../core/interfaces/controller/IInstructorController";
 import { IEnrollmentController } from "../core/interfaces/controller/IEnrollmentController";
+import { IReviewController } from "../core/interfaces/controller/IReviewController";
+import { UserRole } from "../core/constants/user.enum";
 
 
 const router = express.Router();
@@ -23,27 +25,29 @@ const instructorController = container.get<IInstructorController>(TYPES.Instruct
 const enrollmentController = container.get<IEnrollmentController>(TYPES.EnrollmentController)
 
 // router.use(authMiddleware);
-router.get("/profile",authMiddleware(["user"]), userController.getUserProfile)
+router.get("/profile",authMiddleware([UserRole.USER]), userController.getUserProfile)
 router.put(
-  "/profile",authMiddleware(["user"]),
+  "/profile",authMiddleware([UserRole.USER]),
   upload.single("profileImage"),
   userController.updateProfile
 );
-router.patch("/:userId/change-password",authMiddleware(["user"]), userController.changePassword)
-router.post("/:userId/become-instructor",authMiddleware(["user"]),upload.single("idCardImage"), userController.becomeInstructor)
-router.get("/courses",authMiddleware(["user", "instructor"]), courseController.getAllCourses)
-router.get("/courses/:courseId",authMiddleware(["user", "instructor"]), courseController.getCourseWithContent)
-router.get("/instructor-profile",authMiddleware(["user"]), instructorController.getInstructorProfile)
-router.get("/cart",authMiddleware(["user","instructor"]), cartController.getCart)
-router.post("/cart/add",authMiddleware(["user", "instructor"]), cartController.addItemToCart)
-router.post("/cart/remove",authMiddleware(["user", "instructor"]), cartController.removeItemFromCart)
-router.get("/wishlist",authMiddleware(["user", "instructor"]), wishlistControllet.getWishlistItems)
-router.post("/wishlist/add",authMiddleware(["user", "instructor"]), wishlistControllet.addItemToWishlist)
-router.post("/wishlist/remove",authMiddleware(["user", "instructor"]), wishlistControllet.removeItemFromWishlist)
-router.get("/applications",authMiddleware(["user"]), instructorController.getUserApplications)
-router.get("/enrolled/courses", authMiddleware(["user", "instructor"]), enrollmentController.getEnrolledCourses)
-router.get("/courses/watch/:courseId", authMiddleware(["user", "instructor"]), enrollmentController.getOneEnrolledCourse)
+router.patch("/:userId/change-password",authMiddleware([UserRole.USER]), userController.changePassword)
+router.post("/:userId/become-instructor",authMiddleware([UserRole.USER]),upload.single("idCardImage"), userController.becomeInstructor)
+router.get("/courses",authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), courseController.getAllCourses)
+router.get("/courses/:courseId",authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), courseController.getCourseWithContent)
+router.get("/instructor-profile",authMiddleware([UserRole.USER]), instructorController.getInstructorProfile)
+router.get("/cart",authMiddleware([UserRole.USER,UserRole.INSTRUCTOR]), cartController.getCart)
+router.post("/cart/add",authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), cartController.addItemToCart)
+router.post("/cart/remove",authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), cartController.removeItemFromCart)
+router.get("/wishlist",authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), wishlistControllet.getWishlistItems)
+router.post("/wishlist/add",authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), wishlistControllet.addItemToWishlist)
+router.post("/wishlist/remove",authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), wishlistControllet.removeItemFromWishlist)
+router.get("/applications",authMiddleware([UserRole.USER]), instructorController.getUserApplications)
+router.get("/enrolled/courses", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), enrollmentController.getEnrolledCourses)
+router.get("/courses/watch/:courseId", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), enrollmentController.getOneEnrolledCourse)
 
-router.patch("/courses/enrolled/update-lastvisit", authMiddleware(["user", "instructor"]), enrollmentController.updateLastVisitedLesson)
-router.post("/courses/enrolled/complete-lesson", authMiddleware(["user", "instructor"]), enrollmentController.completeLesson)
+router.patch("/courses/enrolled/update-lastvisit", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), enrollmentController.updateLastVisitedLesson)
+router.post("/courses/enrolled/complete-lesson", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), enrollmentController.completeLesson)
+
+
 export default router;

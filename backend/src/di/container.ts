@@ -80,6 +80,12 @@ import { IEnrollmentService } from "../core/interfaces/service/IEnrollmentServic
 import { EnrollmentService } from "../services/enrollment.service";
 import { IEnrollmentRepository } from "../core/interfaces/repository/IEnrollmentRepository";
 import { EnrollmentRepository } from "../repositories/enrollment.repository";
+import { IReviewController } from "../core/interfaces/controller/IReviewController";
+import { ReviewController } from "../controllers/review.controller";
+import { IReviewService } from "../core/interfaces/service/IReviewService";
+import { ReviewService } from "../services/review.service";
+import { IReviewRepository } from "../core/interfaces/repository/IReviewRepository";
+import { ReviewRepository } from "../repositories/review.repository";
 
 const container = new Container()
 
@@ -130,6 +136,10 @@ container.bind<IOrderRepository>(TYPES.OrderRepository).to(OrderRepository)
 container.bind<IEnrollmentController>(TYPES.EnrollmentController).to(EnrollmentController)
 container.bind<IEnrollmentService>(TYPES.EnrollmentService).to(EnrollmentService)
 container.bind<IEnrollmentRepository>(TYPES.EnrollmentRepository).to(EnrollmentRepository)
+
+container.bind<IReviewController>(TYPES.ReviewController).to(ReviewController)
+container.bind<IReviewService>(TYPES.ReviewService).to(ReviewService)
+container.bind<IReviewRepository>(TYPES.ReviewRepository).to(ReviewRepository)
 
 container.bind<IPaymentController>(TYPES.PaymentController).to(PaymentController)
 container.bind<IPaymentService>(TYPES.PaymentService).to(PaymentService)

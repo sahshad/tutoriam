@@ -12,6 +12,7 @@ import { formatDate, formatTimeFromSeconds } from "@/utils/formatDate";
 import ReactPlayer from "react-player";
 import { EnrolledCourse } from "@/types/enrollment";
 import { Lesson } from "@/types/lessons";
+import CourseReviews from "../course-review/course-reviews";
 
 export default function WatchCoursePage() {
   const [enrolledCourse, setEnrolledCourse] = useState<EnrolledCourse>();
@@ -73,9 +74,8 @@ export default function WatchCoursePage() {
           sections={courseDetails.modules?.length as number}
           lectures={totalLessons as number}
           duration={formatTimeFromSeconds(totalDuration)}
-          isCompleted={enrolledCourse.completed}
+          enrollment={enrolledCourse}
         />
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
           <div className="lg:col-span-2">
             {/* <VideoPlayer url={courseDetails.modules?.[0]?.lessons?.[0]?.videoUrl ?? ""} /> */}
@@ -87,6 +87,7 @@ export default function WatchCoursePage() {
               comments={154}
             />
             <LectureDescription description={currentLesson?.description as string} />
+            <CourseReviews courseId={courseDetails._id}/>
           </div>
           <div className="lg:col-span-1">
             <CourseContents

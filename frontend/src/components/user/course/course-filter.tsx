@@ -8,6 +8,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useEffect, useState } from "react";
+import { Category } from "@/types/category";
+import { fetchListedCategories } from "@/services/categoryService";
 
 interface CourseFiltersProps {
   userCatagories: string[];
@@ -27,7 +30,6 @@ interface CourseFiltersProps {
 }
 
 export function CourseFilters(
-
   {
     userCatagories,
     setUserCatagories,
@@ -51,7 +53,7 @@ export function CourseFilters(
         : [...userSubCatagories, id];
     
       setUserSubCatagories(updatedSubCategories);
-      console.log(userSubCatagories,priceRange);
+      console.log(updatedSubCategories);
   };
 
   const handlePriceTypeChange = (value: string) => {
@@ -77,12 +79,53 @@ export function CourseFilters(
     // );
   };
 
+   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [subCategories, setSubCategories] = useState<any[]>([]); 
+    const [categories, setCategories]= useState<Category[] >([])
+  
+    useEffect(()=> {
+      const fetchCategories = async () => {
+        try {
+          const {categories} = await fetchListedCategories()
+          setCategories(categories)
+          console.log(categories)
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      fetchCategories()
+    },[])
+  
+    useEffect(() => {
+      if (selectedCategory) {
+        const category = categories.find(cat => cat._id === selectedCategory);
+        if (category) {
+          setSubCategories(category.subcategories); 
+        }
+      }
+    }, [selectedCategory, categories]);
+
   return (
     <div className="space-y-6">
       <div>
         <h2 className="mb-4 text-lg font-semibold uppercase">Category</h2>
         <Accordion type="multiple" defaultValue={[""]}>
-          <CategoryAccordionItem
+          {
+            categories.map(category => (
+              <CategoryAccordionItem
+              value={category._id}
+              title={category.name}
+              items={
+                category.subcategories.map(subCat => (
+                  { id: subCat._id, label: subCat.name, count: 574 }
+                ))
+              }
+              selectedSubCategories={userSubCatagories}
+              onSubCategoryChange={handleSubCategoryChange}
+            />
+            ))
+          }
+          {/* <CategoryAccordionItem
             value="development"
             title="Development"
             items={[
@@ -118,7 +161,7 @@ export function CourseFilters(
             ]}
             selectedSubCategories={userSubCatagories}
             onSubCategoryChange={handleSubCategoryChange}
-          />
+          /> */}
           <CategoryAccordionItem
             value="it-software"
             title="IT & Software"

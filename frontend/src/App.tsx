@@ -59,7 +59,7 @@ const App = () => {
   }
   return (
     <Router>
-      <Toaster richColors/>
+      <Toaster richColors position="top-right"/>
       <Routes>
         <Route path="/payment-success" element={<div> payment success</div>}/>
         <Route path="/payment-cancel" element={<div> payment cancelled</div>}/>

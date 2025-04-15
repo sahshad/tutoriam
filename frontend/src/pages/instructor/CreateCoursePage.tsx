@@ -10,6 +10,7 @@ import BasicInformation, { BasicInformationType } from "@/components/instructor/
 import PageHeader from "@/components/instructor/common/Header"
 import { createCourse, createLesson, createModule } from "@/services/instructorService"
 import { createCourseData, createLessonData, createModuleData } from "@/utils/Courses"
+import ProgressLoaderModal from "@/components/instructor/create_course/progress-loader"
 
 
 const CreateCoursePage = () => {
@@ -71,109 +72,85 @@ const CreateCoursePage = () => {
     await publishCourse(data)
   }
 
+  type ProgressStep = {
+    message: string;
+    status: "pending" | "success" | "error";
+  };
+
+  const [progressSteps, setProgressSteps] = useState<ProgressStep[]>([]);
+const [showProgress, setShowProgress] = useState(false);
+
+const updateStep = (message: string, status: ProgressStep["status"] = "pending") => {
+  setProgressSteps([{ message, status }]);
+};
+
+const markLastStep = (status: ProgressStep["status"]) => {
+  setProgressSteps((prev) => {
+    const newSteps = [...prev];
+    newSteps[newSteps.length - 1].status = status;
+    return newSteps;
+  });
+};
+
+
   const publishCourse = async (publish: PublishType) => {
-    // console.log(publish)
+    setShowProgress(true);
+    setProgressSteps([]);
     try {
       setIsSubmitting(true)
+      updateStep("Creating course...");
       const courseDate = createCourseData(basicInformation,advancedInformation,publish)
       const response = await createCourse(courseDate)
       const courseId = response.data._id
-      console.log(`courseCreated ${courseId}`)
+      markLastStep("success");
 
      if(curriculum.sections){
       for (let section of curriculum.sections) {
+        updateStep(`Creating module: ${section.name || "Untitled"}...`);
 
-        const moduleData = createModuleData(section, courseId)
-        
+        const moduleData = createModuleData(section, courseId)      
         const response = await createModule(moduleData)
         const moduleId = response.data._id
-
-      console.log(`moduleCreated ${response}`)
+        markLastStep("success");
 
         for (let lecture of section.lectures) {
+          updateStep(`Creating lesson: ${lecture.name || "Untitled"}...`);
+
           const lessonData = createLessonData(lecture,courseId,moduleId);
           const response = await createLesson(lessonData)
-      console.log(`lessonCreated ${response}`)
+          markLastStep("success");
         }
       }
     }
+    updateStep("All steps completed!");
+    markLastStep("success");
       console.log(response)
     } catch (error:any) {
+      markLastStep("error");
+      updateStep("Failed to publish. Please try again.", "error");
       console.log(error)
-      console.log(error.response)
     }finally{
       setIsSubmitting(false)
     }
   }
 
-
-  useEffect(()=>{
-    // console.log('main page render ')
-  })
-  // API call sequence for publishing the course
-  // const publishCourse = async (publishData: PublishType) => {
-  //   setIsSubmitting(true)
-  //   setSubmissionStatus(null)
-
-  //   try {
-  //     // 1. Create all lessons first
-  //     const modulePromises = curriculum.sections?.map(async (section:any) => {
-  //       // Create all lessons for this section
-  //       const lessonIds = await Promise.all(
-  //         section.lectures?.map(async (lecture:any) => {
-  //           const lesson: Lesson = {
-  //             name: lecture.name,
-  //             type: lecture.type,
-  //             content: lecture.content,
-  //             duration: lecture.duration,
-  //           }
-  //           return await courseService.createLesson(lesson)
-  //         }) || [],
-  //       )
-
-  //       // Create the module with lesson IDs
-  //       const module: Module = {
-  //         name: section.name,
-  //         lessons: lessonIds,
-  //       }
-  //       return await courseService.createModule(module)
-  //     })
-
-  //     // Wait for all modules to be created
-  //     const moduleIds = await Promise.all(modulePromises || [])
-
-  //     // 3. Create the course with module IDs
-  //     const course: Course = {
-  //       ...(basicInformation as BasicInformationType),
-  //       ...(advancedInformation as AdvancedInformationType),
-  //       ...publishData,
-  //       modules: moduleIds,
-  //       isPublic: publishData.isPublic ?? false,
-  //     }
-
-  //     const courseId = await courseService.createCourse(course)
-
-  //     setSubmissionStatus({
-  //       success: true,
-  //       message: "Course created successfully!",
-  //       courseId,
-  //     })
-  //   } catch (error) {
-  //     console.error("Error publishing course:", error)
-  //     setSubmissionStatus({
-  //       success: false,
-  //       message: "Failed to create course. Please try again.",
-  //     })
-  //   } finally {
-  //     setIsSubmitting(false)
-  //   }
-  // }
-
-
-
   return (
     <div className="flex h-screen overflow-hidden bg-background" >
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+      {showProgress && <ProgressLoaderModal
+  open={showProgress}
+  title="Publishing Course"
+  description="Please wait while we complete all publishing steps."
+  steps={progressSteps}
+  onDone={() => {
+    setShowProgress(false);
+    setProgressSteps([]);
+    setCurrentStep(1);
+    setBasicInformation({})
+    setAdvancedInformation({})
+    setPublish({})
+  }}
+/>}
 
       <div className="flex-1 flex flex-col overflow-hidden">
         <PageHeader />

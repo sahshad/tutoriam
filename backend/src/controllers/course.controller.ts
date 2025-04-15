@@ -14,6 +14,7 @@ export class CourseController implements ICourseController {
 
     createCourse = asyncHandler(async (req: Request, res: Response): Promise<void> => {
         let  courseData = req.body
+        console.log(courseData)
         const files = req.files as { [fieldname: string]: Express.Multer.File[] };
         courseData.instructorId = req.user?._id
 

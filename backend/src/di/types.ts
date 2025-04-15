@@ -16,6 +16,7 @@ export const TYPES = {
   WebhookController: Symbol.for("WebhookController"),
   OrderController: Symbol.for("OrderController"),
   EnrollmentController: Symbol.for("EnrollmentController"),
+  ReviewController: Symbol.for("ReviewController"),
 
   // SERVICES
   AdminService: Symbol.for("AdminService"),
@@ -32,6 +33,7 @@ export const TYPES = {
   WebhookService: Symbol.for("WebhookService"),
   OrderService: Symbol.for("OrderService"),
   EnrollmentService: Symbol.for("EnrollmentService"),
+  ReviewService: Symbol.for("ReviewService"),
 
   // REPOSITORIES
   AdminRepository: Symbol.for("AdminRepository"),
@@ -46,5 +48,6 @@ export const TYPES = {
   CategoryRepository: Symbol.for("CategoryRepository"),
   OrderRepository: Symbol.for("OrderRepository"),
   EnrollmentRepository: Symbol.for("EnrollmentRepository"),
+  ReviewRepository: Symbol.for("ReviewRepository"),
   
 };
