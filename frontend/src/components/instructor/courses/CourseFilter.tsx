@@ -1,19 +1,22 @@
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search } from "lucide-react"
-import { use, useEffect, useState } from "react"
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { fetchListedCategories } from "@/services/categoryService";
+import { Category } from "@/types/category";
+import { values } from "lodash";
+import { CodeSquare, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface CourseFiltersProps {
-  sortBy: string
-  setSortBy: (value: string) => void
-  category: string
-  setCategory: (value: string) => void
-  rating: string
-  setRating: (value: string) => void
-  searchQuery: string
-  setSearchQuery: (value: string) => void
-  subCategory: string
-  setSubCategory: (value: string) => void
+  sortBy: string;
+  setSortBy: (value: string) => void;
+  category: string;
+  setCategory: (value: string) => void;
+  rating: string;
+  setRating: (value: string) => void;
+  searchQuery: string;
+  setSearchQuery: (value: string) => void;
+  subCategory: string;
+  setSubCategory: (value: string) => void;
 }
 
 export function CourseFilters({
@@ -28,15 +31,48 @@ export function CourseFilters({
   searchQuery,
   setSearchQuery,
 }: CourseFiltersProps) {
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setSearchQuery(search)
-    }, 500) 
+      setSearchQuery(search);
+    }, 500);
 
-    return () => clearTimeout(timer)
-  },[search])
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [subCategories, setSubCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { categories } = await fetchListedCategories();
+        setCategories(categories);
+        console.log(categories);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      const category = categories.find((cat) => cat._id === selectedCategory);
+      if (category) {
+        setSubCategories(category.subcategories);
+      }
+    }
+  }, [selectedCategory, categories]);
+
+  const handleCategoryChange = async (value: string) => {
+    console.log(value);
+    setSelectedCategory(value);
+    setCategory(value);
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
       <div>
@@ -70,16 +106,17 @@ export function CourseFilters({
 
       <div>
         <p className="text-sm mb-2">Category</p>
-        <Select value={category} onValueChange={setCategory}>
+        <Select value={category} onValueChange={handleCategoryChange}>
           <SelectTrigger>
             <SelectValue placeholder="All Category" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Category</SelectItem>
-            <SelectItem value="development">Development</SelectItem>
-            <SelectItem value="design">Design</SelectItem>
-            <SelectItem value="business">Business</SelectItem>
-            <SelectItem value="marketing">Marketing</SelectItem>
+            {categories.map((category) => (
+              <SelectItem key={category._id} value={category._id}>
+                {category.name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -92,10 +129,11 @@ export function CourseFilters({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Sub Category</SelectItem>
-            <SelectItem value="web">web</SelectItem>
-            <SelectItem value="mobile">mobile</SelectItem>
-            <SelectItem value="gaming">gaming</SelectItem>
-            <SelectItem value="database design">database design</SelectItem>
+            {subCategories.map((subCat) => (
+              <SelectItem key={subCat._id} value={subCat._id}>
+                {subCat.name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -115,6 +153,5 @@ export function CourseFilters({
         </Select>
       </div> */}
     </div>
-  )
+  );
 }
-

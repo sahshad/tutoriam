@@ -3,6 +3,7 @@ import jwt, { TokenExpiredError } from "jsonwebtoken";
 import { IUser } from "../models/User";
 import { StatusCodes } from "http-status-codes";
 import { decode } from "punycode";
+import { UserRole } from "../core/constants/user.enum";
 
 declare module "express-serve-static-core"{
   interface Request {
@@ -12,7 +13,7 @@ declare module "express-serve-static-core"{
  }
 
 export const authMiddleware = (
-  roles:string[],
+  roles:UserRole[],
 ) => {
   return (  req: Request,res: Response,next: NextFunction) => {
     try {
@@ -26,7 +27,7 @@ export const authMiddleware = (
         process.env.ACCESS_TOKEN_SECRET!
       ) as { userId: string, role:string };
       
-        if(roles.length && !roles.includes(decoded.role)){
+        if(roles.length && !roles.includes(decoded.role as UserRole)){
           res.status(StatusCodes.FORBIDDEN).json({message: "permisson denied"})
           return
         }

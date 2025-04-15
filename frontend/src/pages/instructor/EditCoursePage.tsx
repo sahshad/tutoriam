@@ -91,47 +91,6 @@ import { toast } from "sonner";
       await updateCourseData(data);
     };
 
-    // API call to update the course
-  //   const updateCourseData = async (publishData: PublishType) => {
-  //     setIsSubmitting(true);
-  //     setSubmissionStatus(null);
-
-  //     try {
-  //       // Combine all form data
-  //       const courseData = {
-  //         id: courseId,
-  //         basicInformation: basicInformation as BasicInformationType,
-  //         advancedInformation: advancedInformation as AdvancedInformationType,
-  //         curriculum: curriculum as CurriculumType,
-  //         publish: publishData,
-  //       };
-
-  //     //   await updateCourse(courseData);
-
-  //       setSubmissionStatus({
-  //         success: true,
-  //         message: "Course updated successfully!",
-  //       });
-
-
-
-  //       // Redirect to course view page after successful update
-  //       setTimeout(() => {
-  //         navigate(`/course/${courseId}`);  // Use navigate() for redirection
-  //       }, 2000);
-  //     } catch (error) {
-  //       console.error("Error updating course:", error);
-  //       setSubmissionStatus({
-  //         success: false,
-  //         message: "Failed to update course. Please try again.",
-  //       });
-
-  //     } finally {
-  //       setIsSubmitting(false);
-  //     }
-  //   };
-
-
     const compareAndUpdateModulesAndLessons = async () => {
       const newCurriculum = curriculum;
       const oldCurriculum = prevCurriculum;
@@ -231,17 +190,14 @@ import { toast } from "sonner";
           
         }
       }
-      }
-    
+      }  
       return changedFields;
     };
-    
-
+  
     const updateCourseData = async (data:PublishType) => {
       const  publish = data
       setIsSubmitting(true);
       setSubmissionStatus(null);
-
       try {
 
         const getUpdatedCourseData = () => {
@@ -281,11 +237,7 @@ import { toast } from "sonner";
             console.log(error)
           }
         }
-
-
         await compareAndUpdateModulesAndLessons();
-
-
       toast.success('course updated successfully', {position:"top-right"})
       navigate("/instructor/my-courses")
       } catch (error) {
@@ -411,7 +363,6 @@ import { toast } from "sonner";
               />
             )}
 
-            {/* <PageFooter /> */}
           </main>
         </div>
       </div>

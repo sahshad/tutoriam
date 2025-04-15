@@ -11,7 +11,7 @@ export const useCategory = () => {
     const [filter, setFilter] = useState<string | null>("")
 
     const categoriesPerPage = 10
-    
+   
     const fetchCategories = async (page: number, limit: number, search: string, filter: string) => {
         try {
             setLoading(true)

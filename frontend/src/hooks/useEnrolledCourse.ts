@@ -10,12 +10,10 @@ export function useEnrolledCourses({ userId }: UseEnrolledCoursesProps) {
   const [enrolledCourses, setEnrolledCourses] = useState<EnrolledCourse[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const coursesPerPage = 12;
 
-  // Filters, sort, search
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("all"); 
 
@@ -39,14 +37,12 @@ export function useEnrolledCourses({ userId }: UseEnrolledCoursesProps) {
     }
   };
 
-  // Fetch whenever any dependency changes
   useEffect(() => {
     if (userId) {
       getEnrolledCourses();
     }
   }, [userId, currentPage, searchQuery, filter]);
 
-  // Reset to page 1 if filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, filter]);

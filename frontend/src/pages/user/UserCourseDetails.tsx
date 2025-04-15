@@ -7,12 +7,13 @@ import CourseTabs from "@/components/user/course-details/course-tab"
 import CourseDescription from "@/components/user/course-details/course-description"
 import CourseCurriculum from "@/components/user/course-details/course-curriculum"
 import CourseInstructor from "@/components/user/course-details/course-instructor"
-import CourseReviews from "@/components/user/course-details/course-reviews"
+// import CourseReviews from "@/components/user/course-details/course-reviews"
 import CourseSidebar from "@/components/user/course-details/course-sidebar"
 import { useNavigate, useParams } from "react-router-dom"
 import { getCourseById } from "@/services/courseService"
 import Header from "@/components/user/home/header"
 import { createCurriculumData } from "@/utils/Courses"
+import CourseReviews from "@/components/user/course-review/course-reviews"
 
 export default function UserCourseDetailsPage() {
 
@@ -76,7 +77,7 @@ const navigate = useNavigate()
               {activeTab === "overview" && <CourseDescription description={course.description as string} whatYouWillLearn={course.whatYouWillLearn } />}
               {activeTab === "curriculum" && <CourseCurriculum curriculum={createCurriculumData(course)} />}
               {activeTab === "instructor" && <CourseInstructor instructorId={course.instructorId} />}
-              {activeTab === "review" && <CourseReviews reviews={0} rating={course.rating as number} />}
+              {activeTab === "review" && <CourseReviews courseId={course._id as string} />}
             </div>
           </div>
         </div>

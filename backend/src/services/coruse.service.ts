@@ -116,7 +116,7 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
   }
 
     if(subCategory.length > 0 && subCategory[0] !== 'all'){
-        filter.subCategory = { $in: subCategory };
+        filter.subCategoryId = { $in: subCategory };
     }
 
   // Build sort
