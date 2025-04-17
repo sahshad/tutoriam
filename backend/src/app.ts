@@ -11,12 +11,12 @@ import instructorRoutes from './routes/instructorRoutes'
 import paymentRoutes from './routes/paymentRoutes'
 import webhookRoutes from './routes/webhookRoutes'
 import reviewRoutes from './routes/review.routes'
+import certificateRoutes from './routes/certificate.routes'
 import { errorHandler } from "./middlewares/errorMiddleware";
 import passport from "./config/passport";
 
 dotenv.config();
 connectDB();
-
 
 const app = express();
 const CLIENT_URL = process.env.CLIENT_URL
@@ -39,6 +39,7 @@ app.use("/api/admin", adminRoutes)
 app.use("/api/instructor",instructorRoutes)
 app.use("/api/payment", paymentRoutes)
 app.use("/api/reviews", reviewRoutes)
+app.use("/api/certificates", certificateRoutes)
 
 app.use(errorHandler)
 

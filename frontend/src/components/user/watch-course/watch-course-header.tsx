@@ -1,22 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CircleCheckBig, CircleX, Download, SendHorizontal, Star } from "lucide-react";
+import { ArrowLeft, Download } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { EnrolledCourse } from "@/types/enrollment";
 import { addReview } from "@/services/reviewService";
 import { toast } from "sonner";
 import ReviewDialog from "../course-review/course-review-dialog";
+import { applyForCertificate, downloadCertificate } from "@/services/certificateService";
 
 interface CourseHeaderProps {
   title: string;
@@ -47,6 +37,16 @@ export function CourseHeader({
     }
   };
 
+  const handleDownloadCertificate = async () => {
+    try {
+      const data = await applyForCertificate(enrollment.courseId as string)
+      console.log(data)
+      const download = await downloadCertificate(data.certificateUrl)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div className="flex items-start gap-3">
@@ -74,7 +74,7 @@ export function CourseHeader({
       {enrollment.completed && (
         <div className="flex gap-3">
         <Button variant="outline" size="sm" onClick={()=> setDialogOpen(true)}>Write A Review</Button>
-        <Button variant="secondary" size="sm" className="gap-2">
+        <Button variant="secondary" size="sm" className="gap-2" onClick={handleDownloadCertificate}>
           <Download/>
           Certificate 
         </Button>

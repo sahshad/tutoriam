@@ -12,19 +12,69 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { BarLoader} from "react-spinners"; 
 import { toast } from "sonner";
 
+const passwordSchema = z
+  .string()
+  .trim()
+  .superRefine((val, ctx) => {
+    if (val.length < 8) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_small,
+        minimum: 8,
+        type: "string",
+        inclusive: true,
+        message: "Password must be at least 8 characters",
+      });
+    }
+
+    if (!/[a-zA-Z]/.test(val)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Password must contain at least one letter",
+      });
+    }
+
+    if (!/[0-9]/.test(val)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Password must contain at least one number",
+      });
+    }
+
+    if (!/[\W_]/.test(val)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Password must contain at least one special character",
+      });
+    }
+
+    if (!/[A-Z]/.test(val)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Password must contain at least one uppercase letter",
+      });
+    }
+
+    if (/password|123456|qwerty|letmein/i.test(val)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Password cannot contain common patterns",
+      });
+    }
+  });
+
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Please enter a valid email address"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[a-zA-Z]/, "Password must contain at least one letter")
-    .regex(/[0-9]/, "Password must contain at least one number")
-    .regex(/[\W_]/, "Password must contain at least one special character") // Special characters
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")// Uppercase letters
-    .regex(/^(?!.*(?:password|123456|qwerty|letmein)).*$/, "Password cannot contain common patterns"), // Block common patterns
+  password: passwordSchema,
+    // .string()
+    // .min(8, "Password must be at least 8 characters")
+    // .regex(/[a-zA-Z]/, "Password must contain at least one letter")
+    // .regex(/[0-9]/, "Password must contain at least one number")
+    // .regex(/[\W_]/, "Password must contain at least one special character") // Special characters
+    // .regex(/[A-Z]/, "Password must contain at least one uppercase letter")// Uppercase letters
+    // .regex(/^(?!.*(?:password|123456|qwerty|letmein)).*$/, "Password cannot contain common patterns"), // Block common patterns
   confirmPassword: z
   .string()
   .min(8, "Password must be at least 8 characters")

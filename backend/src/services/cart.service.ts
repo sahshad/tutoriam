@@ -27,6 +27,14 @@ export class CartService implements ICartService {
         return updatedCart
     }
 
+    async clearCart(userId: string): Promise<ICart | null> {
+        const cart =  await this.cartRepository.clearCart(userId)
+        if(!cart){
+            throw new Error(" cannot find cart. please try again")
+        }
+        return cart
+    }
+
     async getCartItems(userId: string): Promise<ICart | null> {
         let cart = await this.cartRepository.getCartItems(userId)
         if(!cart){

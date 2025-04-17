@@ -20,7 +20,9 @@ addItemToCart = asyncHandler(async (req: Request, res:Response) => {
     
 })
 clearCart = asyncHandler(async (req: Request, res:Response) => {
-
+    const userId = req.user?.id as string
+    const cart = await this.cartService.clearCart(userId)
+    res.status(StatusCodes.OK).json({message: "cart cleared successfully", cart})
 })
 getCart = asyncHandler(async (req: Request, res:Response) => {
     const userId = req.user?._id

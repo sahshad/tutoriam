@@ -86,6 +86,12 @@ import { IReviewService } from "../core/interfaces/service/IReviewService";
 import { ReviewService } from "../services/review.service";
 import { IReviewRepository } from "../core/interfaces/repository/IReviewRepository";
 import { ReviewRepository } from "../repositories/review.repository";
+import { ICertificateController } from "../core/interfaces/controller/ICertificateController";
+import { CertificateController } from "../controllers/certificate.controller";
+import { ICertificateService } from "../core/interfaces/service/ICertficateService";
+import { CertificateService } from "../services/certificate.service";
+import { ICertificateRepository } from "../core/interfaces/repository/ICertificateRespository";
+import { CertificateRepository } from "../repositories/certificate.repository";
 
 const container = new Container()
 
@@ -140,6 +146,10 @@ container.bind<IEnrollmentRepository>(TYPES.EnrollmentRepository).to(EnrollmentR
 container.bind<IReviewController>(TYPES.ReviewController).to(ReviewController)
 container.bind<IReviewService>(TYPES.ReviewService).to(ReviewService)
 container.bind<IReviewRepository>(TYPES.ReviewRepository).to(ReviewRepository)
+
+container.bind<ICertificateController>(TYPES.CertificateController).to(CertificateController)
+container.bind<ICertificateService>(TYPES.CertificateService).to(CertificateService)
+container.bind<ICertificateRepository>(TYPES.CertificateRepository).to(CertificateRepository)
 
 container.bind<IPaymentController>(TYPES.PaymentController).to(PaymentController)
 container.bind<IPaymentService>(TYPES.PaymentService).to(PaymentService)
