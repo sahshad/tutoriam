@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import profiePlaceholder from "/profile_placeholder.png";
 import { getUserProfile, updateProfile } from "@/services/userServices";
 import { useDispatch } from "react-redux";
+import ChangePassword from "./change-password";
 
 interface User {
   _id: string;
@@ -174,6 +175,7 @@ const AccountSettings = () => {
           </div>
         </div>
       </div>
+      <ChangePassword/>
     </TabsContent>
   );
 };

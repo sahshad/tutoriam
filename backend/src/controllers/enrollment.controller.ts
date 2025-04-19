@@ -15,11 +15,11 @@ export class EnrollmentController implements IEnrollmentController{
     ){}
 
     isUserEnrolled= asyncHandler(async(req:Request, res:Response) : Promise<void> =>{
-        const userId = req.user?._id
-        const {courseId} = req.body
+        const userId = req.user?._id as string
+        const courseId = req.query.courseId as string
 
-        const userEnrolled = this.enrollmentService.isUserEnrolled(userId as string, courseId)
-        res.status(StatusCodes.OK).json({isUserEnrolled:userEnrolled})
+        const userEnrolled = await this.enrollmentService.isUserEnrolled(userId, courseId)
+        res.status(StatusCodes.OK).json({userEnrolled})
         
     })
 
@@ -31,8 +31,10 @@ export class EnrollmentController implements IEnrollmentController{
     })
 
     enroll = asyncHandler(async(req: Request, res:Response) :Promise<void> => {
-        const { userId, courseIds } = req.body;
-        await this.enrollmentService.enrollUserInCourses(userId, courseIds);
+        const userId = req.user?._id as string
+        console.log(userId)
+        const { courseId } = req.body;
+        await this.enrollmentService.enrollUserInCourses(userId, [courseId]);
         res.status(StatusCodes.OK).json({ message: "Enrollment successful" });
     })
 

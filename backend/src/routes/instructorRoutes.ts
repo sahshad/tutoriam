@@ -44,6 +44,6 @@ router.delete("/modules/:moduleId", authMiddleware([UserRole.INSTRUCTOR]), modul
 router.put("/lessons/:lessonId", authMiddleware([UserRole.INSTRUCTOR]), upload.single("content"), lessonController.updateLesson);
 router.delete("/lessons/:lessonId", authMiddleware([UserRole.INSTRUCTOR]), lessonController.deleteLesson);
 
-router.get("/categories", authMiddleware([UserRole.INSTRUCTOR]), categoryController.getListedCategories)
+router.get("/categories", authMiddleware([UserRole.INSTRUCTOR, UserRole.USER]), categoryController.getListedCategories)
 
 export default router;

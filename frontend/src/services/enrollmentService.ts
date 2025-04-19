@@ -52,3 +52,26 @@ export const completeLesson = async (courseId: string, lessonId: string) => {
         console.log(error)
     }
 };
+
+export const fetchUserEnrollmentStatus = async (courseId: string) => {
+  try {
+    const res = await apiClient.get("/enrollment/status", {
+      params:{
+        courseId
+      }
+    })
+
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const enrollUserIntoCourse = async (courseId: string) => {
+  try {
+    const res = await apiClient.post("/enrollment", {courseId})
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}

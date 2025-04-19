@@ -22,7 +22,7 @@ export function useCourses({role}:useCoursesProps) {
   const [duration, setDuration] = useState<string[]>([]);
   const [loading, setLoading] = useState(true) 
 
-  const coursesPerPage = 1
+  const coursesPerPage = 12
 
   const fetchCoursesFromBackend = async () => {
     try {

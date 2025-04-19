@@ -4,6 +4,9 @@ import { addCourseToWishlist } from "@/services/userServices"
 import { toast } from "sonner"
 import { useAppDispatch } from "@/redux/store"
 import { addToCart } from "@/redux/thunks/cartThunk"
+import { useEffect, useState } from "react"
+import { enrollUserIntoCourse, fetchUserEnrollmentStatus } from "@/services/enrollmentService"
+import { Link } from "react-router-dom"
 
 export default function CourseSidebar({
   id,
@@ -14,6 +17,7 @@ export default function CourseSidebar({
   language,
   subtitleLanguage,
 }: any) {
+  const [isUserEnrolled, setIsUserEnrolled] = useState<boolean>(false)
   const dispatch = useAppDispatch()
 
   const handleAddToCart = async () => {
@@ -35,24 +39,60 @@ export default function CourseSidebar({
     }
   }
 
+  const handleEnrollCourse = async (courseId: string) => {
+    try {
+      const data = await enrollUserIntoCourse(courseId)
+      console.log(data)
+      setIsUserEnrolled(true)
+      toast.success(data.message || "enrolled successfully")
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getUserEnrollmentStatus = async () => {
+    try {
+      const data = await fetchUserEnrollmentStatus(id)
+      console.log(data)
+      setIsUserEnrolled(data.userEnrolled)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(()=> {
+    getUserEnrollmentStatus()
+  },[])
+
   return (
     <div className="sticky top-24 space-y-6 rounded-lg border bg-card p-6 shadow-sm">
       <div className="space-y-2">
         <div className="flex items-baseline justify-between">
+          {
+            !isUserEnrolled &&
           <div className="text-2xl font-bold">{`${price === 0 ? 'Free' : `₹ ${price.toFixed(2)}`}`}</div>
+          }
           {/* <div className="text-sm text-muted-foreground line-through">${originalPrice.toFixed(2)}</div> */}
         </div>
       </div>
 
       <div className="space-y-4">
-        {price === 0 ?
-        <Button className="w-full">Enroll Now</Button>
-        :
-        <div className="flex w-full justify-between gap-5 ">
-        <Button onClick={handleAddToCart} className="flex-1">Add To Cart</Button>
-        <Button onClick={handleAddToWishlist} className="flex-1">Add To wishlist</Button>
-        </div>
+        {
+          isUserEnrolled ? 
+          <Link to={`/enrolled-courses/watch/${id}`}>
+            <Button className="w-full">watch Now</Button>
+          </Link>
+          :
+          price === 0 ?
+            <Button className="w-full" onClick={()=> handleEnrollCourse(id)}>Enroll Now</Button>
+            :
+            <div className="flex w-full justify-between gap-5 ">
+            <Button onClick={handleAddToCart} className="flex-1">Add To Cart</Button>
+            <Button onClick={handleAddToWishlist} className="flex-1">Add To wishlist</Button>
+            </div>
+          
         }
+        
         
       </div>
 

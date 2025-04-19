@@ -31,6 +31,7 @@ router.put(
   upload.single("profileImage"),
   userController.updateProfile
 );
+
 router.patch("/:userId/change-password",authMiddleware([UserRole.USER]), userController.changePassword)
 router.post("/:userId/become-instructor",authMiddleware([UserRole.USER]),upload.single("idCardImage"), userController.becomeInstructor)
 router.get("/courses",authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), courseController.getAllCourses)

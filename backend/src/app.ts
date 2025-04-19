@@ -11,6 +11,8 @@ import instructorRoutes from './routes/instructorRoutes'
 import paymentRoutes from './routes/paymentRoutes'
 import webhookRoutes from './routes/webhookRoutes'
 import reviewRoutes from './routes/review.routes'
+import orderRoutes from './routes/order.routes'
+import enrollmentRoutes from './routes/enrollment.routes'
 import certificateRoutes from './routes/certificate.routes'
 import { errorHandler } from "./middlewares/errorMiddleware";
 import passport from "./config/passport";
@@ -40,6 +42,8 @@ app.use("/api/instructor",instructorRoutes)
 app.use("/api/payment", paymentRoutes)
 app.use("/api/reviews", reviewRoutes)
 app.use("/api/certificates", certificateRoutes)
+app.use("/api/orders", orderRoutes)
+app.use("/api/enrollment",enrollmentRoutes)
 
 app.use(errorHandler)
 

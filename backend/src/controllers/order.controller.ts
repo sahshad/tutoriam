@@ -4,6 +4,7 @@ import asyncHandler from "express-async-handler";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../di/types";
 import { IOrderService } from "../core/interfaces/service/IOrderService";
+import { StatusCodes } from "http-status-codes";
 
 @injectable()
 export class OrderController implements IOrderController{
@@ -13,6 +14,6 @@ export class OrderController implements IOrderController{
     getUserOrders= asyncHandler(async(req: Request, res:Response) :Promise<void> => {
         const userId = req.user?._id;
         const orders = await this.orderService.getUserOrders(userId as string);
-        res.status(200).json(orders);
+        res.status(StatusCodes.OK).json({message: "order fetched successfully", orders});
     })
 }
