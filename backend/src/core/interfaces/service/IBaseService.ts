@@ -7,6 +7,8 @@ export interface IBaseService<T> {
     findByIdAndUpdate(id: string, data: Partial<T>): Promise<T | null>;
     delete(id: string): Promise<T | null>;
     findAll(): Promise<T[] | null>;
+    find(filter:FilterQuery<T>): Promise<T[] | null>
     findOne(data: Partial<T>): Promise<T | null>;
     // findOneAndUpdate(filter: FilterQuery<T>, data: Partial<T>): Promise<T | null>
+    toggleStatus(id: string): Promise<T | null>
   }

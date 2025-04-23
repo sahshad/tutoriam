@@ -34,6 +34,8 @@ import { useAppDispatch } from "./redux/store";
 import { fetchCartItems } from "./redux/thunks/cartThunk";
 import { UserRole } from "./constants/role";
 import WatchCoursePage from "./components/user/watch-course/watch-course-page";
+import PaymentSuccess from "./components/common/payment-success";
+import PaymentFailed from "./components/common/payment-failed";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -43,8 +45,10 @@ const App = () => {
   useEffect(() => {
     const fetchUser = async () => {
         try {
-          await refreshToken(dispatch);
-          appDispatch(fetchCartItems())
+          const user = await refreshToken(dispatch);
+          if(user.role !== 'admin'){
+            appDispatch(fetchCartItems())
+          }
         } catch (error) {
           console.log("Error during token refresh", error);
         } finally {
@@ -61,8 +65,8 @@ const App = () => {
     <Router>
       <Toaster richColors position="top-right"/>
       <Routes>
-        <Route path="/payment-success" element={<div> payment success</div>}/>
-        <Route path="/payment-cancel" element={<div> payment cancelled</div>}/>
+        <Route path="/payment-success" element={<PaymentSuccess/>}/>
+        <Route path="/payment-cancel" element={<PaymentFailed/>}/>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/verify-otp" element={<OtpPage />} />
         <Route path="/" element={<HomePage />} />

@@ -17,6 +17,7 @@ export const TYPES = {
   OrderController: Symbol.for("OrderController"),
   EnrollmentController: Symbol.for("EnrollmentController"),
   ReviewController: Symbol.for("ReviewController"),
+  CertificateController: Symbol.for("CertificateController"),
 
   // SERVICES
   AdminService: Symbol.for("AdminService"),
@@ -34,6 +35,7 @@ export const TYPES = {
   OrderService: Symbol.for("OrderService"),
   EnrollmentService: Symbol.for("EnrollmentService"),
   ReviewService: Symbol.for("ReviewService"),
+  CertificateService: Symbol.for("CertificateService"),
 
   // REPOSITORIES
   AdminRepository: Symbol.for("AdminRepository"),
@@ -49,5 +51,6 @@ export const TYPES = {
   OrderRepository: Symbol.for("OrderRepository"),
   EnrollmentRepository: Symbol.for("EnrollmentRepository"),
   ReviewRepository: Symbol.for("ReviewRepository"),
+  CertificateRepository: Symbol.for("CertificateRepository"),
   
 };

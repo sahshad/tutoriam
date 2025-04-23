@@ -6,7 +6,6 @@ export abstract class BaseService<T extends Document> implements IBaseService<T>
   constructor(protected repository: IBaseRepository<T>) {}
 
   async create(data: Partial<T>): Promise<T | null> {
-    console.log(this.repository)
     return await this.repository.create(data);
   }
 
@@ -30,6 +29,10 @@ export abstract class BaseService<T extends Document> implements IBaseService<T>
     return await this.repository.delete(id)
   }
 
+  async find(filter:FilterQuery<T>): Promise<T[] | null> {
+    return await this.repository.find(filter)
+  }
+
   async findAll(): Promise<T[] | null> {
     return await this.repository.findAll();
   }
@@ -38,7 +41,11 @@ export abstract class BaseService<T extends Document> implements IBaseService<T>
     return await this.repository.findOne(data);
   }
 
+  async toggleStatus(id:string): Promise<T | null>{
+    return await this.repository.toggleStatus(id)
+  }
   // async findOneAndUpadate(filter: FilterQuery<T>, data: Partial<T>): Promise<T | null>{
   //   return await this.repository.findOneAndUpdate(filter, data)
   // }
+
 }

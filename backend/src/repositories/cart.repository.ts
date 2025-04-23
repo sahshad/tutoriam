@@ -44,4 +44,8 @@ export class CartRepository extends BaseRepository<ICart> implements ICartReposi
             }
           });
     }
+
+    async clearCart(userId: string): Promise<ICart | null> {
+       return await Cart.findOneAndUpdate({userId}, {courses: []}, {new: true})
+    }
 }

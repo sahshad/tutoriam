@@ -1,33 +1,12 @@
-import { useNavigate } from "react-router-dom"; // Replaced useRouter with useNavigate
+import { useNavigate } from "react-router-dom"; 
 import { Star, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Course } from "@/types/course";
 import { formatDate } from "@/utils/formatDate";
-import { updateCoursePublishStatus } from "@/services/instructorService";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-
-// Dummy Course Data
-const dummyCourse = {
-  _id: "12345",
-  title: "React for Beginners",
-  description: "Learn the fundamentals of React and build dynamic web applications.",
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  thumbnail: "/placeholder.svg",
-  rating: 4.5,
-  ratingCount: 200,
-  price: 1000,
-  totalRevenue: 50000,
-  instructors: [
-    {
-      id: "1",
-      name: "John Doe",
-      avatar: "/placeholder.svg?height=32&width=32",
-    },
-  ],
-};
+import { updateCoursePublishStatus } from "@/services/courseService";
 
 interface CourseHeaderProps {
   course: Course | null;
@@ -36,20 +15,20 @@ interface CourseHeaderProps {
 const CourseHeader: React.FC<CourseHeaderProps> = ({ course }) => {
   const navigate = useNavigate();
   const [courseDetails, setCourseDetails] = useState(course)
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(false)
 
   useEffect(()=> {
   },[courseDetails])
 
    const handlePublishToggle = async(e:React.MouseEvent) => {
-        
+        e.preventDefault()
        try {
         if(courseDetails){
-          setLoading(true)
+          // setLoading(true)
           const res = await updateCoursePublishStatus(courseDetails._id)
           
          //  setCourses((prev:Course[]) => prev.map((c) => c._id === course._id ? res.data.course : c))
-         setCourseDetails(res.data.course)
+         setCourseDetails(course => course ? { ...course, isPublic: !course.isPublic } : course)
          toast.success(res.data.message || 'course status changed successfully', {position:"top-right"})
         }
            
@@ -57,7 +36,7 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({ course }) => {
               console.log(error)
               toast.error("failed to change status", {position:"top-right"})
           }finally{
-            setLoading(false)
+            // setLoading(false)
           }
     }
 
@@ -74,9 +53,9 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({ course }) => {
     navigate(`/instructor/my-courses/${course._id}/edit`);
   };
 
-  if(loading){
-    return <div></div>
-  }
+  // if(loading){
+  //   return <div></div>
+  // }
 
   return (
     <div className=" rounded-lg overflow-hidden border shadow-sm">
@@ -96,9 +75,9 @@ const CourseHeader: React.FC<CourseHeaderProps> = ({ course }) => {
             <div className="mb-4">
               <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-500">
-                  <span>Published: {formatDate(course.createdAt)}</span>
+                  <span>Published: {formatDate(course.createdAt as Date)}</span>
                   <span className="mx-2">•</span>
-                  <span>Last Updated: {formatDate(course.updatedAt)}</span>
+                  <span>Last Updated: {formatDate(course.updatedAt as Date)}</span>
                 </div>
 
                 <DropdownMenu>

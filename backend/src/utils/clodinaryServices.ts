@@ -154,3 +154,38 @@ export const uploadVideoToCloudinary = async (
 }
 
 
+export const uploadPdfToCloudinary = async (
+  buffer: Buffer,
+  folder: string
+): Promise<string | null> => {
+  try {
+    const result = await new Promise<UploadApiResponse>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: "raw",      
+          type: "upload",            
+          folder: `Tutoriam/${folder}`,
+          format: "pdf",
+        },
+        (error: UploadApiErrorResponse | undefined, result: UploadApiResponse | undefined) => {
+          if (result) {
+            resolve(result);
+          } else if (error) {
+            reject(new Error(`Cloudinary PDF upload failed: ${error.message}`));
+          }
+        }
+      );
+
+      if (buffer) {
+        uploadStream.end(buffer);
+      } else {
+        reject(new Error("No PDF buffer provided."));
+      }
+    });
+
+    return result ? result.secure_url : null;
+  } catch (error: any) {
+    console.error("Error uploading PDF to Cloudinary:", error);
+    throw new Error(`Error uploading PDF: ${error.message}`);
+  }
+};

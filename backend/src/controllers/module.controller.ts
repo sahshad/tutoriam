@@ -28,10 +28,10 @@ export class ModuleController implements IModuleController{
  })
 
 deleteModule = asyncHandler(async (req:Request, res:Response) => {
-    const {mdouleId} = req.params 
-    const module = this.moduleService.delete(mdouleId)
+    const {moduleId} = req.params 
+    const module = await this.moduleService.delete(moduleId)
 
-    res.status(StatusCodes.OK).json({message: "module deleted successfully"})
+    res.status(StatusCodes.OK).json({message: "module deleted successfully", module})
 })
 
 }

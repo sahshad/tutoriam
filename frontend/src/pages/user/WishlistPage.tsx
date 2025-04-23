@@ -6,8 +6,9 @@ import { Link } from "react-router-dom"
 import { EmptyWishlist } from "@/components/user/wishlist/empty-wishlist"
 import { WishlistItem } from "@/components/user/wishlist/wishlist-itmes"
 import Header from "@/components/user/home/header"
-import { addCourseToCart, getWishlistItems, removeCourseFromWishlist } from "@/services/userServices"
 import { toast } from "sonner"
+import { addCourseToCart } from "@/services/cartService"
+import { getWishlistItems, removeCourseFromWishlist } from "@/services/wishlistService"
 
 export default function WishlistPage() {
 //   const { toast } = useToast()

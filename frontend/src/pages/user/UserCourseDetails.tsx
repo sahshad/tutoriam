@@ -56,7 +56,7 @@ const navigate = useNavigate()
     <>
     <Header/>
     <div className="container mx-auto px-[4%] py-8">
-      <div className="mb-8">
+      <div className="mb-6">
         <CourseHeader
           title={course.title as string}
           subtitle={course.subtitle as string}

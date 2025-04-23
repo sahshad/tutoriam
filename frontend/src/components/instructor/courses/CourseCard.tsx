@@ -10,9 +10,10 @@ import {
 import { Button } from "@/components/ui/button";
 import type { Course } from "@/types/course";
 import { cn } from "@/lib/utils";
-import { updateCoursePublishStatus } from "@/services/instructorService";
+// import { updateCoursePublishStatus } from "@/services/instructorService";
 import { useCourses } from "@/hooks/useCourse";
 import { toast } from "sonner";
+import { updateCoursePublishStatus } from "@/services/courseService";
 
 interface CourseCardProps {
   course: Course;

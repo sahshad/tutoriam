@@ -2,9 +2,8 @@ import { CategoryFormValues, CategoryParams } from "@/types/category"
 import apiClient from "@/utils/axiosInstance"
 
 export const fetchAllCategories = async ({page, limit, searchQuery, filter}:CategoryParams) => {
-    // console.log(page, limit, searchQuery, filter)
     try {
-        const res = await apiClient.get("/admin/categories",{
+        const res = await apiClient.get("/categories",{
             params:{
                 page,
                 limit,
@@ -12,7 +11,6 @@ export const fetchAllCategories = async ({page, limit, searchQuery, filter}:Cate
                 filter
             }
         })
-        console.log(res)
         return res
     } catch (error) {
         console.log(error)
@@ -22,7 +20,7 @@ export const fetchAllCategories = async ({page, limit, searchQuery, filter}:Cate
 
 export const fetchListedCategories = async () => {
     try {
-        const res = await apiClient.get("/instructor/categories")
+        const res = await apiClient.get("/categories/listed")
         return res.data
     } catch (error) {
         console.log(error)
@@ -32,26 +30,25 @@ export const fetchListedCategories = async () => {
 
 export const createCategory = async (categoryData:CategoryFormValues) => {
     try {
-        const res = await apiClient.post("/admin/categories", categoryData)
-        console.log(res)
+        const res = await apiClient.post("/categories", categoryData)
         return res.data
     } catch (error) {
         console.log(error)
     }
 }
 
-export const editCategory = async (id:string,data:any) => {
+export const editCategory = async (categoryId:string,data:any) => {
     try {
-        const res = await apiClient.patch(`/admin/categories/${id}`, data)
+        const res = await apiClient.patch(`/categories/${categoryId}`, data)
         return res.data
     } catch (error) {
         console.log(error)
     }
 }
 
-export const toggleCategoryStatus = async (id:string) => {
+export const toggleCategoryStatus = async (categoryId:string) => {
     try {
-        const res = await apiClient.patch(`/admin/categories/${id}/status`)
+        const res = await apiClient.patch(`/categories/${categoryId}/status`)
         return res.data
     } catch (error) {
         console.log(error)

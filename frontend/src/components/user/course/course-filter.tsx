@@ -113,6 +113,7 @@ export function CourseFilters(
           {
             categories.map(category => (
               <CategoryAccordionItem
+              key={category._id}
               value={category._id}
               title={category.name}
               items={

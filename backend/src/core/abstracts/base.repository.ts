@@ -2,14 +2,12 @@ import { Document, FilterQuery, Model } from "mongoose";
 import { IBaseRepository } from "../interfaces/repository/IBaseRepository";
 import { IEnrollment } from "../../models/Enrollment";
 
-export abstract class BaseRepository<T extends Document>
-  implements IBaseRepository<T>
-{
+export abstract class BaseRepository<T extends Document> implements IBaseRepository<T> {
   constructor(protected model: Model<T>) {}
 
   async create(data: Partial<T>): Promise<T | null> {
     const category = await this.model.create(data);
-    return category
+    return category;
   }
 
   async findById(id: string): Promise<T | null> {
@@ -34,7 +32,7 @@ export abstract class BaseRepository<T extends Document>
   }
 
   async delete(id: string): Promise<T | null> {
-    return await this.model.findByIdAndDelete(id)
+    return await this.model.findByIdAndDelete(id);
   }
 
   async findByIdAndDelete(id: string): Promise<T | null> {
@@ -45,8 +43,8 @@ export abstract class BaseRepository<T extends Document>
     return await this.model.find();
   }
 
-  async find(filter: FilterQuery<T>):Promise<T[] | null> {
-    return await this.model.find(filter)
+  async find(filter: FilterQuery<T>): Promise<T[] | null> {
+    return await this.model.find(filter);
   }
 
   async findOne(data: Partial<T>): Promise<T | null> {
@@ -76,12 +74,9 @@ export abstract class BaseRepository<T extends Document>
     currentPage: number;
   }> {
     const skip = (page - 1) * limit;
-  
-    const query = this.model.find(filter)
-      .sort(sort)
-      .skip(skip)
-      .limit(limit);
-  
+
+    const query = this.model.find(filter).sort(sort).skip(skip).limit(limit);
+
     if (populate) {
       if (Array.isArray(populate)) {
         populate.forEach((path) => query.populate(path));
@@ -89,12 +84,9 @@ export abstract class BaseRepository<T extends Document>
         query.populate(populate);
       }
     }
-  
-    const [data, totalItems] = await Promise.all([
-      query.exec(),
-      this.model.countDocuments(filter),
-    ]);
-  
+
+    const [data, totalItems] = await Promise.all([query.exec(), this.model.countDocuments(filter)]);
+
     return {
       data,
       totalItems,
@@ -102,8 +94,24 @@ export abstract class BaseRepository<T extends Document>
       currentPage: page,
     };
   }
-  
-  async findOneAndUpdate(filter: FilterQuery<T>, data: Partial<T>): Promise<T | null>{
-    return await this.model.findOneAndUpdate(filter, data,{new:true})
+
+  async findOneAndUpdate(filter: FilterQuery<T>, data: Partial<T>): Promise<T | null> {
+    return await this.model.findOneAndUpdate(filter, data, { new: true });
+  }
+
+  async toggleStatus(id: string): Promise<T | null> {
+    return await this.model.findByIdAndUpdate(
+      id,
+      [
+        {
+          $set: {
+            status: {
+              $cond: { if: { $eq: ["$status", true] }, then: false, else: true },
+            },
+          },
+        },
+      ],
+      { new: true }
+    );
   }
 }

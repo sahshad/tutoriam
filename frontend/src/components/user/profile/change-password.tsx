@@ -54,7 +54,6 @@ const ChangePassword = () => {
       return;
     }
     const response: AxiosResponse = await changePassword(
-      user._id,
       currentPassword,
       newPassword
     );

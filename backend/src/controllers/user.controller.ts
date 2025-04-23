@@ -1,7 +1,4 @@
 import { Request, Response } from "express";
-import cloudinary, { uploadToCloudinary } from "../config/cloudinary";
-import { UserService } from "../services/user.service";
-import { error } from "console";
 import { IUserController } from "../core/interfaces/controller/IUserController";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../di/types";
@@ -12,19 +9,13 @@ import { StatusCodes } from "http-status-codes";
 
 
 @injectable()
-
 export class UserController implements IUserController{
   constructor(
       @inject(TYPES.UserService) private userService: IUserService
     ) {}
 
     updateProfile = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-      const userId = req.user?._id
-      if (!userId) {
-        res.status(401).json({ message: "Unauthorized" });
-        return;
-      }
-  
+      const userId = req.user?._id  as string
       const { name, title } = req.body;
   
       const updateData: { name: any; title: any; profileImageUrl?: string } = {
@@ -38,16 +29,16 @@ export class UserController implements IUserController{
       }
   
       const response = await this.userService.updateUser(userId, updateData);
-      res.status(200).json({ message: "user updated successfully", user: response });
+      res.status(StatusCodes.OK).json({ message: "user updated successfully", user: response });
     });
 
     changePassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
       const { currentPassword, newPassword } = req.body;
-      const { userId } = req.params;
+      const userId  = req.user?._id as string;
       const updatedUser = await this.userService.changePassword(userId, currentPassword, newPassword);
       if (!updatedUser || updatedUser instanceof Error) {
         console.log(updatedUser)
-        res.status(400).json({ message: "please check the given passwords" });
+        res.status(StatusCodes.BAD_REQUEST).json({ message: "please check the given passwords" });
         return;
       }
   
@@ -55,20 +46,16 @@ export class UserController implements IUserController{
     });
 
     getUserProfile = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-      const userId = req.user?._id;
-      if (!userId) {
-        res.status(401).json({ message: "Unauthorized" });
-        return;
-      }
-  
+      const userId = req.user?._id as string
+
       const user = await this.userService.getUserProfile(userId);
   
       if (user.status === 'blocked') {
-        res.status(403).json({ message: "you have been blocked" });
+        res.status(StatusCodes.FORBIDDEN).json({ message: "you have been blocked" });
         return;
       }
   
-      res.status(200).json({ user });
+      res.status(StatusCodes.OK).json({ user });
     });
   
 
@@ -86,8 +73,21 @@ export class UserController implements IUserController{
   
       const instructor = await this.userService.becomeInstructor(instructorData);
   
-      res.status(200).json({ message: 'application submitted successfully' });
+      res.status(StatusCodes.OK).json({ message: 'application submitted successfully' });
     });
 
-    
+    getAllUsers = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+      const users = await this.userService.find({role: "user"})
+      if (!users) {
+        res.status(404).json({ message: "users not found" });
+        return;
+      }
+      res.status(200).json({ users });
+    });
+
+    toggleUserStatus = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+        const { userId } = req.params;
+        const user = await this.userService.toggleStatus(userId)
+        res.status(200).json({ message: "user status changed successfully" });
+   });
 }

@@ -2,10 +2,11 @@ import { TabsContent } from '@radix-ui/react-tabs'
 import { Tabs, TabsList, TabsTrigger } from '../../ui/tabs'
 import AccountSettings from './account-settings'
 import CoursesPage from '../enrolled-course/enrolled-courses-page'
+import PurchaseHistoryContent from '../purchase-history/purchase-history-content'
 
 const ProfileNavigation = () => {
   return (
-    <Tabs defaultValue="dashboard" className="w-full">
+    <Tabs defaultValue="settings" className="w-full">
           <TabsList className="mb-8 w-full justify-start border-b bg-transparent p-0">
             <TabsTrigger
               value="dashboard"
@@ -19,12 +20,12 @@ const ProfileNavigation = () => {
             >
               Courses
             </TabsTrigger>
-            <TabsTrigger
+            {/* <TabsTrigger
               value="teachers"
               className="rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:border-black"
             >
               Teachers
-            </TabsTrigger>
+            </TabsTrigger> */}
             <TabsTrigger
               value="message"
               className="rounded-none border-b-2 border-transparent px-4 py-2 data-[state=active]:border-black"
@@ -65,10 +66,10 @@ const ProfileNavigation = () => {
       </TabsContent>
       <TabsContent value="wishlist">
         <Wishlist />
-      </TabsContent>
-      <TabsContent value="purchase-history">
-        <PurchaseHistory />
       </TabsContent> */}
+      <TabsContent value="purchase-history">
+        <PurchaseHistoryContent />
+      </TabsContent>
 
           <TabsContent value='settings'>
           <AccountSettings/>

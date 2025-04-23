@@ -1,10 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  addCourseToCart,
-  addCourseToWishlist,
-  getCartItems,
-  removeCourseFromCart,
-} from "@/services/userServices";
+import { addCourseToCart, getCartItems, removeCourseFromCart } from "@/services/cartService";
+import { addCourseToWishlist } from "@/services/wishlistService";
 
 export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
