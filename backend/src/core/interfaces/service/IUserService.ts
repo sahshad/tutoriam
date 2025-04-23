@@ -1,7 +1,8 @@
 import { IInstructor } from "../../../models/Instructor";
 import { IUser } from "../../../models/User";
+import { IBaseService } from "./IBaseService";
 
-export interface IUserService {
+export interface IUserService extends IBaseService<IUser> {
   updateUser(userId: string, updateData: Partial<IUser>): Promise<IUser>;
   changePassword(userId: string,currentPassword: string,newPassword: string): Promise<IUser>;
   getUserProfile(userId: string): Promise<IUser>;

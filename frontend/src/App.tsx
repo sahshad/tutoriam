@@ -45,8 +45,10 @@ const App = () => {
   useEffect(() => {
     const fetchUser = async () => {
         try {
-          await refreshToken(dispatch);
-          appDispatch(fetchCartItems())
+          const user = await refreshToken(dispatch);
+          if(user.role !== 'admin'){
+            appDispatch(fetchCartItems())
+          }
         } catch (error) {
           console.log("Error during token refresh", error);
         } finally {

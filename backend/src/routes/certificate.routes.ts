@@ -2,7 +2,7 @@ import express from "express";
 import container from "../di/container";
 import { ICertificateController } from "../core/interfaces/controller/ICertificateController";
 import { TYPES } from "../di/types";
-import { authMiddleware } from "../middlewares/authMiddleware";
+import { authMiddleware } from "../middlewares/auth.middleware";
 import { UserRole } from "../core/constants/user.enum";
 
 const router = express.Router();

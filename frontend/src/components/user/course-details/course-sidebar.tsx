@@ -1,12 +1,12 @@
 import { Clock, BarChart, Users, Globe, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { addCourseToWishlist } from "@/services/userServices"
 import { toast } from "sonner"
 import { useAppDispatch } from "@/redux/store"
 import { addToCart } from "@/redux/thunks/cartThunk"
 import { useEffect, useState } from "react"
 import { enrollUserIntoCourse, fetchUserEnrollmentStatus } from "@/services/enrollmentService"
 import { Link } from "react-router-dom"
+import { addCourseToWishlist } from "@/services/wishlistService"
 
 export default function CourseSidebar({
   id,

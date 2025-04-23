@@ -37,34 +37,34 @@ export class AdminService implements IAdminService {
     }
    }
 
-   reviewTutorApplication = async(tutorId: string, status: string, reason?: string) :Promise<IInstructor|null> => {
-    try {
-        if (!["approved", "rejected"].includes(status)) {
-          throw new Error("Invalid status. Must be 'approved' or 'rejected'.");
-        }
+  //  reviewTutorApplication = async(tutorId: string, status: string, reason?: string) :Promise<IInstructor|null> => {
+  //   try {
+  //       if (!["approved", "rejected"].includes(status)) {
+  //         throw new Error("Invalid status. Must be 'approved' or 'rejected'.");
+  //       }
   
-        const updatedInstructor =  await  this.instructorRepository.updateInstructorStatus(tutorId, {
-          "adminApproval.status": status,
-         "adminApproval.reason" : reason ? reason : ''
-        });
+  //       const updatedInstructor =  await  this.instructorRepository.updateInstructorStatus(tutorId, {
+  //         "adminApproval.status": status,
+  //        "adminApproval.reason" : reason ? reason : ''
+  //       });
   
-        if (!updatedInstructor) {
-          throw new Error("instructor not found");
-        }
+  //       if (!updatedInstructor) {
+  //         throw new Error("instructor not found");
+  //       }
 
-        const InstructorStatus:any = updatedInstructor.adminApproval.status
+  //       const InstructorStatus:any = updatedInstructor.adminApproval.status
 
-        if( InstructorStatus === 'approved'){
-           const instructor = await this.userRepository.updateById(updatedInstructor.userId as string, {role:"instructor"})
-           if(!instructor){
-            throw new Error("user not found")
-           }
-        }
+  //       if( InstructorStatus === 'approved'){
+  //          const instructor = await this.userRepository.updateById(updatedInstructor.userId as string, {role:"instructor"})
+  //          if(!instructor){
+  //           throw new Error("user not found")
+  //          }
+  //       }
   
-        return updatedInstructor;
-      } catch (error) {
-        console.error("Error updating tutor status:", error);
-        throw error
-      }
-   }
+  //       return updatedInstructor;
+  //     } catch (error) {
+  //       console.error("Error updating tutor status:", error);
+  //       throw error
+  //     }
+  //  }
 }

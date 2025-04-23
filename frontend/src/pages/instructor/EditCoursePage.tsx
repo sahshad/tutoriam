@@ -1,11 +1,8 @@
   import { useState, useEffect } from "react";
-  import { useNavigate, useParams } from "react-router-dom"; // Correct import for React Router v6
+  import { useNavigate, useParams } from "react-router-dom"; 
   import { Card, CardContent } from "@/components/ui/card";
   import { Button } from "@/components/ui/button";
-  // import { getCourseForEdit, updateCourse } from "@/lib/api/course-service";
   import { FileText, Layers, CheckCircle } from "lucide-react";
-  // import { StepItem } from "@/components/course/step-item";
-  // import { toast } from "@/components/ui/use-toast";
   import {isEqual} from 'lodash'
   import { Sidebar } from "@/components/instructor/common/Sidebar";
   import PageHeader from "@/components/instructor/common/Header";
@@ -14,11 +11,11 @@
   import Curriculum, { CurriculumType } from "@/components/instructor/create_course/Curriculum";
   import PublishCourse, { PublishType } from "@/components/instructor/create_course/PublishCourse";
   import StepItem from "@/components/instructor/create_course/common/StepItem";
-  import { getCourseById } from "@/services/courseService";
+  import { getCourseById, updateCourse } from "@/services/courseService";
   import { createAdvancedInformationData, createBasicInformationData, createCourseData, createCurriculumData, createLessonData, createModuleData, createPublishData } from "@/utils/Courses";
-  import { AdvanceInformationType } from "@/lib/validations/course";
-  import { createLesson, createModule, deleteLesson, deleteModule, updateCourse, updateLesson, updateModule } from "@/services/instructorService";
-import { toast } from "sonner";
+  import { toast } from "sonner";
+import { createModule, deleteModule, updateModule } from "@/services/moduleService";
+import { createLesson, deleteLesson, updateLesson } from "@/services/lessonService";
 
   export default function EditCoursePage() {
     const { courseId } = useParams();  
@@ -37,7 +34,6 @@ import { toast } from "sonner";
     const [curriculum, setCurriculum] = useState<Partial<CurriculumType>>({});
     const [publish, setPublish] = useState<Partial<PublishType>>({});
 
-
     const [prevBasicInfo, setPrevBasicInfo] = useState<Partial<BasicInformationType>>({});
     const [prevCurriculum, setPrevCurriculum] = useState<Partial<CurriculumType>>({});
     const [prevAdvancedInfo, setPrevAdvancedInfo] = useState<Partial<AdvancedInformationType>>({});
@@ -49,6 +45,7 @@ import { toast } from "sonner";
           setIsLoading(true);
           const res = await getCourseById(courseId as string);
           const courseData = res.data
+          console.log(courseData)
 
           setBasicInformation(createBasicInformationData(courseData));
           setAdvancedInformation(createAdvancedInformationData(courseData));
@@ -70,7 +67,6 @@ import { toast } from "sonner";
       fetchCourseData();
     }, [courseId, navigate]);
 
-  
     const handleBasicInfoSubmit = (data: BasicInformationType) => {
       setBasicInformation(data);
       setCurrentStep(2);
@@ -147,7 +143,7 @@ import { toast } from "sonner";
           for (const newLesson of newModule.lectures) {
             if (!module.lectures.find((lsn:any) => lsn.id === newLesson.id)) {
              try {
-              const lessonData = createLessonData(newLesson,newModule.id )
+              const lessonData = createLessonData(newLesson,courseId,newModule.id )
 
               const res = await createLesson(lessonData);
               console.log(res)
@@ -169,7 +165,7 @@ import { toast } from "sonner";
           
           for (const newLesson of newModule.lectures) {
             try {
-              const lessonData = createLessonData(newLesson,newModuleId)
+              const lessonData = createLessonData(newLesson,courseId,newModuleId)
             const res = await createLesson(lessonData);
             console.log(res.data)
             } catch (error) {

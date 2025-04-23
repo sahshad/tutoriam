@@ -62,4 +62,18 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
     };
   }
 
+  async toggleStatus(id: string): Promise<IUser | null> {
+      return await User.findByIdAndUpdate(id, 
+        [
+          {
+            $set: {
+              status: {
+                $cond: { if: { $eq: ["$status", "active"] }, then: "blocked", else: "active" },
+              },
+            },
+          },
+        ],
+        { new: true }
+      )
+  }
 }

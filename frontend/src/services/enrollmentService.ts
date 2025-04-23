@@ -10,7 +10,7 @@ interface FetchEnrolledCoursesParams {
 
 export const fetchEnrolledCourses = async (params: FetchEnrolledCoursesParams) => {
   try {
-    const res = await apiClient.get("/user/enrolled/courses", {
+    const res = await apiClient.get("/enrollments", {
       params: {
         page: params.page,
         limit: params.limit,
@@ -28,7 +28,7 @@ export const fetchEnrolledCourses = async (params: FetchEnrolledCoursesParams) =
 
 export const fetchEnrolledCourseWithModulesAndLessons = async (courseId: string) => {
   try {
-    const res = await apiClient.get(`/user/courses/watch/${courseId}`);
+    const res = await apiClient.get(`/enrollments/${courseId}`);
     return res.data;
   } catch (error) {
     console.log(error);
@@ -37,7 +37,7 @@ export const fetchEnrolledCourseWithModulesAndLessons = async (courseId: string)
 
 export const updateLastVisitedLesson = async (courseId: string, lessonId: string) => {
   try {
-    const res = await apiClient.patch("/user/courses/enrolled/update-lastvisit", { courseId, lessonId });
+    const res = await apiClient.patch(`/enrollments/${courseId}/update-lastvisit`, { lessonId});
     return res.data;
   } catch (error) {
     console.log(error);
@@ -46,7 +46,7 @@ export const updateLastVisitedLesson = async (courseId: string, lessonId: string
 
 export const completeLesson = async (courseId: string, lessonId: string) => {
     try {
-        const res = await apiClient.post("/user/courses/enrolled/complete-lesson", {courseId, lessonId})
+        const res = await apiClient.post(`/enrollments/${courseId}/complete-lesson`, { lessonId})
         return res.data
     } catch (error) {
         console.log(error)
@@ -55,11 +55,7 @@ export const completeLesson = async (courseId: string, lessonId: string) => {
 
 export const fetchUserEnrollmentStatus = async (courseId: string) => {
   try {
-    const res = await apiClient.get("/enrollment/status", {
-      params:{
-        courseId
-      }
-    })
+    const res = await apiClient.get(`/enrollments/${courseId}/status`)
 
     return res.data
   } catch (error) {
@@ -69,7 +65,7 @@ export const fetchUserEnrollmentStatus = async (courseId: string) => {
 
 export const enrollUserIntoCourse = async (courseId: string) => {
   try {
-    const res = await apiClient.post("/enrollment", {courseId})
+    const res = await apiClient.post("/enrollments", {courseId})
     return res.data
   } catch (error) {
     console.log(error)

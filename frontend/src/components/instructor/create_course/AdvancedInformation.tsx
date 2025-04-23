@@ -68,17 +68,17 @@ const AdvancedInformation = ({ defaultValues, onSubmit, onBack }: AdvancedInform
   useEffect(()=>{
     if(defaultValues){
       if(defaultValues.thumbnail){
-        console.log(defaultValues.thumbnail)
         setThumbnailPreview(defaultValues.thumbnail as string)
       }
-
+      
       if(defaultValues.trailer){
-        setThumbnailPreview(defaultValues.trailer as string)
+        setTrailerPreview(defaultValues.trailer as string)
       }
       
     }
   }, [defaultValues])
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
     e.preventDefault()
     const file = e.target.files?.[0]
     if (file) {

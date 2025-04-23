@@ -1,5 +1,4 @@
-import { getInstructorDetails } from "@/services/courseService"
-import { flatMap } from "lodash"
+import { getInstructorDetails } from "@/services/instructorService"
 import { Star } from "lucide-react"
 import { useEffect, useState } from "react"
 
@@ -11,7 +10,6 @@ export default function CourseInstructor({ instructorId }: CourseInstructorProps
   const [instructor, setInstructor] = useState<any>()
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(()=> {
-    console.log("hi")
      const fetchInstructorDetails = async () => {
       try {
         const data = await getInstructorDetails(instructorId)
@@ -49,9 +47,9 @@ export default function CourseInstructor({ instructorId }: CourseInstructorProps
               <Star className="h-4 w-4" />
               <span className="ml-1 text-sm">{instructor.rating} instructor Rating</span>
             </div>
-            {/* <div className="text-sm text-muted-foreground">{instructor.reviews.toLocaleString()} Reviews</div> */}
-            {/* <div className="text-sm text-muted-foreground">{instructor.students.toLocaleString()} Students</div> */}
-            <div className="text-sm text-muted-foreground">{instructor.courses} Courses</div>
+            <div className="text-sm text-muted-foreground">{4} Reviews</div>
+            <div className="text-sm text-muted-foreground">{235} Students</div>
+            <div className="text-sm text-muted-foreground">{4} Courses</div>
           </div>
         </div>
       </div>

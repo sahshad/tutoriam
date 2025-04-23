@@ -24,4 +24,5 @@ export interface IBaseRepository<T> {
       currentPage: number;
     }>;
     findOneAndUpdate(filter: FilterQuery<T>, data: Partial<T>): Promise<T | null>
+    toggleStatus(id: string): Promise<T | null>
   }

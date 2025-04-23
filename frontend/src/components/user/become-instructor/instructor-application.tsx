@@ -58,9 +58,8 @@ const TutorApplicationForm = () => {
       }
     })
 
-
     try {
-      const resposne = await sendInstructorApplication(user._id,formData)  
+      const resposne = await sendInstructorApplication(formData)  
       console.log(resposne)
       setIsSubmitted(true)
       toast.success("Application submitted successfully",{position:"top-right"})

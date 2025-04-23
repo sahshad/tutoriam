@@ -24,8 +24,6 @@ export const downloadCertificate = async (certificateId: string) => {
         },
         responseType: "blob",
       });
-
-      console.log(response)
   
       const url = window.URL.createObjectURL(new Blob([response.data], { type: "application/pdf" }));
       const link = document.createElement("a");

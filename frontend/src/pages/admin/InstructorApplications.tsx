@@ -23,10 +23,9 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ApplicationReviewDialog } from "@/components/admin/instructorApplication/ApplicationReviewDialog";
 import { RejectionDialog } from "@/components/admin/instructorApplication/RejectDialog";
-import { fetchInstructorApplications, updateInstructorStatus } from "@/services/adminService";
 import { AxiosResponse } from "axios";
 import { toast } from "sonner";
-import { subjects } from "@/lib/becomeTutorFormShemas";
+import { fetchInstructorApplications, updateInstructorStatus } from "@/services/instructorService";
 
 export default function InstructorApplicationsPage() {
   const [loading, setLoading] = useState(true);

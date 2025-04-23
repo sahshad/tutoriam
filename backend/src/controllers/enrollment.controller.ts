@@ -16,7 +16,7 @@ export class EnrollmentController implements IEnrollmentController{
 
     isUserEnrolled= asyncHandler(async(req:Request, res:Response) : Promise<void> =>{
         const userId = req.user?._id as string
-        const courseId = req.query.courseId as string
+        const courseId = req.params.courseId as string
 
         const userEnrolled = await this.enrollmentService.isUserEnrolled(userId, courseId)
         res.status(StatusCodes.OK).json({userEnrolled})
@@ -24,7 +24,8 @@ export class EnrollmentController implements IEnrollmentController{
     })
 
     completeLesson = asyncHandler(async(req:Request, res:Response) : Promise<void> => {
-        const { courseId, lessonId } = req.body;
+        const { lessonId } = req.body;
+        const { courseId} = req.params
         const userId = req.user?._id;
         const enrollment = await this.enrollmentService.completeLesson(userId as string, courseId, lessonId);
         res.status(StatusCodes.OK).json({message:"lesson completed succeefully", enrollment});
@@ -32,7 +33,6 @@ export class EnrollmentController implements IEnrollmentController{
 
     enroll = asyncHandler(async(req: Request, res:Response) :Promise<void> => {
         const userId = req.user?._id as string
-        console.log(userId)
         const { courseId } = req.body;
         await this.enrollmentService.enrollUserInCourses(userId, [courseId]);
         res.status(StatusCodes.OK).json({ message: "Enrollment successful" });
@@ -73,7 +73,8 @@ export class EnrollmentController implements IEnrollmentController{
 
     updateLastVisitedLesson = asyncHandler(async(req: Request, res:Response) :Promise<void> =>{
         const userId = req.user?._id
-        const {courseId, lessonId} = req.body
+        const { lessonId} = req.body
+        const { courseId} = req.params
         const enrollment = await this.enrollmentService.updateLastVisitedLesson({userId, courseId}, lessonId)
 
         res.status(StatusCodes.OK).json({message: "last visited lesson updated successfully", enrollment})

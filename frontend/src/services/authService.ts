@@ -116,7 +116,7 @@ export const refreshToken = async (dispatch: AppDispatch) => {
         user: response.data.user,
       })
     );
-    return response.data.accessToken;
+    return response.data.user
   } catch (error) {
     console.log(error)
     dispatch(logout());

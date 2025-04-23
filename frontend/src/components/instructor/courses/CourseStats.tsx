@@ -1,38 +1,9 @@
-import { Course, FullCourse } from "@/types/course"
-import { Clock, MessageSquare, Users, Eye, BookOpen, Languages, Menu, Grid, Gauge, ChartColumnStacked, ChartBarStacked } from "lucide-react"
+import { FullCourse } from "@/types/course"
+import { Lesson } from "@/types/lessons"
+import { Module } from "@/types/module"
+import { formatTimeFromSeconds } from "@/utils/formatDate"
+import { Clock, Users, BookOpen, Languages, Menu, Gauge, ChartColumnStacked, ChartBarStacked } from "lucide-react"
 
-// Dummy course data
-const dummyCourse = {
-  _id: "12345",
-  title: "React for Beginners",
-  description: "Learn the fundamentals of React and build dynamic web applications.",
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  thumbnail: "/placeholder.svg",
-  rating: 4.5,
-  ratingCount: 200,
-  price: 1000,
-  totalRevenue: 50000,
-  category: "Web Development",
-  subcategory: "React",
-  instructors: [
-    {
-      id: "1",
-      name: "John Doe",
-      avatar: "/placeholder.svg?height=32&width=32",
-    },
-  ],
-  lectureCount: 20, // Dummy data for lecture count
-  lectureSize: "10 hours", // Dummy data for lecture size
-  commentCount: 150, // Dummy data for total comments
-  enrolledStudents: 3500, // Dummy data for students enrolled
-  level: "Beginner", // Dummy data for course level
-  language: "English", // Dummy data for course language
-  attachmentCount: 5, // Dummy data for attachment count
-  attachmentSize: "20MB", // Dummy data for attachment size
-  duration: 12, // Dummy data for course duration in hours
-  viewCount: 5000, // Dummy data for student views
-}
 
 interface CourseStatsProps {
   course: FullCourse
@@ -40,6 +11,7 @@ interface CourseStatsProps {
 
 
 export function CourseStats({ course }: CourseStatsProps) {
+  console.log(course)
     const getLessonsCount = () => {
         let lessonsCount = 0;
     
@@ -49,6 +21,12 @@ export function CourseStats({ course }: CourseStatsProps) {
 
         return lessonsCount
     }
+      const totalDuration = course.modules?.flatMap((module: Module) =>
+        module.lessons?.map((lesson: Lesson) => Number(lesson.duration) || 0) || []
+      ).reduce((sum: number, minutes: number) => sum + minutes, 0) || 0;
+    
+
+
     const stats = [
         {
             icon: <Menu className="h-5 w-5 text-gray-500" />,
@@ -79,18 +57,18 @@ export function CourseStats({ course }: CourseStatsProps) {
          
           {
             icon: <Clock className="h-5 w-5 text-gray-500" />,
-            value: course.duration, // Assuming formatDuration function exists
+            value: formatTimeFromSeconds(totalDuration), 
             label: "Hours",
           },
         {
             icon: <ChartColumnStacked className="h-5 w-5 text-gray-500" />,
-            value: course.category?.toLocaleString(),
+            value: course.categoryName?.toLocaleString(),
             label: "Category",
         },
     
     {
       icon: <ChartBarStacked className="h-5 w-5 text-gray-500" />,
-      value: course.subCategory?.toLocaleString(),
+      value: course.subCategoryName?.toLocaleString(),
       label: "Sub-Category",
     },
   ]
@@ -110,8 +88,4 @@ export function CourseStats({ course }: CourseStatsProps) {
   )
 }
 
-function formatDuration(duration: number) {
-  const hours = Math.floor(duration);
-  const minutes = Math.round((duration - hours) * 60);
-  return `${hours}h ${minutes}m`;
-}
+

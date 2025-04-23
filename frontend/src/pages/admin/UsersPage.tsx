@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getUsers, toggleUserStatus } from "@/services/adminService";
+import { getUsers, toggleUserStatus } from "@/services/userServices";
 import { MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";

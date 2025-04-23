@@ -7,12 +7,14 @@ import { TYPES } from "../di/types";
 import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
 import { IInstructor } from "../models/Instructor";
 import { IInstructorRepository } from "../core/interfaces/repository/IInstructorRepository";
+import { BaseService } from "../core/abstracts/base.service";
 
 @injectable()
-export class UserService implements IUserService {
+export class UserService extends BaseService<IUser> implements IUserService {
   constructor(@inject(TYPES.UserRepository) private userRepository:IUserRepository,
-  @inject(TYPES.InstructorRepository) private instructorRepository: IInstructorRepository){
-
+  @inject(TYPES.InstructorRepository) private instructorRepository: IInstructorRepository)
+  {
+    super(userRepository)
   }
   async updateUser(
     userId: string,

@@ -8,9 +8,11 @@ import Curriculum, { CurriculumType } from "@/components/instructor/create_cours
 import AdvancedInformation, { AdvancedInformationType } from "@/components/instructor/create_course/AdvancedInformation"
 import BasicInformation, { BasicInformationType } from "@/components/instructor/create_course/BasicInformation"
 import PageHeader from "@/components/instructor/common/Header"
-import { createCourse, createLesson, createModule } from "@/services/instructorService"
 import { createCourseData, createLessonData, createModuleData } from "@/utils/Courses"
 import ProgressLoaderModal from "@/components/instructor/create_course/progress-loader"
+import { createCourse } from "@/services/courseService"
+import { createModule } from "@/services/moduleService"
+import { createLesson } from "@/services/lessonService"
 
 
 const CreateCoursePage = () => {

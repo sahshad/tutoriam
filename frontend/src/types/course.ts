@@ -7,6 +7,8 @@ export interface Course {
     subtitle: string;
     categoryId: {name:string};
     subCategoryId: {name: string};
+    categoryName: string,
+    subCategoryName: string,
     language: string;
     level: "beginner" | "intermediate" | "advanced";
     thumbnail: string;

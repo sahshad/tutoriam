@@ -107,8 +107,8 @@ export const createBasicInformationData = (data: any): BasicInformationType => {
       return {
           title: data.title,
           subtitle: data.subtitle,
-          category: data.category,
-          subCategory: data.subCategory,
+          category: data.categoryId,
+          subCategory: data.subCategoryId,
           topic: data.title, 
           language: data.language,
           level: data.level,

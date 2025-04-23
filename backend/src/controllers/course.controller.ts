@@ -14,7 +14,6 @@ export class CourseController implements ICourseController {
 
     createCourse = asyncHandler(async (req: Request, res: Response): Promise<void> => {
         let  courseData = req.body
-        console.log(courseData)
         const files = req.files as { [fieldname: string]: Express.Multer.File[] };
         courseData.instructorId = req.user?._id
 
@@ -24,7 +23,6 @@ export class CourseController implements ICourseController {
 
     getMyCourses = asyncHandler(async(req:Request, res: Response) => {
         const { page, limit, searchQuery, category, subCategory, sortBy } = req.query;
-        console.log(searchQuery,sortBy)
         const instructorId = req.user?._id
         const coursesWithPagination = await this.courseService.getMycourses({
             page: Number(page) || 1,
@@ -48,7 +46,6 @@ export class CourseController implements ICourseController {
 
     getAllCourses = asyncHandler(async (req: Request, res: Response) => {
         const { page, limit, sortBy, sortOrder, category, subCategory, searchQuery } = req.query;
-        console.log(subCategory, sortBy, searchQuery)
         const coursesWithPagination = await this.courseService.getAllCourses({
             page: Number(page) || 1,
             limit: Number(limit) || 10,
@@ -64,7 +61,6 @@ export class CourseController implements ICourseController {
     getCourseWithContent = asyncHandler(async(req:Request, res:Response) => {
         const {courseId} = req.params
         const course = await this.courseService.getFullCourse(courseId)
-        console.log(course)
         res.status(StatusCodes.OK).json(course)
     })
 

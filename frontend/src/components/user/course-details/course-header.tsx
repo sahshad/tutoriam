@@ -11,10 +11,10 @@ interface CourseHeaderProps {
 export default function CourseHeader({ title, subtitle, rating, reviewCount, instructor }: CourseHeaderProps) {
   return (
     <div>
-      <h1 className="mb-2 text-2xl font-bold leading-tight sm:text-3xl md:text-4xl">{title}</h1>
-      <p className="mb-4 text-lg text-muted-foreground">{subtitle}</p>
+      <h1 className="mb-2 text-2xl font-bold leading-tight sm:text-3xl md:text-2xl">{title}</h1>
+      {/* <p className="mb-4 text-md text-muted-foreground">{subtitle}</p> */}
 
-      <div className="flex flex-wrap items-center gap-4">
+      <div className="flex flex-wrap items-center gap-2">
         <div className="flex items-center">
           <div className="flex items-center">
             {[1, 2, 3, 4, 5].map((star) => (

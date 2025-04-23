@@ -86,12 +86,53 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
       },
 
       {
+        $lookup: {
+          from: "categories",
+          localField: "categoryId",
+          foreignField: "_id",
+          as: "categoryInfo",
+        },
+      },
+      {
+        $unwind: {
+          path: "$categoryInfo",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+  
+      // Extract subcategory name from categoryInfo.subcategories
+      {
+        $addFields: {
+          categoryName: "$categoryInfo.name",
+          subcategoryName: {
+            $let: {
+              vars: {
+                matchedSub: {
+                  $filter: {
+                    input: "$categoryInfo.subcategories",
+                    as: "sub",
+                    cond: {
+                      $eq: ["$$sub._id", "$subCategoryId"],
+                    },
+                  },
+                },
+              },
+              in: { $arrayElemAt: ["$$matchedSub.name", 0] },
+            },
+          },
+        },
+      },
+  
+
+      {
         $group: {
           _id: "$_id",
           title: { $first: "$title" },
           subtitle: { $first: "$subtitle" },
-          category: { $first: "$category" },
-          subCategory: { $first: "$subCategory" },
+          categoryId: { $first: "$categoryId" },
+          subCategoryId: { $first: "$subCategoryId" },
+          categoryName: { $first: "$categoryName" },
+          subCategoryName: { $first: "$subcategoryName" },
           language: { $first: "$language" },
           level: { $first: "$level" },
           duration: { $first: "$duration" },

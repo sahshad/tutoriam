@@ -70,6 +70,9 @@ const BasicInformation = ({ defaultValues, onSubmit, onCancel }: BasicInformatio
       }
     }
     fetchCategories()
+    if(defaultValues){
+      setSelectedCategory(defaultValues.category as string)
+    }
   },[])
 
   useEffect(() => {
