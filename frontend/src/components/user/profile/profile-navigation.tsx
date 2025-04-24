@@ -3,6 +3,7 @@ import { Tabs, TabsList, TabsTrigger } from '../../ui/tabs'
 import AccountSettings from './account-settings'
 import CoursesPage from '../enrolled-course/enrolled-courses-page'
 import PurchaseHistoryContent from '../purchase-history/purchase-history-content'
+import DashboardPage from '../dashboard/dashboard-page'
 
 const ProfileNavigation = () => {
   return (
@@ -52,9 +53,9 @@ const ProfileNavigation = () => {
             </TabsTrigger>
           </TabsList>
 
-          {/* <TabsContent value="dashboard">
-        <Dashboard />
-      </TabsContent> */}
+          <TabsContent value="dashboard">
+        <DashboardPage />
+      </TabsContent>
       <TabsContent value="courses">
         <CoursesPage />
       </TabsContent>

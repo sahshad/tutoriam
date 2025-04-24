@@ -1,5 +1,6 @@
 import { IInstructor } from "../../../models/Instructor";
 import { IUser } from "../../../models/User";
+import { DashboardData } from "../../types/userTypes";
 import { IBaseService } from "./IBaseService";
 
 export interface IUserService extends IBaseService<IUser> {
@@ -9,4 +10,5 @@ export interface IUserService extends IBaseService<IUser> {
   becomeInstructor(instructorData:Partial<IInstructor>): Promise<IInstructor|null>
   findUserByGoogleId(googleId:string):Promise<IUser | null>
   createGoogleUser(name:string, email:string, profileImageUrl?:string,googleId?:string): Promise<IUser | null>
+  getDashboardData(userId: string): Promise<DashboardData>
 }

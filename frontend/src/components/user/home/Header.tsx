@@ -53,6 +53,7 @@ const Header = () => {
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
+    // navigate("/courses")
   };
 
   const isActive = (path: string) => location.pathname === path;
@@ -63,10 +64,10 @@ const Header = () => {
         <div className="container flex h-10 items-center justify-between">
           <Button
             onClick={toggleSidebar}
-            className="sm:hidden "
+            className="sm:hidden bg-transparent hover:bg-transparent"
             aria-label="Menu"
           >
-            <Menu className="h-6 w-6" />
+            <Menu className="h-6 w-6 text-white" />
           </Button>
 
           <nav className="hidden sm:flex items-center space-x-6 flex-wrap">
@@ -224,37 +225,57 @@ const Header = () => {
         </div>
       </div>
 
-      <div
+      {/* <div
         className={`fixed inset-0 z-10 bg-opacity-50 sm:hidden ${
           sidebarOpen ? "block" : "hidden"
         }`}
         onClick={toggleSidebar} 
-      />
-      <div
-        className={`fixed top-0 left-0 w-2/3 h-full bg-white p-4 sm:hidden transform transition-transform ${
+      /> */}
+
+<div
+  className={`fixed inset-0 z-40 sm:hidden transition-opacity duration-300 
+    backdrop-blur-sm bg-black/30 dark:bg-black/40 
+    ${sidebarOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
+  onClick={toggleSidebar}
+/>
+
+      {/* <div
+        className={`fixed top-0 left-0 w-2/3 h-full z-1000 p-4 sm:hidden transform transition-transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-      >
+      > */}
+      <div
+  className={`fixed top-0 left-0 w-2/3 h-full z-50 p-4 sm:hidden transform transition-transform 
+    bg-white dark:bg-zinc-900 shadow-lg 
+    ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+>
+
         <Button
-          className="absolute top-4 right-4 "
+          className="absolute top-4 right-4 bg-transparent hover:bg-transparent"
           onClick={toggleSidebar}
         >
-          <X className="h-6 w-6" />
+          <X className="h-6 w-6 text-black dark:text-white" />
         </Button>
-        <nav className="flex flex-col space-y-4">
-          <Link to="/" onClick={toggleSidebar} className="text-lg font-medium text-gray-800">
+        <nav className="flex flex-col space-y-4 mt-8">
+          <Link onClick={toggleSidebar} to="/" className="text-lg font-medium ">
             Home
           </Link>
-          <Link to="/courses" onClick={toggleSidebar} className="text-lg font-medium text-gray-800">
+          <Link onClick={toggleSidebar} to="/cart" className="text-lg font-medium ">
+            Cart
+          </Link>
+          <Link onClick={toggleSidebar} to="/wishlist" className="text-lg font-medium ">
+            Wishlist
+          </Link>
+          <Link onClick={toggleSidebar} to="/courses" className="text-lg font-medium">
             Courses
           </Link>
-          <Link to="/about" onClick={toggleSidebar} className="text-lg font-medium text-gray-800">
+          <Link onClick={toggleSidebar} to="/about" className="text-lg font-medium">
             About
           </Link>
-          <Link to="/contact" onClick={toggleSidebar} className="text-lg font-medium text-gray-800">
+          <Link onClick={toggleSidebar} to="/contact" className="text-lg font-medium">
             Contact
           </Link>
-          <Link to="/become-instructor" onClick={toggleSidebar} className="text-lg font-medium text-gray-800">
+          <Link onClick={toggleSidebar} to="/become-instructor" className="text-lg font-medium">
             Become an Instructor
           </Link>
         </nav>

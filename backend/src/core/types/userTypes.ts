@@ -1,28 +1,36 @@
-import { IAdmin } from "../../models/Admin"
+import { IAdmin } from "../../models/Admin";
 import { ICourse } from "../../models/Course";
-import { IUser } from "../../models/User"
+import { IEnrollment } from "../../models/Enrollment";
+import { IUser } from "../../models/User";
 
 export interface verifiedUer {
-   accessToken:string,
-   refreshToken:string,
-   user:IUser|IAdmin
+  accessToken: string;
+  refreshToken: string;
+  user: IUser | IAdmin;
 }
 
 export interface refreshedUser {
-    accessToken:string,
-    user: IUser|IAdmin
+  accessToken: string;
+  user: IUser | IAdmin;
 }
 
 export interface AdminDashboardStats {
-    totalUsers: number | null;
-    totalTutors: number | null;
-    totalCourses: number | null;
-  }
+  totalUsers: number | null;
+  totalTutors: number | null;
+  totalCourses: number | null;
+}
 
- export interface PaginatedCoursesResponse {
-    totalCourses: number;  
-    totalPages: number;    
-    currentPage: number;  
-    courses: ICourse[] | null ; 
-  }
-  
+export interface PaginatedCoursesResponse {
+  totalCourses: number;
+  totalPages: number;
+  currentPage: number;
+  courses: ICourse[] | null;
+}
+
+export interface DashboardData {
+  enrolledCourses: number
+  activeCourses: number
+  completedCourses: number
+  instructors: number
+  enrollments: IEnrollment[] | null
+}

@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios"
 
 export const getInstructorDetails = async (userId: string) => {
   try {
-    const res:AxiosResponse = await apiClient.get(`/instructor/${userId}/profile`)
+    const res:AxiosResponse = await apiClient.get(`/instructors/${userId}/profile`)
     return res.data
   } catch (error) {
     if (axios.isAxiosError(error)) {

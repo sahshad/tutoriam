@@ -67,22 +67,17 @@ export class EnrollmentRepository extends BaseRepository<IEnrollment> implements
     const isCompleted = completedLessons.some(id => id.equals(lessonObjectId));
   
     if (isCompleted) {
-      // Remove if it's already completed
       enrollment.progress.completedLessons = completedLessons.filter(id => !id.equals(lessonObjectId));
     } else {
-      // Add if not completed
       enrollment.progress.completedLessons.push(lessonObjectId);
     }
-  
-    // Always update lastVisited to current lesson
+
     enrollment.progress.lastVisited = lessonObjectId;
   
-    // Recalculate percentage
     enrollment.progress.percentage = Math.floor(
       (enrollment.progress.completedLessons.length / enrollment.progress.totalLessons) * 100
     );
   
-    // Mark course as completed if percentage is 100
     enrollment.completed = enrollment.progress.percentage === 100;
   
     return enrollment.save();
@@ -90,5 +85,38 @@ export class EnrollmentRepository extends BaseRepository<IEnrollment> implements
 
   async updateLastVisitedLesson(filter: mongoose.FilterQuery<IEnrollment>, lessonId: string): Promise<IEnrollment | null> {
      return await Enrollment.findOneAndUpdate(filter, { 'progress.lastVisited': lessonId }, {new: true})
+  }
+
+  async findDistinctInstructors(userId: string): Promise<string[]> {
+    const objectId = new mongoose.Types.ObjectId(userId);
+    const result = await Enrollment.aggregate([
+      {
+        $match: { userId: objectId }
+      },
+      {
+        $lookup: {
+          from: "courses",
+          localField: "courseId",
+          foreignField: "_id",
+          as: "course"
+        }
+      },
+      {
+        $unwind: "$course"
+      },
+      {
+        $group: {
+          _id: "$course.instructorId"
+        }
+      },
+      {
+        $project: {
+          instructorId: "$_id",
+          _id: 0
+        }
+      }
+    ]);
+  
+    return result.map((r) => r.instructorId.toString());
   }
 }
