@@ -32,10 +32,12 @@ import NotFound from "./pages/user/NotFound";
 import CategoriesPage from "./pages/admin/category-page";
 import { useAppDispatch } from "./redux/store";
 import { fetchCartItems } from "./redux/thunks/cartThunk";
-import { UserRole } from "./constants/role";
+import { UserRole } from "./lib/constants/role";
 import WatchCoursePage from "./components/user/watch-course/watch-course-page";
 import PaymentSuccess from "./components/common/payment-success";
 import PaymentFailed from "./components/common/payment-failed";
+import MessagePage from "./pages/user/messaging-page";
+import { DashboardFooter } from "./components/common/footer";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -65,8 +67,7 @@ const App = () => {
     <Router>
       <Toaster richColors position="top-right"/>
       <Routes>
-        <Route path="/payment-success" element={<PaymentSuccess/>}/>
-        <Route path="/payment-cancel" element={<PaymentFailed/>}/>
+
         <Route path="/login" element={<LoginPage />} />
         <Route path="/verify-otp" element={<OtpPage />} />
         <Route path="/" element={<HomePage />} />
@@ -77,8 +78,10 @@ const App = () => {
               <Route path="/profile" element={<UserProfile /> } />
               <Route path="/become-instructor" element={<BecomeInstructorPage/>}/>
               <Route path="/become-instructor/application" element={<TutorApplicationForm/>}/>
-              {/* <Route path="/enrolled-courses" element={}/> */}
               <Route path="/enrolled-courses/watch/:courseId" element={<WatchCoursePage/>}/>
+              <Route path="/payment-success" element={<PaymentSuccess/>}/>
+              <Route path="/payment-cancel" element={<PaymentFailed/>}/>
+              <Route path="/message" element={<MessagePage/>}/>
         </Route>
 
         <Route element={<ProtectedRoute role={[UserRole.INSTRUCTOR]}/>}>
@@ -87,10 +90,6 @@ const App = () => {
           <Route path="/instructor/my-courses" element={<CoursesPage/>}/>
           <Route path="/instructor/my-courses/:courseId" element={<SingleCoursePage/>}/>
           <Route path="/instructor/my-courses/:courseId/edit" element={<EditCoursePage/>}/>
-          {/* <Route path="/instructor/courses" element={<UserCoursesPage/>}/>
-              <Route path="/instructor/courses/:courseId" element={<UserCourseDetailsPage/>}/>
-              <Route path="/instructor/cart" element={<CartPage/>}/>
-              <Route path="/instructor/wishlist" element={<WishlistPage/>} /> */}
         </Route>
 
         <Route element={<ProtectedRoute role={[UserRole.USER,UserRole.INSTRUCTOR ]} />}>
@@ -114,6 +113,7 @@ const App = () => {
         </Route>
         <Route path="*" element={<NotFound/>} /> 
       </Routes>
+      <DashboardFooter/>
     </Router>
   );
 };

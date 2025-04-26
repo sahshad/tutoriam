@@ -1,7 +1,7 @@
 import { FullCourse } from "@/types/course"
 import { Lesson } from "@/types/lessons"
 import { Module } from "@/types/module"
-import { formatTimeFromSeconds } from "@/utils/formatDate"
+import { formatTimeFromSeconds } from "@/lib/utils/formatDate"
 import { Clock, Users, BookOpen, Languages, Menu, Gauge, ChartColumnStacked, ChartBarStacked } from "lucide-react"
 
 

@@ -1,4 +1,4 @@
-import apiClient from "@/utils/axiosInstance";
+import apiClient from "@/lib/axios";
 
 interface FetchEnrolledCoursesParams {
   page: number;

@@ -13,7 +13,7 @@ import {
     Heart,
     Music,
   } from "lucide-react"
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/classname'
 
 interface CategoryCardProps {
     icon: string

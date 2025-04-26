@@ -2,7 +2,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input"
 
 
-import type { FormValues } from "@/lib/becomeTutorFormShemas"
+import type { FormValues } from "@/lib/validations/instructorApplication"
 import { Control } from "react-hook-form"
 
 interface PersonalInfoSectionProps {

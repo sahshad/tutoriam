@@ -1,4 +1,4 @@
-import apiClient from "@/utils/axiosInstance"
+import apiClient from "@/lib/axios"
 
 export const createModule = async(data:any) => {
     try {

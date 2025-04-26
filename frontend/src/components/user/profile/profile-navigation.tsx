@@ -4,6 +4,7 @@ import AccountSettings from './account-settings'
 import CoursesPage from '../enrolled-course/enrolled-courses-page'
 import PurchaseHistoryContent from '../purchase-history/purchase-history-content'
 import DashboardPage from '../dashboard/dashboard-page'
+import MessagingPage from '../messaging/message-page'
 
 const ProfileNavigation = () => {
   return (
@@ -61,11 +62,11 @@ const ProfileNavigation = () => {
       </TabsContent>
       {/* <TabsContent value="teachers">
         <Teachers />
-      </TabsContent>
+      </TabsContent> */}
       <TabsContent value="message">
-        <Messages />
+        <MessagingPage />
       </TabsContent>
-      <TabsContent value="wishlist">
+      {/* <TabsContent value="wishlist">
         <Wishlist />
       </TabsContent> */}
       <TabsContent value="purchase-history">

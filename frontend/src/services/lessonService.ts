@@ -1,4 +1,4 @@
-import apiClient from "@/utils/axiosInstance"
+import apiClient from "@/lib/axios"
 
 export const createLesson = async(data:any) => {
     try {

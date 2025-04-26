@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
-import { formatDate } from "@/utils/formatDate"
+import { formatDate } from "@/lib/utils/formatDate"
 import { Category } from "@/types/category"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal, Edit, Eye, EyeOff } from "lucide-react"

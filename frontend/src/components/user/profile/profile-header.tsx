@@ -1,4 +1,3 @@
-
 import { Button } from "../../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { useSelector } from "react-redux";
@@ -80,7 +79,7 @@ const ProfileHeader = () => {
               <Button variant="outline">View Applications</Button>
               }
             </DialogTrigger>
-            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto no-scrollbar">
               <DialogHeader>
                 <DialogTitle>Your Instructor Applications</DialogTitle>
               </DialogHeader>

@@ -8,7 +8,7 @@ import { CourseHeader } from "./watch-course-header";
 import { useParams } from "react-router-dom";
 import { fetchEnrolledCourseWithModulesAndLessons } from "@/services/enrollmentService";
 import { Course } from "@/types/course";
-import { formatDate, formatTimeFromSeconds } from "@/utils/formatDate";
+import { formatDate, formatTimeFromSeconds } from "@/lib/utils/formatDate";
 import ReactPlayer from "react-player";
 import { EnrolledCourse } from "@/types/enrollment";
 import { Lesson } from "@/types/lessons";

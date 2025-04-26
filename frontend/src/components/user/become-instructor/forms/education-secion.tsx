@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-import type { FormValues } from "@/lib/becomeTutorFormShemas"
+import type { FormValues } from "@/lib/validations/instructorApplication"
 
 interface EducationSectionProps {
   control: Control<FormValues>

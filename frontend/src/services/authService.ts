@@ -1,6 +1,6 @@
 import { setAuthData, logout } from "../redux/slices/authSlice";
 import { AppDispatch } from "../redux/store";
-import apiClient from "@/utils/axiosInstance";
+import apiClient from "@/lib/axios";
 
 const API_URL = "http://localhost:5000/api/auth";
 

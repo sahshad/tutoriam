@@ -1,6 +1,6 @@
 import { CreditCard } from "lucide-react"
 import type { IOrder } from "@/types/order"
-import { formatDate } from "@/utils/formatDate"
+import { formatDate } from "@/lib/utils/formatDate"
 
 interface PurchaseGroupSummaryProps {
   purchaseGroup: IOrder

@@ -1,4 +1,4 @@
-import apiClient from '@/utils/axiosInstance'
+import apiClient from '@/lib/axios'
 import {loadStripe} from '@stripe/stripe-js'
 
 export const makePayment = async (courseIds:string[]) => {

@@ -1,4 +1,4 @@
-import apiClient from "@/utils/axiosInstance"
+import apiClient from "@/lib/axios"
 import axios, { AxiosResponse } from "axios"
 
 export const getInstructorDetails = async (userId: string) => {

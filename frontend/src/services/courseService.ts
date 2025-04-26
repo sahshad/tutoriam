@@ -1,5 +1,5 @@
 import { GetCoursesRequestParams, UserCourseFilterParams } from "@/types/course"
-import apiClient from "@/utils/axiosInstance"
+import apiClient from "@/lib/axios"
 import axios, { AxiosResponse } from "axios"
 
 export const getCourseById = async(courseId:string)=>{

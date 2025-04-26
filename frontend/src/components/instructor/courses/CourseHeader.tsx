@@ -3,7 +3,7 @@ import { Star, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Course } from "@/types/course";
-import { formatDate } from "@/utils/formatDate";
+import { formatDate } from "@/lib/utils/formatDate";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { updateCoursePublishStatus } from "@/services/courseService";

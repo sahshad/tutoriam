@@ -1,12 +1,10 @@
-import type { Control } from "react-hook-form"
-
-import { Textarea } from "@/components/ui/textarea"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-
-import type { FormValues } from "@/lib/becomeTutorFormShemas"
+import type { Control } from "react-hook-form";
+import { Textarea } from "@/components/ui/textarea";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import type { FormValues } from "@/lib/validations/instructorApplication";
 
 interface BioSectionProps {
-  control: Control<FormValues>
+  control: Control<FormValues>;
 }
 
 const BioSection = ({ control }: BioSectionProps) => {
@@ -32,7 +30,7 @@ const BioSection = ({ control }: BioSectionProps) => {
         )}
       />
     </div>
-  )
-}
+  );
+};
 
-export default BioSection
+export default BioSection;

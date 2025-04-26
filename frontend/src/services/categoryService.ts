@@ -1,5 +1,5 @@
 import { CategoryFormValues, CategoryParams } from "@/types/category"
-import apiClient from "@/utils/axiosInstance"
+import apiClient from "@/lib/axios"
 
 export const fetchAllCategories = async ({page, limit, searchQuery, filter}:CategoryParams) => {
     try {

@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Pencil, Trash2 } from "lucide-react";
 import { StarRating } from "./start-rating";
 import { IPopulatedReview } from "@/types/review";
-import { timeAgo } from "@/utils/formatDate";
+import { timeAgo } from "@/lib/utils/formatDate";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";

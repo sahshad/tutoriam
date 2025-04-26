@@ -1,6 +1,6 @@
 import { updateUser } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
-import apiClient from "@/utils/axiosInstance";
+import apiClient from "@/lib/axios";
 
 export const updateProfile = async (
   formData: FormData,
