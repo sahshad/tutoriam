@@ -5,12 +5,11 @@ import { ChevronLeft, MoreHorizontal } from "lucide-react"
 interface MessageHeaderProps {
   name: string
   avatar: string
-  status: string
   online: boolean
   onBackClick?: () => void
 }
 
-export function MessageHeader({ name, avatar, status, online, onBackClick }: MessageHeaderProps) {
+export function MessageHeader({ name, avatar, online, onBackClick }: MessageHeaderProps) {
   const initials = name
     .split(" ")
     .map((n) => n[0])
@@ -36,7 +35,7 @@ export function MessageHeader({ name, avatar, status, online, onBackClick }: Mes
         </div>
         <div>
           <h2 className="font-medium">{name}</h2>
-          <p className="text-xs text-muted-foreground">{status}</p>
+          {online && <p className="text-xs text-muted-foreground">Online</p>}
         </div>
       </div>
       <Button variant="ghost" size="icon">

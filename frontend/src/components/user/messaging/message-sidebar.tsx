@@ -4,7 +4,13 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, Plus } from "lucide-react"
 import { MessagePreview } from "./message-preview"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useAppDispatch, useAppSelector } from "@/redux/store"
+import { IUser } from "@/types/user"
+import { fetchChats } from "@/redux/thunks/chatThunk"
+import { fetchMessages } from "@/redux/thunks/MessageThunk"
+import { Message } from "@/redux/slices/messageSlice"
+import { formatTimeWithoutSeconds } from "@/lib/utils/dateUtils"
 
 interface MessageSidebarProps {
   onChatSelect: (id: string) => void
@@ -108,6 +114,28 @@ const messageData = [
 export function MessageSidebar({ onChatSelect, activeChatId }: MessageSidebarProps) {
   const [searchQuery, setSearchQuery] = useState("")
 
+  const dispatch = useAppDispatch()
+   
+  useEffect(() => {
+    const getCartData = async () => {
+      try {
+        dispatch(fetchChats())
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    getCartData()
+  }, [dispatch]);
+
+     const {chats} = useAppSelector((state) => state.chat);
+     const {user} = useAppSelector((state) => state.auth)
+
+
+  const handleChangeChat = (chatId: string) => {
+    onChatSelect(chatId)
+    dispatch(fetchMessages(chatId))
+  }
   const filteredMessages = messageData.filter(
     (message) =>
       message.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -137,20 +165,25 @@ export function MessageSidebar({ onChatSelect, activeChatId }: MessageSidebarPro
       </div>
 
       <div className="flex-1 overflow-auto no-scrollbar">
-        {filteredMessages.map((message) => (
+        {chats.map((chat) => {
+        const participants = chat.participants as Partial<IUser>[]
+        const targetUser = participants.filter(p => p._id !== user._id)[0]
+        return (
           <MessagePreview
-            key={message.id}
-            id={message.id}
-            name={message.name}
-            message={message.message}
-            time={message.time}
-            avatar={message.avatar}
-            online={message.online}
-            unread={message.unread}
-            isActive={message.id === activeChatId}
-            onClick={() => onChatSelect(message.id)}
+            key={chat._id}
+            id={chat._id}
+            name={targetUser.name as string}
+            message={chat.lastMessage.body as string}
+            time={formatTimeWithoutSeconds(new Date(chat.updatedAt))}
+            avatar={targetUser.profileImageUrl as string}
+            online={true}
+            unread={true}
+            isActive={true}
+            onClick={() => handleChangeChat(chat._id)}
           />
-        ))}
+        )
+
+        })}
       </div>
     </div>
   )

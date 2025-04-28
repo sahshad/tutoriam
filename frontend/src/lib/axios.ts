@@ -3,7 +3,7 @@ import store  from "../redux/store";
 import { refreshToken } from "../services/authService";
 import {logout  } from '../redux/slices/authSlice'
 
-const apiClient = axios.create({
+const apiClient = axios.create({ 
   baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true, 
 });

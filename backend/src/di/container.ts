@@ -1,97 +1,145 @@
-import { IAdminController } from "../core/interfaces/controller/IAdminController";
 import { Container } from "inversify";
 import { TYPES } from "./types";
+
+// ADMIN
+import { IAdminController } from "../core/interfaces/controller/IAdminController";
+import { IAdminService } from "../core/interfaces/service/IAdminService";
+import { IAdminRepository } from "../core/interfaces/repository/IAdminRepository";
 import { AdminController } from "../controllers/admin.controller";
 import { AdminService } from "../services/admin.service";
 import { AdminRepository } from "../repositories/admin.repository";
-import { UserController } from "../controllers/user.controller";
-import { UserRepository } from "../repositories/user.repository";
-import { UserService } from "../services/user.service";
-import { AuthController } from "../controllers/auth.controller";
-import { AuthService } from "../services/auth.service";
-import { AuthRepository } from "../repositories/auth.repository";
-import { IAdminService } from "../core/interfaces/service/IAdminService";
-import { IAdminRepository } from "../core/interfaces/repository/IAdminRepository";
+
+// USER
 import { IUserController } from "../core/interfaces/controller/IUserController";
 import { IUserService } from "../core/interfaces/service/IUserService";
 import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
+import { UserController } from "../controllers/user.controller";
+import { UserService } from "../services/user.service";
+import { UserRepository } from "../repositories/user.repository";
+
+// AUTHENTICATION
 import { IAuthController } from "../core/interfaces/controller/IAuthController";
 import { IAuthService } from "../core/interfaces/service/IAuthService";
 import { IAuthRepository } from "../core/interfaces/repository/IAuthRepository";
-import { IInstructorRepository } from "../core/interfaces/repository/IInstructorRepository";
-import { InstructorRepository } from "../repositories/instructor.repository";
-import { InstructorController } from "../controllers/instructor.controller";
+import { AuthController } from "../controllers/auth.controller";
+import { AuthService } from "../services/auth.service";
+import { AuthRepository } from "../repositories/auth.repository";
+
+// INSTRUCTOR
 import { IInstructorController } from "../core/interfaces/controller/IInstructorController";
-import { InstructorService } from "../services/instructor.service";
 import { IInstructorService } from "../core/interfaces/service/IInstructorService";
+import { IInstructorRepository } from "../core/interfaces/repository/IInstructorRepository";
+import { InstructorController } from "../controllers/instructor.controller";
+import { InstructorService } from "../services/instructor.service";
+import { InstructorRepository } from "../repositories/instructor.repository";
+
+// COURSE
 import { ICourseController } from "../core/interfaces/controller/ICourseController";
-import { CourseController } from "../controllers/course.controller";
 import { ICourseService } from "../core/interfaces/service/ICourseService";
 import { ICourseRepository } from "../core/interfaces/repository/ICourseRepository";
+import { CourseController } from "../controllers/course.controller";
+import { CourseService } from "../services/coruse.service";
 import { CourseRepository } from "../repositories/course.repository";
-import { ModuleController } from "../controllers/module.controller";
+
+// MODULE
 import { IModuleController } from "../core/interfaces/controller/IModuleController";
 import { IModuleService } from "../core/interfaces/service/IModuleService";
-import { ModuleService } from "../services/module.service";
 import { IModuleRepository } from "../core/interfaces/repository/IModuleRepository";
+import { ModuleController } from "../controllers/module.controller";
+import { ModuleService } from "../services/module.service";
 import { ModuleRepository } from "../repositories/module.repository";
+
+// LESSON
 import { ILessonController } from "../core/interfaces/controller/ILessonController";
 import { ILessonService } from "../core/interfaces/service/ILessonService";
+import { ILessonRepository } from "../core/interfaces/repository/ILessonRepository ";
 import { LessonController } from "../controllers/lesson.controller";
 import { LessonService } from "../services/lesson.service";
-import { ILessonRepository } from "../core/interfaces/repository/ILessonRepository ";
 import { LessonRepository } from "../repositories/lesson.repository";
-import { CourseService } from "../services/coruse.service";
+
+// CART
 import { ICartController } from "../core/interfaces/controller/ICartController";
-import { CartController } from "../controllers/cart.controller";
 import { ICartService } from "../core/interfaces/service/ICartService";
-import { CartService } from "../services/cart.service";
 import { ICartRepository } from "../core/interfaces/repository/ICartRepository";
+import { CartController } from "../controllers/cart.controller";
+import { CartService } from "../services/cart.service";
 import { CartRepository } from "../repositories/cart.repository";
+
+// WISHLIST
 import { IWishlistController } from "../core/interfaces/controller/IWishlistController";
-import { WishlistController } from "../controllers/wishlist.controller";
 import { IWishlistService } from "../core/interfaces/service/IWishlistService";
-import { WishlistService } from "../services/wishlist.service";
 import { IWishlistRepository } from "../core/interfaces/repository/IWishlistRepository";
+import { WishlistController } from "../controllers/wishlist.controller";
+import { WishlistService } from "../services/wishlist.service";
 import { WishlistRepository } from "../repositories/wishlist.repository";
+
+// CATEGORY
 import { ICategoryController } from "../core/interfaces/controller/ICategoryController";
+import { ICategoryService } from "../core/interfaces/service/ICategoryService";
+import { ICategoryRepository } from "../core/interfaces/repository/ICategoryRepository";
+import { CategoryController } from "../controllers/category.controller";
 import { CategoryService } from "../services/category.service";
 import { CategoryRepository } from "../repositories/category.repository";
-import { ICategoryRepository } from "../core/interfaces/repository/ICategoryRepository";
-import { ICategoryService } from "../core/interfaces/service/ICategoryService";
-import { CategoryController } from "../controllers/category.controller";
-import { IPaymentController } from "../core/interfaces/controller/IPaymentController";
-import { PaymentController } from "../controllers/payment.controller";
-import { IPaymentService } from "../core/interfaces/service/IPaymentService";
-import { PaymentService } from "../services/payment.service";
-import { IWebhookController } from "../core/interfaces/controller/IWebhookController";
-import { WebhookController } from "../controllers/webhook.controller";
-import { IWebhookService } from "../core/interfaces/service/IWebhookService";
-import { WebhookService } from "../services/webhook.service";
+
+// ORDER
 import { IOrderController } from "../core/interfaces/controller/IOrderController";
-import { OrderController } from "../controllers/order.controller";
 import { IOrderService } from "../core/interfaces/service/IOrderService";
-import { OrderService } from "../services/order.service";
 import { IOrderRepository } from "../core/interfaces/repository/IOrderRespoitory";
+import { OrderController } from "../controllers/order.controller";
+import { OrderService } from "../services/order.service";
 import { OrderRepository } from "../repositories/order.repository";
+
+// ENROLLMENT
 import { IEnrollmentController } from "../core/interfaces/controller/IEnrollmentController";
-import { EnrollmentController } from "../controllers/enrollment.controller";
 import { IEnrollmentService } from "../core/interfaces/service/IEnrollmentService";
-import { EnrollmentService } from "../services/enrollment.service";
 import { IEnrollmentRepository } from "../core/interfaces/repository/IEnrollmentRepository";
+import { EnrollmentController } from "../controllers/enrollment.controller";
+import { EnrollmentService } from "../services/enrollment.service";
 import { EnrollmentRepository } from "../repositories/enrollment.repository";
+
+// REVIEW
 import { IReviewController } from "../core/interfaces/controller/IReviewController";
-import { ReviewController } from "../controllers/review.controller";
 import { IReviewService } from "../core/interfaces/service/IReviewService";
-import { ReviewService } from "../services/review.service";
 import { IReviewRepository } from "../core/interfaces/repository/IReviewRepository";
+import { ReviewController } from "../controllers/review.controller";
+import { ReviewService } from "../services/review.service";
 import { ReviewRepository } from "../repositories/review.repository";
+
+// CERTIFICATE
 import { ICertificateController } from "../core/interfaces/controller/ICertificateController";
-import { CertificateController } from "../controllers/certificate.controller";
 import { ICertificateService } from "../core/interfaces/service/ICertficateService";
-import { CertificateService } from "../services/certificate.service";
 import { ICertificateRepository } from "../core/interfaces/repository/ICertificateRespository";
+import { CertificateController } from "../controllers/certificate.controller";
+import { CertificateService } from "../services/certificate.service";
 import { CertificateRepository } from "../repositories/certificate.repository";
+
+// CHAT
+import { IChatController } from "../core/interfaces/controller/IChatController";
+import { IChatService } from "../core/interfaces/service/IChatService";
+import { IChatRepository } from "../core/interfaces/repository/IChatRepository";
+import { ChatController } from "../controllers/chat.controller";
+import { ChatService } from "../services/chat.service";
+import { ChatRepository } from "../repositories/chat.repository";
+
+// MESSAGE
+import { IMessageController } from "../core/interfaces/controller/IMessageController";
+import { IMessageService } from "../core/interfaces/service/IMessageService";
+import { IMessageRepository } from "../core/interfaces/repository/IMessageRepository";
+import { MessageController } from "../controllers/message.controller";
+import { MessageService } from "../services/message.service";
+import { MessageRepository } from "../repositories/message.repository";
+
+// PAYMENT
+import { IPaymentController } from "../core/interfaces/controller/IPaymentController";
+import { IPaymentService } from "../core/interfaces/service/IPaymentService";
+import { PaymentController } from "../controllers/payment.controller";
+import { PaymentService } from "../services/payment.service";
+
+// WEBHOOK
+import { IWebhookController } from "../core/interfaces/controller/IWebhookController";
+import { IWebhookService } from "../core/interfaces/service/IWebhookService";
+import { WebhookController } from "../controllers/webhook.controller";
+import { WebhookService } from "../services/webhook.service";
 
 const container = new Container()
 
@@ -150,6 +198,14 @@ container.bind<IReviewRepository>(TYPES.ReviewRepository).to(ReviewRepository)
 container.bind<ICertificateController>(TYPES.CertificateController).to(CertificateController)
 container.bind<ICertificateService>(TYPES.CertificateService).to(CertificateService)
 container.bind<ICertificateRepository>(TYPES.CertificateRepository).to(CertificateRepository)
+
+container.bind<IChatController>(TYPES.ChatController).to(ChatController)
+container.bind<IChatService>(TYPES.ChatService).to(ChatService)
+container.bind<IChatRepository>(TYPES.ChatRepository).to(ChatRepository)
+
+container.bind<IMessageController>(TYPES.MessageController).to(MessageController)
+container.bind<IMessageService>(TYPES.MessageService).to(MessageService)
+container.bind<IMessageRepository>(TYPES.MessageRepository).to(MessageRepository)
 
 container.bind<IPaymentController>(TYPES.PaymentController).to(PaymentController)
 container.bind<IPaymentService>(TYPES.PaymentService).to(PaymentService)

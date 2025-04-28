@@ -38,6 +38,9 @@ import PaymentSuccess from "./components/common/payment-success";
 import PaymentFailed from "./components/common/payment-failed";
 import MessagePage from "./pages/user/messaging-page";
 import { DashboardFooter } from "./components/common/footer";
+import { SocketProvider } from "./context/socket-context";
+import InstructorMessagesPage from "./pages/instructor/messages-page";
+import { fetchChats } from "./redux/thunks/chatThunk";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -50,6 +53,7 @@ const App = () => {
           const user = await refreshToken(dispatch);
           if(user.role !== 'admin'){
             appDispatch(fetchCartItems())
+            // appDispatch(fetchChats())  
           }
         } catch (error) {
           console.log("Error during token refresh", error);
@@ -66,6 +70,8 @@ const App = () => {
   return (
     <Router>
       <Toaster richColors position="top-right"/>
+      <SocketProvider>
+
       <Routes>
 
         <Route path="/login" element={<LoginPage />} />
@@ -88,6 +94,7 @@ const App = () => {
           <Route path="/instructor/dashboard" element={<InstructorDashboardPage/>}/>
           <Route path="/instructor/create-course" element={<CreateCoursePage/>}/>
           <Route path="/instructor/my-courses" element={<CoursesPage/>}/>
+          <Route path="/instructor/messages" element={<InstructorMessagesPage/>} />
           <Route path="/instructor/my-courses/:courseId" element={<SingleCoursePage/>}/>
           <Route path="/instructor/my-courses/:courseId/edit" element={<EditCoursePage/>}/>
         </Route>
@@ -113,6 +120,8 @@ const App = () => {
         </Route>
         <Route path="*" element={<NotFound/>} /> 
       </Routes>
+      </SocketProvider>
+
       <DashboardFooter/>
     </Router>
   );

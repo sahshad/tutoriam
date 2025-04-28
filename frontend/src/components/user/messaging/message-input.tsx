@@ -20,10 +20,10 @@ export function MessageInput({ onSendMessage }: MessageInputProps) {
   return (
     <div className="border-t p-4">
       <form onSubmit={handleSubmit} className="flex items-center gap-2">
-        <Button type="button" variant="ghost" size="icon" className="text-muted-foreground">
+        {/* <Button type="button" variant="ghost" size="icon" className="text-muted-foreground">
           <Pencil className="h-5 w-5" />
           <span className="sr-only">Attach</span>
-        </Button>
+        </Button> */}
 
         <input
           type="text"

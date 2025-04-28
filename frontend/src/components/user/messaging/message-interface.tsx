@@ -1,5 +1,3 @@
-"use client"
-
 import { MessageSidebar } from "./message-sidebar"
 import { MessagePanel } from "./message-panel"
 import { useMediaQuery } from "@/hooks/useMobile"
@@ -8,7 +6,7 @@ import { useState } from "react"
 export function MessagingInterface() {
   const isMobile = useMediaQuery("(max-width: 768px)")
   const [showSidebar, setShowSidebar] = useState(true)
-  const [activeChatId, setActiveChatId] = useState<string | null>("1") // Default to first chat
+  const [activeChatId, setActiveChatId] = useState<string | null>(null) // Default to first chat
 
   const handleChatSelect = (id: string) => {
     setActiveChatId(id)
