@@ -1,5 +1,3 @@
-"use client"
-
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, Plus } from "lucide-react"
@@ -8,114 +6,18 @@ import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { IUser } from "@/types/user"
 import { fetchChats } from "@/redux/thunks/chatThunk"
-import { fetchMessages } from "@/redux/thunks/MessageThunk"
-import { Message } from "@/redux/slices/messageSlice"
+import { fetchMessages } from "@/redux/thunks/messageThunk"
 import { formatTimeWithoutSeconds } from "@/lib/utils/dateUtils"
 
 interface MessageSidebarProps {
   onChatSelect: (id: string) => void
-  activeChatId: string | null
 }
 
-// Sample data for message previews
-const messageData = [
-  {
-    id: "1",
-    name: "Jane Cooper",
-    message: "Yeah sure, tell me zafor",
-    time: "just now",
-    avatar: "/placeholder.svg?height=40&width=40",
-    online: true,
-    unread: false,
-  },
-  {
-    id: "2",
-    name: "Jenny Wilson",
-    message: "Thank you so much, sir",
-    time: "2 d",
-    avatar: "/placeholder.svg?height=40&width=40",
-    online: true,
-    unread: true,
-  },
-  {
-    id: "3",
-    name: "Marvin McKinney",
-    message: "You're Welcome",
-    time: "1 m",
-    avatar: "/placeholder.svg?height=40&width=40",
-    online: true,
-    unread: true,
-  },
-  {
-    id: "4",
-    name: "Eleanor Pena",
-    message: "Thank you so much, sir",
-    time: "1 m",
-    avatar: "/placeholder.svg?height=40&width=40",
-    online: false,
-    unread: false,
-  },
-  {
-    id: "5",
-    name: "Ronald Richards",
-    message: "Sorry, I can't help you",
-    time: "2 m",
-    avatar: "/placeholder.svg?height=40&width=40",
-    online: true,
-    unread: false,
-  },
-  {
-    id: "6",
-    name: "Kathryn Murphy",
-    message: "new message",
-    time: "2 m",
-    avatar: "/placeholder.svg?height=40&width=40",
-    online: false,
-    unread: false,
-  },
-  {
-    id: "7",
-    name: "Jacob Jones",
-    message: "Thank you so much, sir",
-    time: "6 m",
-    avatar: "/placeholder.svg?height=40&width=40",
-    online: true,
-    unread: false,
-  },
-  {
-    id: "8",
-    name: "Cameron Williamson",
-    message: "It's okay, no problem brother, i will fix everythin...",
-    time: "6 m",
-    avatar: "/placeholder.svg?height=40&width=40",
-    online: false,
-    unread: false,
-  },
-  {
-    id: "9",
-    name: "Arlene McCoy",
-    message: "Thank you so much, sir",
-    time: "9 m",
-    avatar: "/placeholder.svg?height=40&width=40",
-    online: false,
-    unread: false,
-  },
-  {
-    id: "10",
-    name: "Dianne Russell",
-    message: "You're Welcome",
-    time: "9 m",
-    avatar: "/placeholder.svg?height=40&width=40",
-    online: true,
-    unread: false,
-  },
-]
-
-export function MessageSidebar({ onChatSelect, activeChatId }: MessageSidebarProps) {
+export function MessageSidebar({ onChatSelect }: MessageSidebarProps) {
   const [searchQuery, setSearchQuery] = useState("")
-
+  
   const dispatch = useAppDispatch()
-   
+  
   useEffect(() => {
     const getCartData = async () => {
       try {
@@ -130,17 +32,13 @@ export function MessageSidebar({ onChatSelect, activeChatId }: MessageSidebarPro
 
      const {chats} = useAppSelector((state) => state.chat);
      const {user} = useAppSelector((state) => state.auth)
+     const onlineUsers = useAppSelector((state) => state.chat.onlineUsers)
 
 
   const handleChangeChat = (chatId: string) => {
     onChatSelect(chatId)
     dispatch(fetchMessages(chatId))
   }
-  const filteredMessages = messageData.filter(
-    (message) =>
-      message.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      message.message.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
 
   return (
     <div className="flex h-full flex-col">
@@ -171,14 +69,13 @@ export function MessageSidebar({ onChatSelect, activeChatId }: MessageSidebarPro
         return (
           <MessagePreview
             key={chat._id}
-            id={chat._id}
             name={targetUser.name as string}
-            message={chat.lastMessage.body as string}
+            message={chat.lastMessage?.body as string}
             time={formatTimeWithoutSeconds(new Date(chat.updatedAt))}
             avatar={targetUser.profileImageUrl as string}
-            online={true}
-            unread={true}
-            isActive={true}
+            online={onlineUsers.includes(targetUser._id as string)}
+            unread={false}
+            isActive={onlineUsers.includes(targetUser._id as string)}
             onClick={() => handleChangeChat(chat._id)}
           />
         )

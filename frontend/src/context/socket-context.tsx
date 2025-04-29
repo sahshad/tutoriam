@@ -2,7 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { addMessage } from "@/redux/slices/messageSlice";
+import { addMessage, deleteMessageFromState, updateMessageInState } from "@/redux/slices/messageSlice";
+import { updateChat, updateOnlineUsers } from "@/redux/slices/chatSlice";
 
 const SOCKET_URL = "http://localhost:5000";
 
@@ -28,12 +29,27 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
         setIsConnected(true);
       });
 
-      // newSocket.on("getOnlineUsers", (users) => {
-      //   console.log(users)
-      // })
+      newSocket.on("getOnlineUsers", (users) => {
+        console.log(users)
+        dispatch(updateOnlineUsers(users))
+      })
       newSocket.on("newMessage", (message) => {
         dispatch(addMessage(message))
+        dispatch(updateChat({
+          _id:message.chatId,
+          lastMessage:message,
+          updatedAt:new Date().toISOString()
+        }))
+        
       })
+
+      newSocket.on("updateMessage", (message) => {
+        dispatch(updateMessageInState(message))
+      })
+
+      newSocket.on("deleteMessage", (message)=> {
+        dispatch(deleteMessageFromState(message._id))
+      }) 
 
       newSocket.on("disconnect", () => {
         setIsConnected(false);

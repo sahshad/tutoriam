@@ -14,4 +14,8 @@ export class MessageRepository extends BaseRepository<IMessage> implements IMess
         return Message.find({ chatId }).sort({ createdAt: 1 });
     }
 
+    async findByIdAndUpdate(id: string, data: Partial<IMessage>): Promise<IMessage | null> {
+        return Message.findByIdAndUpdate(id, data, {new: true})
+    }
+
 }

@@ -74,8 +74,11 @@ export const initSocketServer = (server: Server) => {
 
     console.log(`user is connected to socket : ${socket.id}`)
 
+    server.emit("getOnlineUsers", Object.keys(userSocketMap))
+    
     socket.on("disconnect", () => {
-      delete userSocketMap[userId];
+        delete userSocketMap[userId];
+        server.emit("getOnlineUsers", Object.keys(userSocketMap))
     });
   });
 };

@@ -4,7 +4,7 @@ export interface IMessage extends Document {
   chatId: Types.ObjectId | string;
   senderId: Types.ObjectId | string;
   body: string;
-  readBy: { userId: Types.ObjectId | string; read: boolean }[];
+  readBy: (Types.ObjectId | string)[];
   attachments?: { url: string; mime: string; size: number }[];
   createdAt: Date;
   updatedAt: Date;
@@ -15,12 +15,12 @@ const MessageSchema = new Schema<IMessage>(
     chatId: { type: Schema.Types.ObjectId, ref: "Chat", required: true, index: true },
     senderId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     body: { type: String, required: true, maxlength: 2000 },
-    readBy: [
-      {
-        userId: { type: Schema.Types.ObjectId, ref: "User" },
-        read: { type: Boolean, default: false },
-      },
-    ],
+    readBy: {
+      type: [{ type: Schema.Types.Mixed, ref: "User" }], 
+      default: function () {
+        return [this.senderId]; 
+      }
+    },
     attachments: [
       {
         url: String,

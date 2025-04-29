@@ -23,7 +23,7 @@ export function MessagingInterface() {
     <div className="flex h-full w-full overflow-hidden">
       {(showSidebar || !isMobile) && (
         <div className={`${isMobile ? "w-full" : "w-1/3 border-r"} h-full`}>
-          <MessageSidebar onChatSelect={handleChatSelect} activeChatId={activeChatId} />
+          <MessageSidebar onChatSelect={handleChatSelect} />
         </div>
       )}
 

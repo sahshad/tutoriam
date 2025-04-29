@@ -10,5 +10,7 @@ const messageController = container.get<IMessageController>(TYPES.MessageControl
 
 router.get("/:chatId", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), messageController.getMessages);
 router.post("/send", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), messageController.createMessage);
+router.patch("/:messageId", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), messageController.updateMessage)
+router.delete("/:messageId", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), messageController.deleteMessage)
 
 export default router;

@@ -1,11 +1,12 @@
 import { MessageHeader } from "./message-header";
 import { MessageList } from "./message-list";
 import { MessageInput } from "./message-input";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Message } from "@/redux/slices/messageSlice";
-import { sendMessage } from "@/redux/thunks/MessageThunk";
+import { sendMessage, updateMessage } from "@/redux/thunks/messageThunk";
 import { IUser } from "@/types/user";
+import { updateChat } from "@/redux/slices/chatSlice";
 
 interface MessagePanelProps {
   activeChatId: string | null;
@@ -14,8 +15,13 @@ interface MessagePanelProps {
 
 export function MessagePanel({ activeChatId, onBackClick }: MessagePanelProps) {
   const [messages, setMessages] = useState<Message[] | []>([]);
+  const [isEditing, setIsEditing] = useState<string | null>(null);
+  const [inputMessage, setInputMessage] = useState<string>("");
+  const messageInputRef = useRef<HTMLInputElement>(null);
+
   const chatMessages = useAppSelector((state) => state.message.messages);
   const userId = useAppSelector((state) => state.auth.user._id);
+  const onlineUsers = useAppSelector((state) => state.chat.onlineUsers)
 
   const participants = useAppSelector((state) => state.chat.chats).find(
     (chat) => chat._id.toString() === activeChatId?.toString()
@@ -30,7 +36,26 @@ export function MessagePanel({ activeChatId, onBackClick }: MessagePanelProps) {
 
   const handleSendMessage = (content: string) => {
     if (!content.trim()) return;
+
+    if (isEditing) {
+      console.log(isEditing)
+      setIsEditing(null);
+      dispatch(updateMessage({messageId:isEditing, content}))
+      return;
+    }
+
     dispatch(sendMessage({ chatId: activeChatId as string, content }));
+    dispatch(
+      updateChat({
+        _id: activeChatId,
+        lastMessage: {
+          body: content,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        updatedAt: new Date().toISOString(),
+      })
+    );
   };
 
   if (!activeChatId) {
@@ -46,11 +71,22 @@ export function MessagePanel({ activeChatId, onBackClick }: MessagePanelProps) {
       <MessageHeader
         name={chatDetails?.name as string}
         avatar={chatDetails?.profileImageUrl as string}
-        online={true}
+        online={onlineUsers.includes(chatDetails?._id as string)}
         onBackClick={onBackClick}
       />
-      <MessageList messages={messages} />
-      <MessageInput onSendMessage={handleSendMessage} />
+      <MessageList
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+        setInputMessage={setInputMessage}
+        inputRef={messageInputRef as React.RefObject<HTMLInputElement>}
+        messages={messages}
+      />
+      <MessageInput
+        message={inputMessage}
+        setMessage={setInputMessage}
+        inputRef={messageInputRef as React.RefObject<HTMLInputElement>}
+        onSendMessage={handleSendMessage}
+      />
     </>
   );
 }

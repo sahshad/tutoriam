@@ -53,7 +53,7 @@ const App = () => {
           const user = await refreshToken(dispatch);
           if(user.role !== 'admin'){
             appDispatch(fetchCartItems())
-            // appDispatch(fetchChats())  
+            appDispatch(fetchChats())  
           }
         } catch (error) {
           console.log("Error during token refresh", error);

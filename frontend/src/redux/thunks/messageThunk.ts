@@ -1,25 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Message } from "../slices/messageSlice";
-import { fetchChatMessages, sendMessageToUser } from "@/services/messageService";
-
-// // ✅ Thunk to fetch messages for a chat
-// export const fetchMessages = createAsyncThunk(
-//   "message/fetchMessages",
-//   async (chatId: string) => {
-//     const response = await axios.get(`/api/chats/${chatId}/messages`);
-//     return response.data.messages as Message[];
-//   }
-// );
+import { deleteChatMessage, fetchChatMessages, sendMessageToUser, updateChatMessage } from "@/services/messageService";
 
 export const fetchMessages = createAsyncThunk(
     "message/fetchMessages",
       async (chatId: string, { rejectWithValue }) => {
         try {
           const data = await fetchChatMessages(chatId);
-        //   console.log(data.messages)
           return data.messages as Message[]
         } catch (err: any) {
-          return rejectWithValue(err?.data?.message || "Failed to fetch cart items");
+          return rejectWithValue(err?.data?.message || "Failed to fetch messages");
         }
       }
 )
@@ -31,15 +21,34 @@ export const sendMessage = createAsyncThunk(
           const data = await sendMessageToUser(chatId, content)
           return data.messageData
         } catch (err: any) {
-          return rejectWithValue(err?.data?.message || "Failed to fetch cart items");
+          return rejectWithValue(err?.data?.message || "Failed to send message");
         }
       }
 )
 
-// export const sendMessage = createAsyncThunk(
-//   "message/sendMessage",
-//   async ({ chatId, content }: { chatId: string; content: string }) => {
-//     const response = await axios.post("/api/messages", { chatId, content });
-//     return response.data.message as Message;
-//   }
-// );
+
+export const updateMessage = createAsyncThunk(
+    "message/updateMessage",
+      async ({ messageId, content }: { messageId: string; content: string }, { rejectWithValue }) => {
+        try {
+          const data = await updateChatMessage(messageId, content)
+          return data.messageData
+        } catch (err: any) {
+          return rejectWithValue(err?.data?.message || "Failed to update message");
+        }
+      }
+)
+
+
+export const deleteMessage = createAsyncThunk(
+    "message/deleteMessage",
+    async({messageId}: {messageId: string}, {rejectWithValue}) => {
+        try {
+            const data = await deleteChatMessage(messageId)
+            return data.messageData
+        } catch (error: any) {
+            return rejectWithValue(error?.data?.message || "Failed to delete message")
+        }
+    }
+)
+

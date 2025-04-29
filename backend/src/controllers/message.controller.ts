@@ -29,4 +29,21 @@ export class MessageController implements IMessageController {
         const message = await this.messageService.createMessage(messageData);
         res.status(StatusCodes.CREATED).json({ message: "Message sent successfully", messageData: message });
     });
+
+    updateMessage = asyncHandler(async (req: Request, res: Response) => {
+        const {messageId} = req.params
+        const {body} = req.body
+
+        console.log(messageId, body)
+
+        const message = await this.messageService.updateMessage(messageId, body)
+        res.status(StatusCodes.OK).json({message: "message updated successfully", messageData: message})
+    })
+
+    deleteMessage = asyncHandler(async (req: Request, res: Response) => {
+        const {messageId} = req.params
+
+        const message = await this.messageService.deleteMessage(messageId)
+        res.status(StatusCodes.OK).json({message: "message deleted successfully", messageData: message})
+    })
 }

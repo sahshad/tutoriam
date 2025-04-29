@@ -13,12 +13,14 @@ export interface Chat {
 
 interface ChatState {
   chats: Chat[];
+  onlineUsers: string [];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ChatState = {
   chats: [],
+  onlineUsers: [],
   loading: false,
   error: null,
 };
@@ -35,6 +37,19 @@ const chatSlice = createSlice({
       if (index !== -1) {
         state.chats[index] = { ...state.chats[index], ...action.payload };
       }
+    },
+    updateOnlineUsers(state, action) {
+        const onlineIds: string[] = action.payload;
+        
+        const allChatParticipants = state.chats.flatMap(chat =>
+            chat.participants.map(p => {
+              if (typeof p === "string") return p;
+              if (typeof p === "object" && p._id) return p._id;
+              return null;
+            }).filter(Boolean)
+          );
+        const uniqueParticipants = new Set(allChatParticipants);
+        state.onlineUsers = onlineIds.filter(id => uniqueParticipants.has(id));
     }
   },
   extraReducers: (builder) => {
@@ -54,5 +69,5 @@ const chatSlice = createSlice({
   },
 });
 
-export const { addChat, updateChat } = chatSlice.actions;
+export const { addChat, updateChat, updateOnlineUsers } = chatSlice.actions;
 export default chatSlice.reducer;

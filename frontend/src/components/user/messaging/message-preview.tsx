@@ -1,10 +1,7 @@
-"use client"
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils/classname"
 
 interface MessagePreviewProps {
-  id: string
   name: string
   message: string
   time: string
@@ -16,7 +13,6 @@ interface MessagePreviewProps {
 }
 
 export function MessagePreview({
-  id,
   name,
   message,
   time,

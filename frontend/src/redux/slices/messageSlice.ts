@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchMessages, sendMessage } from "../thunks/MessageThunk";
+import { fetchMessages, sendMessage, updateMessage, deleteMessage } from "../thunks/messageThunk";
 
 export interface Message {
   _id: string;
@@ -30,7 +30,19 @@ const messageSlice = createSlice({
   reducers: {
     addMessage(state, action) {
       state.messages.push(action.payload);
+    },
+    updateMessageInState(state, action) {
+        const updatedMessage = action.payload;
+        const index = state.messages.findIndex(msg => msg._id === updatedMessage._id);
+        if (index !== -1) {
+          state.messages[index] = updatedMessage;
+        }
+    },
+    deleteMessageFromState(state, action) {
+        const deletedMessageId = action.payload
+        state.messages = state.messages.filter(message => message._id.toString() !== deletedMessageId.toString())
     }
+
   },
   extraReducers: (builder) => {
     builder
@@ -48,9 +60,24 @@ const messageSlice = createSlice({
       })
       .addCase(sendMessage.fulfilled, (state, action) => {
         state.messages.push(action.payload);
-      });
+      })
+      .addCase(updateMessage.fulfilled, (state, action) => {
+        const updatedMessage = action.payload;
+        const messageIndex = state.messages.findIndex(
+          (message) => message._id === updatedMessage._id
+        );
+        if (messageIndex !== -1) {
+          state.messages[messageIndex] = updatedMessage;
+        }
+      })
+      .addCase(deleteMessage.fulfilled, (state, action) => {
+        const deletedMessageId = action.payload._id
+        state.messages = state.messages.filter(
+          (message) => message._id !== deletedMessageId
+        );
+      })
   },
 });
 
-export const { addMessage } = messageSlice.actions;
+export const { addMessage, updateMessageInState, deleteMessageFromState } = messageSlice.actions;
 export default messageSlice.reducer;
