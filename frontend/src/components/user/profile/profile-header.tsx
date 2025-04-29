@@ -55,7 +55,7 @@ const ProfileHeader = () => {
           </p>
         </div>
         <div className="ml-auto flex gap-2">
-          <Link to={"/become-instructor"}>
+          <Link to={"/be-instructor"}>
             <Button variant="outline" className="">
               Become Instructor
               <svg

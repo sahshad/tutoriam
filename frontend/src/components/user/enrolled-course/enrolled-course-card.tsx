@@ -29,7 +29,7 @@ export default function EnrolledCourseCard({ enrolledCourse }: EnrolledCourseCar
               <span className="text-xs text-green-600 ml-2">{enrolledCourse.progress.percentage}% Completed</span>
             </div>
           )}
-          <Link to={`/enrolled-courses/watch/${course._id}`}>
+          <Link to={`/courses/watch/${course._id}`}>
             <Button className={`w-full`} size="sm">
               Watch Lecture
             </Button>

@@ -1,6 +1,5 @@
 import { Upload } from "lucide-react";
 import { Button } from "../../ui/button";
-import { TabsContent } from "../../ui/tabs";
 import { Input } from "../../ui/input";
 import { useEffect, useRef, useState } from "react";
 import profiePlaceholder from "/profile_placeholder.png";
@@ -83,7 +82,7 @@ const AccountSettings = () => {
   }
 
   return (
-    <TabsContent value="settings" className="space-y-8 pb-20">
+    <div className="space-y-8 pb-20">
       <div>
         <h2 className="mb-6 text-xl font-semibold">Account settings</h2>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -176,7 +175,7 @@ const AccountSettings = () => {
         </div>
       </div>
       <ChangePassword/>
-    </TabsContent>
+    </div>
   );
 };
 

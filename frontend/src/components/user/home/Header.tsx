@@ -96,8 +96,8 @@ const Header = () => {
               Contact
             </Link>
             <Link
-              to="/become-instructor"
-              className={`text-sm font-medium ${isActive("/become-instructor") ? "text-white" : "text-white/70"} hover:text-white`}
+              to="/be-instructor"
+              className={`text-sm font-medium ${isActive("/be-instructor") ? "text-white" : "text-white/70"} hover:text-white`}
             >
               Become an Instructor
             </Link>
@@ -186,7 +186,7 @@ const Header = () => {
   </div>
               </Link>
 
-              <Link to={user.role === "instructor" ? "/instructor/dashboard" : "/profile"}>
+              <Link to={user.role === "instructor" ? "/instructor/dashboard" : "/user/dashboard"}>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Avatar className="h-10 w-10 border-2 border-white shadow-md cursor-pointer">
@@ -197,7 +197,7 @@ const Header = () => {
                   <DropdownMenuContent align="end" className="mt-1 px-2 pb-4 pt-2 flex flex-col gap-2">
                     <DropdownMenuItem asChild className="gap-3">
                       <Link
-                        to={user.role === "instructor" ? "/instructor/dashboard" : "/profile"}
+                        to={user.role === "instructor" ? "/instructor/dashboard" : "/user/dashboard"}
                         className="text-sm"
                       >
                         <User className="mr-2 h-4 w-4" />
@@ -275,7 +275,7 @@ const Header = () => {
           <Link onClick={toggleSidebar} to="/contact" className="text-lg font-medium">
             Contact
           </Link>
-          <Link onClick={toggleSidebar} to="/become-instructor" className="text-lg font-medium">
+          <Link onClick={toggleSidebar} to="/be-instructor" className="text-lg font-medium">
             Become an Instructor
           </Link>
         </nav>

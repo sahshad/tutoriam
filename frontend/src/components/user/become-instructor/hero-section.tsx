@@ -14,7 +14,7 @@ const HeroSection = () => {
               Become an instructor & start teaching with 26k certified instructors. Create a success story with 67.1k
               Students — Grow yourself with 71 countries.
             </p>
-            <Link to="/become-instructor/application">
+            <Link to="/be-instructor/apply">
             <Button  className=" px-8 py-6 rounded-md text-lg font-medium">
               Get Started
             </Button>

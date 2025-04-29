@@ -5,21 +5,30 @@ import TutorApplicationForm from "@/components/user/become-instructor/instructor
 import WatchCoursePage from "@/components/user/watch-course/watch-course-page";
 import { UserRole } from "@/lib/constants/role";
 import BecomeInstructorPage from "@/pages/user/BecomeInstructorPage";
-import MessagePage from "@/pages/user/messaging-page";
 import UserProfile from "@/pages/user/UserProfile";
-import { RouteObject } from "react-router-dom";
+import { Navigate, Route } from "react-router-dom";
+import UserDashboard from "../components/user/dashboard/dashboard-page";
+import UserCourses from "../components/user/enrolled-course/enrolled-courses-page";
+import MessagingPage from "@/components/user/messaging/message-page";
+import PurchaseHistoryContent from "@/components/user/purchase-history/purchase-history-content";
+import AccountSettings from "@/components/user/profile/account-settings";
 
-const userRoutes: RouteObject = {
-  element: <ProtectedRoute role={[UserRole.USER]} />,
-  children: [
-    { path: "/profile", element: <UserProfile /> },
-    { path: "/become-instructor", element: <BecomeInstructorPage /> },
-    { path: "/become-instructor/application", element: <TutorApplicationForm /> },
-    { path: "/enrolled-courses/watch/:courseId", element: <WatchCoursePage /> },
-    { path: "/payment-success", element: <PaymentSuccess /> },
-    { path: "/payment-cancel", element: <PaymentFailed /> },
-    { path: "/message", element: <MessagePage /> },
-  ],
-};
+export const userRoutes = (
+  <Route element={<ProtectedRoute role={[UserRole.USER]} />}>
+  <Route path="/profile" element={<UserProfile />} />
+  <Route path="/be-instructor" element={<BecomeInstructorPage />} />
+  <Route path="/be-instructor/apply" element={<TutorApplicationForm />} />
+  <Route path="/courses/watch/:courseId" element={<WatchCoursePage />} />
+  <Route path="/payment-success" element={<PaymentSuccess />} />
+  <Route path="/payment-cancel" element={<PaymentFailed />} />
 
-export default userRoutes
+  <Route path="/user" element={<UserProfile />}>
+    <Route index element={<Navigate to="dashboard" />} />
+    <Route path="dashboard" element={<UserDashboard />} />
+    <Route path="courses" element={<UserCourses />} />
+    <Route path="message" element={<MessagingPage />} />
+    <Route path="purchase-history" element={<PurchaseHistoryContent />} />
+    <Route path="settings" element={<AccountSettings />} />
+  </Route>
+</Route>
+)
