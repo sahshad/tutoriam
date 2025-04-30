@@ -30,7 +30,7 @@ export function MessagePreview({
   return (
     <div
       className={cn(
-        "flex cursor-pointer items-center gap-3 border-b p-4 transition-colors hover:bg-muted/50",
+        "flex mt-2 cursor-pointer items-center gap-3 border rounded-md p-3 transition-colors hover:bg-muted/50",
         isActive && "bg-muted/50",
       )}
       onClick={onClick}

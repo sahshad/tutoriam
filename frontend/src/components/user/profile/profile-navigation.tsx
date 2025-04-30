@@ -104,17 +104,17 @@
 
 // export default ProfileNavigation
 
-
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const tabs = [
-  { value: 'dashboard', label: 'Dashboard' },
-  { value: 'courses', label: 'Courses' },
-  { value: 'message', label: 'Message' },
-  { value: 'wishlist', label: 'Wishlist' },
-  { value: 'purchase-history', label: 'Purchase History' },
-  { value: 'settings', label: 'Settings' },
+  { value: "dashboard", label: "Dashboard" },
+  { value: "courses", label: "Courses" },
+  { value: "instructors", label: "Instructor" },
+  { value: "messages", label: "Message" },
+  // { value: "wishlist", label: "Wishlist" },
+  { value: "purchase-history", label: "Purchase History" },
+  { value: "settings", label: "Settings" },
 ];
 
 const ProfileNavigation = () => {
@@ -122,7 +122,7 @@ const ProfileNavigation = () => {
   const location = useLocation();
 
   // Get last segment of the path, e.g. 'courses' from '/user/courses'
-  const currentTab = location.pathname.split('/').pop() || 'dashboard';
+  const currentTab = location.pathname.split("/").pop() || "dashboard";
 
   const handleTabChange = (value: string) => {
     navigate(`/user/${value}`);

@@ -30,7 +30,7 @@ export class EnrollmentService extends BaseService<IEnrollment> implements IEnro
       if (!course) continue;
 
       const totalLessons = await this.lessonRepository.countDocuments({ courseId: courseId });
-
+      
       await this.enrollmentRepository.createEnrollment(userId, courseId, totalLessons);
 
       await this.userRepository.updateWithOperators(userId, { $addToSet: { enrolledCourses: courseId } });

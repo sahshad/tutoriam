@@ -126,146 +126,10 @@ export function CourseFilters(
             />
             ))
           }
-          {/* <CategoryAccordionItem
-            value="development"
-            title="Development"
-            items={[
-              { id: "web", label: "Web development", count: 574 },
-              { id: "data-science", label: "Data Science", count: 365 },
-              { id: "mobile-dev", label: "Mobile Development", count: 1345 },
-              { id: "software-testing", label: "Software Testing", count: 317 },
-              { id: "software-engineering", label: "Software Engineering", count: 31 },
-              { id: "dev-tools", label: "Software Development Tools", count: 556 },
-              { id: "no-code", label: "No-Code Development", count: 21 },
-            ]}
-            selectedSubCategories={userSubCatagories}
-            onSubCategoryChange={handleSubCategoryChange}
-          />
-          <CategoryAccordionItem
-            value="business"
-            title="Business"
-            items={[
-              { id: "entrepreneurship", label: "Entrepreneurship", count: 425 },
-              { id: "management", label: "Management", count: 312 },
-              { id: "sales", label: "Sales", count: 287 },
-            ]}
-            selectedSubCategories={userSubCatagories}
-            onSubCategoryChange={handleSubCategoryChange}
-          />
-          <CategoryAccordionItem
-            value="finance"
-            title="Finance & Accounting"
-            items={[
-              { id: "accounting", label: "Accounting", count: 245 },
-              { id: "crypto", label: "Cryptocurrency", count: 157 },
-              { id: "investing", label: "Investing", count: 321 },
-            ]}
-            selectedSubCategories={userSubCatagories}
-            onSubCategoryChange={handleSubCategoryChange}
-          /> */}
-          <CategoryAccordionItem
-            value="it-software"
-            title="IT & Software"
-            items={[
-              { id: "it-cert", label: "IT Certifications", count: 312 },
-              { id: "network-security", label: "Network & Security", count: 198 },
-              { id: "operating-systems", label: "Operating Systems", count: 156 },
-            ]}
-            selectedSubCategories={userSubCatagories}
-            onSubCategoryChange={handleSubCategoryChange}
-          />
-          <CategoryAccordionItem
-            value="office"
-            title="Office Productivity"
-            items={[
-              { id: "microsoft", label: "Microsoft", count: 354 },
-              { id: "apple", label: "Apple", count: 127 },
-              { id: "google", label: "Google", count: 198 },
-            ]}
-            selectedSubCategories={userSubCatagories}
-            onSubCategoryChange={handleSubCategoryChange}
-          />
-          <CategoryAccordionItem
-            value="personal"
-            title="Personal Development"
-            items={[
-              { id: "leadership", label: "Leadership", count: 298 },
-              { id: "career-dev", label: "Career Development", count: 312 },
-              { id: "creativity", label: "Creativity", count: 156 },
-            ]}
-            selectedSubCategories={userSubCatagories}
-            onSubCategoryChange={handleSubCategoryChange}
-          />
-          <CategoryAccordionItem
-            value="design"
-            title="Design"
-            items={[
-              { id: "web-design", label: "Web Design", count: 312 },
-              { id: "graphic-design", label: "Graphic Design", count: 287 },
-              { id: "ui-ux", label: "UI/UX Design", count: 198 },
-            ]}
-            selectedSubCategories={userSubCatagories}
-            onSubCategoryChange={handleSubCategoryChange}
-          />
-          <CategoryAccordionItem
-            value="marketing"
-            title="Marketing"
-            items={[
-              { id: "digital-marketing", label: "Digital Marketing", count: 354 },
-              { id: "seo", label: "SEO", count: 198 },
-              { id: "social-media", label: "Social Media Marketing", count: 287 },
-            ]}
-            selectedSubCategories={userSubCatagories}
-            onSubCategoryChange={handleSubCategoryChange}
-          />
-          <CategoryAccordionItem
-            value="lifestyle"
-            title="Lifestyle"
-            items={[
-              { id: "arts-crafts", label: "Arts & Crafts", count: 156 },
-              { id: "food-beverage", label: "Food & Beverage", count: 127 },
-              { id: "travel", label: "Travel", count: 98 },
-            ]}
-            selectedSubCategories={userSubCatagories}
-            onSubCategoryChange={handleSubCategoryChange}
-          />
-          <CategoryAccordionItem
-            value="photography"
-            title="Photography & Video"
-            items={[
-              { id: "digital-photo", label: "Digital Photography", count: 198 },
-              { id: "video-production", label: "Video Production", count: 156 },
-              { id: "photo-tools", label: "Photography Tools", count: 127 },
-            ]}
-            selectedSubCategories={userSubCatagories}
-            onSubCategoryChange={handleSubCategoryChange}
-          />
-          <CategoryAccordionItem
-            value="music"
-            title="Music"
-            items={[
-              { id: "instruments", label: "Instruments", count: 156 },
-              { id: "production", label: "Music Production", count: 127 },
-              { id: "theory", label: "Music Theory", count: 98 },
-            ]}
-            selectedSubCategories={userSubCatagories}
-            onSubCategoryChange={handleSubCategoryChange}
-          />
-          <CategoryAccordionItem
-            value="health"
-            title="Health & Fitness"
-            items={[
-              { id: "fitness", label: "Fitness", count: 198 },
-              { id: "nutrition", label: "Nutrition", count: 156 },
-              { id: "yoga", label: "Yoga", count: 127 },
-            ]}
-            selectedSubCategories={userSubCatagories}
-            onSubCategoryChange={handleSubCategoryChange}
-          />
         </Accordion>
       </div>
 
-      <div>
+      {/* <div>
         <h2 className="mb-4 text-lg font-semibold uppercase">Course Level</h2>
         <Accordion type="multiple" defaultValue={["level"]}>
           <AccordionItem value="level">
@@ -291,9 +155,9 @@ export function CourseFilters(
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      </div>
+      </div> */}
 
-      <div>
+      {/* <div>
         <h2 className="mb-4 text-lg font-semibold uppercase">Price</h2>
         <Accordion type="multiple" defaultValue={["price"]}>
           <AccordionItem value="price">
@@ -360,7 +224,7 @@ export function CourseFilters(
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      </div>
+      </div> */}
     </div>
   );
 }

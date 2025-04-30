@@ -12,6 +12,7 @@ import UserCourses from "../components/user/enrolled-course/enrolled-courses-pag
 import MessagingPage from "@/components/user/messaging/message-page";
 import PurchaseHistoryContent from "@/components/user/purchase-history/purchase-history-content";
 import AccountSettings from "@/components/user/profile/account-settings";
+import { InstructorsPage } from "@/components/user/instructors/instructor-page";
 
 export const userRoutes = (
   <Route element={<ProtectedRoute role={[UserRole.USER]} />}>
@@ -26,9 +27,11 @@ export const userRoutes = (
     <Route index element={<Navigate to="dashboard" />} />
     <Route path="dashboard" element={<UserDashboard />} />
     <Route path="courses" element={<UserCourses />} />
-    <Route path="message" element={<MessagingPage />} />
+    <Route path="messages" element={<MessagingPage />} />
+    <Route path="messages/:chatId" element={<MessagingPage />} />
     <Route path="purchase-history" element={<PurchaseHistoryContent />} />
     <Route path="settings" element={<AccountSettings />} />
+    <Route path="instructors" element={<InstructorsPage/>}/>
   </Route>
 </Route>
 )

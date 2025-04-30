@@ -14,6 +14,7 @@ export const instructorRoutes = (
     <Route path="/instructor/create-course" element={<CreateCoursePage />} />
     <Route path="/instructor/my-courses" element={<CoursesPage />} />
     <Route path="/instructor/messages" element={<InstructorMessagesPage />} />
+    <Route path="/instructor/messages/:chatId" element={<InstructorMessagesPage />} />
     <Route path="/instructor/my-courses/:courseId" element={<SingleCoursePage />} />
     <Route path="/instructor/my-courses/:courseId/edit" element={<EditCoursePage />} />
   </Route>

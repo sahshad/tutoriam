@@ -5,4 +5,5 @@ export interface IInstructorController {
   getInstructorProfile: RequestHandler;
   getUserApplications: RequestHandler;
   reviewInstructor: RequestHandler;
+  getEnrolledInstructorsForUser:RequestHandler;
 }

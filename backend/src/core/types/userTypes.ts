@@ -1,6 +1,7 @@
 import { IAdmin } from "../../models/Admin";
 import { ICourse } from "../../models/Course";
 import { IEnrollment } from "../../models/Enrollment";
+import { IInstructor } from "../../models/Instructor";
 import { IUser } from "../../models/User";
 
 export interface verifiedUer {
@@ -25,6 +26,13 @@ export interface PaginatedCoursesResponse {
   totalPages: number;
   currentPage: number;
   courses: ICourse[] | null;
+}
+
+export interface PaginatedInstructorsResponse {
+  totalInstructors: number;
+  totalPages: number;
+  currentPage: number;
+  instructors: IInstructor[] | null;
 }
 
 export interface DashboardData {

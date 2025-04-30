@@ -3,6 +3,7 @@ import { FilterQuery } from "mongoose";
 export interface IBaseRepository<T> {
     create(data: Partial<T>): Promise<T | null>;
     findById(id: string): Promise<T | null>;
+    findMany(ids: string[]): Promise<T[] | null>;
     update(id: string, data: Partial<T>): Promise<T | null>;
     findByIdAndUpdate(id: string, data: Partial<T>): Promise<T | null>;
     updateWithOperators(id: string, updateOps: Record<string, any>): Promise<T | null>;

@@ -11,9 +11,9 @@ interface MessageHeaderProps {
 
 export function MessageHeader({ name, avatar, online, onBackClick }: MessageHeaderProps) {
   const initials = name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
+    ?.split(" ")
+    ?.map((n) => n[0])
+    ?.join("")
 
   return (
     <div className="flex items-center justify-between border-b p-4">

@@ -19,7 +19,7 @@ export function MessageSidebar({ onChatSelect }: MessageSidebarProps) {
   const dispatch = useAppDispatch()
   
   useEffect(() => {
-    const getCartData = async () => {
+    const getChats = async () => {
       try {
         dispatch(fetchChats())
       } catch (error) {
@@ -27,13 +27,12 @@ export function MessageSidebar({ onChatSelect }: MessageSidebarProps) {
       }
     }
 
-    getCartData()
+    getChats()
   }, [dispatch]);
 
      const {chats} = useAppSelector((state) => state.chat);
      const {user} = useAppSelector((state) => state.auth)
      const onlineUsers = useAppSelector((state) => state.chat.onlineUsers)
-
 
   const handleChangeChat = (chatId: string) => {
     onChatSelect(chatId)
@@ -41,9 +40,9 @@ export function MessageSidebar({ onChatSelect }: MessageSidebarProps) {
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col border rounded-md">
       <div className="flex items-center justify-between border-b p-4">
-        <h1 className="text-xl font-semibold">Message</h1>
+        <h1 className="text-xl font-semibold">Chats</h1>
         <Button variant="outline" size="icon" className="rounded-full">
           <Plus className="h-5 w-5" />
           <span className="sr-only">Compose</span>
@@ -62,7 +61,7 @@ export function MessageSidebar({ onChatSelect }: MessageSidebarProps) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto no-scrollbar">
+      <div className="flex-1 overflow-auto no-scrollbar px-4">
         {chats.map((chat) => {
         const participants = chat.participants as Partial<IUser>[]
         const targetUser = participants.filter(p => p._id !== user._id)[0]
