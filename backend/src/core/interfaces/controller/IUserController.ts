@@ -7,4 +7,5 @@ export interface IUserController {
   becomeInstructor: RequestHandler;
   getAllUsers: RequestHandler;
   toggleUserStatus: RequestHandler;
+  getDashboardData: RequestHandler;
 }

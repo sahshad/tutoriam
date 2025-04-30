@@ -1,6 +1,6 @@
 import { updateUser } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
-import apiClient from "@/utils/axiosInstance";
+import apiClient from "@/lib/axios";
 
 export const updateProfile = async (
   formData: FormData,
@@ -85,5 +85,14 @@ export const toggleUserStatus = async (userId:string) =>{
   } catch (error:any) {
       console.log(error)
       return error.response
+  }
+}
+
+export const getUserDashboard = async () => {
+  try {
+    const res = await apiClient.get("/users/dashboard")
+    return res.data
+  } catch (error) {
+    console.log(error)
   }
 }

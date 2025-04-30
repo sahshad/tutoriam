@@ -79,7 +79,7 @@ export default function CourseSidebar({
       <div className="space-y-4">
         {
           isUserEnrolled ? 
-          <Link to={`/enrolled-courses/watch/${id}`}>
+          <Link to={`/courses/watch/${id}`}>
             <Button className="w-full">watch Now</Button>
           </Link>
           :

@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 
-import type { FormValues } from "@/lib/becomeTutorFormShemas"
+import type { FormValues } from "@/lib/validations/instructorApplication"
 
 interface ExperienceSectionProps {
   control: Control<FormValues>

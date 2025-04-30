@@ -18,7 +18,7 @@ export default function PaymentSuccess() {
         Your purchase has been completed. You now have access to your course materials.
       </p>
       <div className="flex gap-3">
-        <Button onClick={() => navigate("/my-courses")} >
+        <Button onClick={() => navigate("/user/courses")} >
           Go to My Courses
         </Button>
         <Button variant="outline" onClick={() => navigate("/")}>

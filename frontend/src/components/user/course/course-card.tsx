@@ -1,6 +1,6 @@
 import { Star } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils/classname"
 import { Link } from "react-router-dom" // Replaced next/link with react-router-dom
 
 import type { Course } from "@/types/course" // Assuming this is the type for course data

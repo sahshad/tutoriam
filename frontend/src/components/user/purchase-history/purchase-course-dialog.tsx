@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Course } from "@/types/course"
 import { IOrder } from "@/types/order"
-import { formatDate } from "@/utils/formatDate"
+import { formatDate } from "@/lib/utils/formatDate"
 import { Star, Download, CreditCard, Calendar, User } from "lucide-react"
 
 interface PurchaseDetailsDialogProps {

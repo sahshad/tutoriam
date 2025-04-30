@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom"
 import { BarChart3, Users, GraduationCap, BookOpen, ShoppingCart, Tag, Settings, LogOut } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils/classname"
 import { Button } from "@/components/ui/button"
 
 const sidebarItems = [

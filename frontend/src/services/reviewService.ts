@@ -1,4 +1,4 @@
-import apiClient from "@/utils/axiosInstance"
+import apiClient from "@/lib/axios"
 import { AxiosError } from "axios";
 
 export const addReview = async (courseId: string, rating: string, comment: string) => {

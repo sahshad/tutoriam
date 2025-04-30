@@ -5,7 +5,7 @@ import { completeLesson, updateLastVisitedLesson } from "@/services/enrollmentSe
 import { EnrolledCourse } from "@/types/enrollment";
 import { Lesson } from "@/types/lessons";
 import { Module } from "@/types/module";
-import { formatTimeFromSeconds } from "@/utils/formatDate";
+import { formatTimeFromSeconds } from "@/lib/utils/formatDate";
 import { Clock, Play, Pause } from "lucide-react";
 
 interface CourseContentsProps {

@@ -4,7 +4,7 @@ import { useCategory } from "@/hooks/useCategory";
 import { CategoryDialog } from "@/components/admin/category/category-dialog";
 import { createCategory, editCategory, toggleCategoryStatus } from "@/services/categoryService";
 import ActionPanel from "@/components/admin/category/action-panel";
-import { trackCategoryChanges } from "@/utils/category";
+import { trackCategoryChanges } from "@/lib/utils/category";
 import { Category } from "@/types/category";
 import CategoryTable from "@/components/admin/category/category-table";
 import { GenericPagination } from "@/components/common/pagination";

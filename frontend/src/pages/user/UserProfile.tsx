@@ -1,10 +1,9 @@
 import Header from '@/components/user/home/header'
-import ChangePassword from '@/components/user/profile/change-password'
 import ProfileHeader from '@/components/user/profile/profile-header'
 import ProfileNavigation from '@/components/user/profile/profile-navigation'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Outlet } from 'react-router-dom'
 
 const UserProfile = () => {
   const user = useSelector((state: any) => state.auth.user);
@@ -23,10 +22,10 @@ const UserProfile = () => {
     <div className='pb-5'>
         <Header/>
         <div className='w-full'>
-        <div className='px-[10%]'>
+        <div className='px-[8%]'>
         <ProfileHeader/>
-        <ProfileNavigation/>
-        {/* <ChangePassword/> */}
+        <ProfileNavigation />
+        <Outlet/>
         </div>
         </div>
     </div>

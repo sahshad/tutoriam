@@ -14,6 +14,10 @@ export abstract class BaseRepository<T extends Document> implements IBaseReposit
     return await this.model.findById(id);
   }
 
+  async findMany(ids: string[]): Promise<T[] | null> {
+    return await this.model.find({_id: {$in: ids}})
+  }
+
   async update(id: string, data: Partial<T>): Promise<T | null> {
     return await this.model.findByIdAndUpdate(id, data, { new: true });
   }

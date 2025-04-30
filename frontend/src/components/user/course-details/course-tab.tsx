@@ -1,5 +1,5 @@
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils/classname"
 
 interface CourseTabsProps {
   activeTab: "overview" | "curriculum" | "instructor" | "review"

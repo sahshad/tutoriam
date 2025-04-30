@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import type { Course } from "@/types/course";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/classname";
 // import { updateCoursePublishStatus } from "@/services/instructorService";
 import { useCourses } from "@/hooks/useCourse";
 import { toast } from "sonner";
@@ -82,9 +82,11 @@ export function CourseCard({ course:initialCourse  }: CourseCardProps) {
       </div>
 
       <div className="p-4">
-        <div className="uppercase text-xs font-semibold mb-2">{course.categoryId.name}</div>
+        {/* <div className="uppercase text-xs font-semibold mb-2">{course.categoryId.name}</div> */}
 
-        <h3 className="font-medium text-sm line-clamp-2 h-10 mb-2">{course.title}</h3>
+        {/* <h3 className="font-medium text-sm line-clamp-2 h-10 mb-2">{course.title}</h3> */}
+        <h3 className="font-medium text-sm truncate mb-2">{course.title}</h3>
+
 
         <div className="flex items-center gap-1 mb-2">
           <div className="flex">

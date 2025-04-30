@@ -103,11 +103,11 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
               Earning
             </NavItem>
             <NavItem
-              href="/instructor/message"
+              href="/instructor/messages"
               icon={<MessageSquare className="h-4 w-4" />}
               badge={1}
-              active={location.pathname.includes("/instructor/message")}
-              onClick={() => handleNavigation("/instructor/message")}
+              active={location.pathname.includes("/instructor/messages")}
+              onClick={() => handleNavigation("/instructor/messages")}
             >
               Message
             </NavItem>

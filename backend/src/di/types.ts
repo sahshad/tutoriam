@@ -1,6 +1,4 @@
-
 export const TYPES = {
-
   // CONTROLLERS
   AdminController: Symbol.for("AdminController"),
   UserController: Symbol.for("UserController"),
@@ -9,8 +7,8 @@ export const TYPES = {
   CourseController: Symbol.for("CourseController"),
   ModuleController: Symbol.for("ModuleController"),
   LessonController: Symbol.for("LessonController"),
-  CartController:Symbol.for("CartController"),
-  WishlistController:Symbol.for("WishlistController"),
+  CartController: Symbol.for("CartController"),
+  WishlistController: Symbol.for("WishlistController"),
   CategoryController: Symbol.for("CategoryController"),
   PaymentController: Symbol.for("PaymentController"),
   WebhookController: Symbol.for("WebhookController"),
@@ -18,6 +16,8 @@ export const TYPES = {
   EnrollmentController: Symbol.for("EnrollmentController"),
   ReviewController: Symbol.for("ReviewController"),
   CertificateController: Symbol.for("CertificateController"),
+  ChatController: Symbol.for("ChatController"),
+  MessageController: Symbol.for("MessageController"),
 
   // SERVICES
   AdminService: Symbol.for("AdminService"),
@@ -27,8 +27,8 @@ export const TYPES = {
   CourseService: Symbol.for("CourseService"),
   ModuleService: Symbol.for("ModuleService"),
   LessonService: Symbol.for("LessonService"),
-  CartService:Symbol.for("CartService"),
-  WishlistService:Symbol.for("WishlistService"),
+  CartService: Symbol.for("CartService"),
+  WishlistService: Symbol.for("WishlistService"),
   CategoryService: Symbol.for("CategoryService"),
   PaymentService: Symbol.for("PaymentService"),
   WebhookService: Symbol.for("WebhookService"),
@@ -36,6 +36,8 @@ export const TYPES = {
   EnrollmentService: Symbol.for("EnrollmentService"),
   ReviewService: Symbol.for("ReviewService"),
   CertificateService: Symbol.for("CertificateService"),
+  ChatService: Symbol.for("ChatService"),
+  MessageService: Symbol.for("MessageService"),
 
   // REPOSITORIES
   AdminRepository: Symbol.for("AdminRepository"),
@@ -45,12 +47,13 @@ export const TYPES = {
   CourseRepository: Symbol.for("CourseRepository"),
   ModuleRepository: Symbol.for("ModuleRepository"),
   LessonRepository: Symbol.for("LessonRepository"),
-  CartRepository:Symbol.for("CartRepository"),
-  WishlistRepository:Symbol.for("WishlistRepository"),
+  CartRepository: Symbol.for("CartRepository"),
+  WishlistRepository: Symbol.for("WishlistRepository"),
   CategoryRepository: Symbol.for("CategoryRepository"),
   OrderRepository: Symbol.for("OrderRepository"),
   EnrollmentRepository: Symbol.for("EnrollmentRepository"),
   ReviewRepository: Symbol.for("ReviewRepository"),
   CertificateRepository: Symbol.for("CertificateRepository"),
-  
+  ChatRepository: Symbol.for("ChatRepository"),
+  MessageRepository: Symbol.for("MessageRepository"),
 };

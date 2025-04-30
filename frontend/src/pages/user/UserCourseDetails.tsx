@@ -12,7 +12,7 @@ import CourseSidebar from "@/components/user/course-details/course-sidebar"
 import { useNavigate, useParams } from "react-router-dom"
 import { getCourseById } from "@/services/courseService"
 import Header from "@/components/user/home/header"
-import { createCurriculumData } from "@/utils/Courses"
+import { createCurriculumData } from "@/lib/utils/courses"
 import CourseReviews from "@/components/user/course-review/course-reviews"
 
 export default function UserCourseDetailsPage() {

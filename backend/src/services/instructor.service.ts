@@ -4,12 +4,16 @@ import { TYPES } from "../di/types";
 import { IInstructorService } from "../core/interfaces/service/IInstructorService";
 import { IInstructorRepository } from "../core/interfaces/repository/IInstructorRepository";
 import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
+import { IEnrollmentRepository } from "../core/interfaces/repository/IEnrollmentRepository";
+import { FilterQuery } from "mongoose";
+import { PaginatedInstructorsResponse } from "../core/types/userTypes";
 
 @injectable()
 export class InstructorService implements IInstructorService{
     constructor(
         @inject(TYPES.InstructorRepository) private instructorRepository:IInstructorRepository,
-        @inject(TYPES.UserRepository) private userRepository: IUserRepository
+        @inject(TYPES.UserRepository) private userRepository: IUserRepository,
+        @inject(TYPES.EnrollmentRepository) private enrollmentRepository: IEnrollmentRepository,
     ){}
     async getInstructorApplications():Promise<IInstructor[]|null>{
         try {
@@ -75,5 +79,30 @@ export class InstructorService implements IInstructorService{
             console.error("Error updating tutor status:", error);
             throw error
           }
+       }
+
+       async getEnrolledInstructors(userId: string, page:number, limit:number, searchQuery?: string): Promise<PaginatedInstructorsResponse | null> {
+            const instructorIds = await this.enrollmentRepository.findDistinctInstructors(userId)
+            console.log(instructorIds)
+
+            const skip = (Number(page) - 1) * Number(limit);
+
+            // const filter: FilterQuery<IInstructor> = {
+            //     userId: { $in: instructorIds },
+            //     "adminApproval.status": "approved"
+            //   };
+
+            //   if (searchQuery) {
+            //     filter["userId.name"] = { $regex: searchQuery, $options: "i" };
+            //   }
+
+            const instructors = await this.instructorRepository.findInstructorsByUserId(instructorIds, skip, limit, searchQuery)
+            
+            return {
+                totalInstructors:instructorIds.length,
+                totalPages: Math.ceil(instructorIds.length / limit),
+                currentPage: page,
+                instructors
+              };
        }
 }

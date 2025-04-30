@@ -21,6 +21,8 @@ import lessonRoutes from "./routes/lesson.routes";
 import cartRoutes from "./routes/cart.routes";
 import wishlistRoutes from "./routes/wishlist.routes";
 import categoryRoutes from "./routes/category.routes";
+import chatRoutes from "./routes/chat.routes";
+import messageRoutes from "./routes/message.routes";
 
 import { errorHandler } from "./middlewares/error.middleware";
 import passport from "./config/passport";
@@ -60,6 +62,8 @@ app.use("/api/lessons", lessonRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/api/wishlists", wishlistRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/chats", chatRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.use(errorHandler);
 

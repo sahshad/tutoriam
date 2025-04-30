@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle2, AlertCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/classname";
 import { resendOtp, verifyOtp } from "@/services/authService";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";

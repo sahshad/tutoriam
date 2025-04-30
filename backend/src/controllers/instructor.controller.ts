@@ -33,7 +33,20 @@ export class InstructorController implements IInstructorController {
         const { instructorId } = req.params;
         const { status, reason } = req.body;
         await this.instructorService.reviewTutorApplication(instructorId, status, reason);
-        res.status(200).json({ message: `instructor ${status} successfully` });
+        res.status(StatusCodes.OK).json({ message: `instructor ${status} successfully` });
       });
+
+      getEnrolledInstructorsForUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+          const userId = req.user?._id as string
+          const {
+            searchQuery,
+            page = 1,
+            limit = 12
+          } = req.query
+          
+
+          const instructorswithPagination = await this.instructorService.getEnrolledInstructors(userId, Number(page), Number(limit),searchQuery as string)
+          res.status(StatusCodes.OK).json({message: "instructors fetched successfully", instructorswithPagination})
+      })
 
 }

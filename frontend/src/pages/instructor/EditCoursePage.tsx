@@ -12,7 +12,7 @@
   import PublishCourse, { PublishType } from "@/components/instructor/create_course/PublishCourse";
   import StepItem from "@/components/instructor/create_course/common/StepItem";
   import { getCourseById, updateCourse } from "@/services/courseService";
-  import { createAdvancedInformationData, createBasicInformationData, createCourseData, createCurriculumData, createLessonData, createModuleData, createPublishData } from "@/utils/Courses";
+  import { createAdvancedInformationData, createBasicInformationData, createCourseData, createCurriculumData, createLessonData, createModuleData, createPublishData } from "@/lib/utils/courses";
   import { toast } from "sonner";
 import { createModule, deleteModule, updateModule } from "@/services/moduleService";
 import { createLesson, deleteLesson, updateLesson } from "@/services/lessonService";

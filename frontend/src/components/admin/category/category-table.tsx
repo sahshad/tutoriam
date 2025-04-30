@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Edit, CheckCircle2, XCircle, MoreHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { formatDate } from "@/utils/formatDate";
+import { formatDate } from "@/lib/utils/formatDate";
 
 interface CategoryTableProps {
   categories: Category[];

@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { UserRole } from "@/constants/role";
+import { UserRole } from "@/lib/constants/role";
     
 interface ProtectedRouteProps {
   role: UserRole[]

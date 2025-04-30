@@ -1,38 +1,58 @@
-import apiClient from "@/utils/axiosInstance"
-import axios, { AxiosResponse } from "axios"
+import apiClient from "@/lib/axios";
+import axios, { AxiosResponse } from "axios";
+import { number } from "zod";
 
 export const getInstructorDetails = async (userId: string) => {
   try {
-    const res:AxiosResponse = await apiClient.get(`/instructor/${userId}/profile`)
-    return res.data
+    const res: AxiosResponse = await apiClient.get(`/instructors/${userId}/profile`);
+    return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw error.response?.data?.message || error.message || "An unknown error occurred";
-  } else {
+    } else {
       throw "An unexpected error occurred";
+    }
   }
-  }
-}
+};
 
 export const fetchInstructorApplications = async () => {
-    try {
-        const response :AxiosResponse = await apiClient.get(`/instructors/applications`)
-        return response
-    } catch (error:any) {
-        return error.response
-    }
-}
+  try {
+    const response: AxiosResponse = await apiClient.get(`/instructors/applications`);
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+};
 
-export const updateInstructorStatus = async (instructorId: string, status: "approved" | "rejected", reason?:string) => {
-    try {
-      const response = await apiClient.patch(
-        `/instructors/applications/${instructorId}/status`,
-        { status,reason},
-        { withCredentials: true }
-      );
-      return response;
-    } catch (error: any) {
-      console.error("Error updating instructor status:", error);
-      return error.response;
-    }
-  };
+export const updateInstructorStatus = async (
+  instructorId: string,
+  status: "approved" | "rejected",
+  reason?: string
+) => {
+  try {
+    const response = await apiClient.patch(
+      `/instructors/applications/${instructorId}/status`,
+      { status, reason },
+      { withCredentials: true }
+    );
+    return response;
+  } catch (error: any) {
+    console.error("Error updating instructor status:", error);
+    return error.response;
+  }
+};
+
+export const fetchEnrolledInstructors = async (page:number,limit:number,searchQuery:string) => {
+  try {
+    const res = await apiClient.get("/instructors/enrolled", {
+      params:{
+        page,
+        limit,
+        searchQuery
+      }
+    });
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

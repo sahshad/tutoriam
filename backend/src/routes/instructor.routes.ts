@@ -12,6 +12,7 @@ const instructorController = container.get<IInstructorController>(TYPES.Instruct
 router.get("/:userId/dashboard", authMiddleware([UserRole.INSTRUCTOR]));
 router.get("/:userId/profile", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), instructorController.getInstructorProfile);
 router.get("/applications",authMiddleware([UserRole.ADMIN]),instructorController.getInstructorApplications)
+router.get("/enrolled", authMiddleware([UserRole.USER]), instructorController.getEnrolledInstructorsForUser)
 router.patch("/applications/:instructorId/status",authMiddleware([UserRole.ADMIN]),instructorController.reviewInstructor)
 
 export default router;

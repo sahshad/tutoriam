@@ -1,4 +1,4 @@
-import apiClient from "@/utils/axiosInstance"
+import apiClient from "@/lib/axios"
 import axios from "axios";
 
 export const getAdminDashboard = async () => {

@@ -4,9 +4,9 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Checkbox } from "@/components/ui/checkbox"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils/classname"
 
-import { type FormValues, skills, subjects, languages } from "@/lib/becomeTutorFormShemas"
+import { type FormValues, skills, subjects, languages } from "@/lib/validations/instructorApplication"
 import { Control } from "react-hook-form"
 
 interface SkillsSubjectsSectionProps {
