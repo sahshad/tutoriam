@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Filter } from "lucide-react";
+import { Filter, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CourseSort } from "@/components/user/course/course-sort";
@@ -55,24 +55,36 @@ export default function UserCoursesPage() {
       <div className="container mx-auto px-[4%] py-8">
         <div className="mb-6 flex flex-col gap-4">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="relative flex-1 ">
+            <div className="relative flex w-full items-center ">
+            <Search className="absolute left-2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
                 placeholder="Search for courses..."
-                className="w-1/3"
+                className="md:w-1/3 pl-10"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <div className="flex items-center gap-2">
+            {/* <div className="relative flex-1 items-center sm:flex ">
+            <Search className="absolute left-2 h-4 w-4 text-muted-foreground" />
+            <Input
+                type="search"
+                placeholder="Search for courses..."
+                className="w-1/3 pl-10"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+          </div> */}
+            <div className="flex items-center gap-2 justify-between">
               <Button
                 variant="outline"
-                className="flex items-center gap-2 border-black"
+                size={"sm"}
+                className="flex items-center gap-2"
                 onClick={toggleFilter}
               >
-                <Filter className="h-4 w-4" />
+                <Filter className="h-" />
                 Filter
-                {/* <span className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-xs text-white"></span> */}
+                {/* <span className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-xs text-white">8</span> */}
               </Button>
               <CourseSort sortBy={sortBy} setSortBy={setSortBy} /> {/* Assuming this manages sortBy */}
             </div>

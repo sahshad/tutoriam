@@ -39,17 +39,19 @@ const chatSlice = createSlice({
       }
     },
     updateOnlineUsers(state, action) {
-        const onlineIds: string[] = action.payload;
+        // const onlineIds: string[] = action.payload;
         
-        const allChatParticipants = state.chats.flatMap(chat =>
-            chat.participants.map(p => {
-              if (typeof p === "string") return p;
-              if (typeof p === "object" && p._id) return p._id;
-              return null;
-            }).filter(Boolean)
-          );
-        const uniqueParticipants = new Set(allChatParticipants);
-        state.onlineUsers = onlineIds.filter(id => uniqueParticipants.has(id));
+        // const allChatParticipants = state.chats.flatMap(chat =>
+        //     chat.participants.map(p => {
+        //       if (typeof p === "string") return p;
+        //       if (typeof p === "object" && p._id) return p._id;
+        //       return null;
+        //     }).filter(Boolean)
+        //   );
+        // const uniqueParticipants = new Set(allChatParticipants);
+        // console.log(uniqueParticipants)
+        // state.onlineUsers = onlineIds.filter(id => uniqueParticipants.has(id));
+        state.onlineUsers = action.payload
     }
   },
   extraReducers: (builder) => {

@@ -1,4 +1,5 @@
 import DashboardLayout from "@/components/admin/layout/DashboardLayout";
+import EarningsPage from "@/components/instructor/earnings/earnings-page";
 import ProtectedRoute from "@/components/user/auth/protected-routes";
 import { UserRole } from "@/lib/constants/role";
 import CategoriesPage from "@/pages/admin/category-page";

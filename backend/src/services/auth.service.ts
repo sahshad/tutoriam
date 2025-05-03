@@ -166,6 +166,8 @@ export class AuthService implements IAuthService {
         900,
         JSON.stringify({ magicLink })
       );
+      const link = await RedisClient.getex(`magicLink:${email}`)
+      console.log(link)
     } catch (error: any) {
       throw new Error(error.message);
     }

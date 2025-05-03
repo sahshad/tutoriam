@@ -23,6 +23,9 @@ import wishlistRoutes from "./routes/wishlist.routes";
 import categoryRoutes from "./routes/category.routes";
 import chatRoutes from "./routes/chat.routes";
 import messageRoutes from "./routes/message.routes";
+import walletRoutes from "./routes/wallet.routes";
+import transactionRoutes from "./routes/transaction.routes";
+import payoutRoutes from "./routes/payout.routes";
 
 import { errorHandler } from "./middlewares/error.middleware";
 import passport from "./config/passport";
@@ -64,6 +67,9 @@ app.use("/api/wishlists", wishlistRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/chats", chatRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/wallets", walletRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/payouts", payoutRoutes);
 
 app.use(errorHandler);
 
