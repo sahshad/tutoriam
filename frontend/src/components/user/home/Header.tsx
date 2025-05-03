@@ -95,12 +95,15 @@ const Header = () => {
             >
               Contact
             </Link>
-            <Link
+            {
+              user?.role === "user" &&
+              <Link
               to="/be-instructor"
               className={`text-sm font-medium ${isActive("/be-instructor") ? "text-white" : "text-white/70"} hover:text-white`}
             >
               Become an Instructor
             </Link>
+            }
           </nav>
 
           <div className=" items-center space-x-4">
@@ -275,9 +278,12 @@ const Header = () => {
           <Link onClick={toggleSidebar} to="/contact" className="text-lg font-medium">
             Contact
           </Link>
-          <Link onClick={toggleSidebar} to="/be-instructor" className="text-lg font-medium">
+          {
+            user?.role === "user" &&
+            <Link onClick={toggleSidebar} to="/be-instructor" className="text-lg font-medium">
             Become an Instructor
           </Link>
+          }
         </nav>
       </div>
     </header>

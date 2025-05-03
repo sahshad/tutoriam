@@ -141,6 +141,30 @@ import { IWebhookService } from "../core/interfaces/service/IWebhookService";
 import { WebhookController } from "../controllers/webhook.controller";
 import { WebhookService } from "../services/webhook.service";
 
+
+import { IWalletController } from "../core/interfaces/controller/IWalletController";
+import { WalletController } from "../controllers/wallet.controller";
+import { IWalletService } from "../core/interfaces/service/IWalletService";
+import { WalletService } from "../services/wallet.service";
+import { IWalletRepository } from "../core/interfaces/repository/IWalletRepository";
+import { WalletRepository } from "../repositories/wallet.repository";
+
+
+import { ITransactionController } from "../core/interfaces/controller/ITransactionConroller";
+import { TransactionController } from "../controllers/transaction.controller";
+import { ITransactionService } from "../core/interfaces/service/ITransactionService";
+import { TransactionService } from "../services/transaction.service";
+import { ITransactionRepository } from "../core/interfaces/repository/ITransactionRepository";
+import { TransactionRepository } from "../repositories/transaction.repository";
+
+
+import { IPayoutController } from "../core/interfaces/controller/IPayoutController";
+import { PayoutController } from "../controllers/payout.controllet";
+import { IPayoutService } from "../core/interfaces/service/IPayoutService";
+import { PayoutService } from "../services/payout.service";
+import { IPayoutRepository } from "../core/interfaces/repository/IPayoutRepository";
+import { PayoutRepository } from "../repositories/payout.repository";
+
 const container = new Container()
 
 container.bind<IAdminController>(TYPES.AdminController).to(AdminController)
@@ -206,6 +230,18 @@ container.bind<IChatRepository>(TYPES.ChatRepository).to(ChatRepository)
 container.bind<IMessageController>(TYPES.MessageController).to(MessageController)
 container.bind<IMessageService>(TYPES.MessageService).to(MessageService)
 container.bind<IMessageRepository>(TYPES.MessageRepository).to(MessageRepository)
+
+container.bind<IWalletController>(TYPES.WalletController).to(WalletController)
+container.bind<IWalletService>(TYPES.WalletService).to(WalletService)
+container.bind<IWalletRepository>(TYPES.WalletRepository).to(WalletRepository)
+
+container.bind<ITransactionController>(TYPES.TransactionController).to(TransactionController)
+container.bind<ITransactionService>(TYPES.TransactionService).to(TransactionService)
+container.bind<ITransactionRepository>(TYPES.TransactionRepository).to(TransactionRepository)
+
+container.bind<IPayoutController>(TYPES.PayoutController).to(PayoutController)
+container.bind<IPayoutService>(TYPES.PayoutService).to(PayoutService)
+container.bind<IPayoutRepository>(TYPES.PayoutRepository).to(PayoutRepository)
 
 container.bind<IPaymentController>(TYPES.PaymentController).to(PaymentController)
 container.bind<IPaymentService>(TYPES.PaymentService).to(PaymentService)

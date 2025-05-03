@@ -18,6 +18,9 @@ export const TYPES = {
   CertificateController: Symbol.for("CertificateController"),
   ChatController: Symbol.for("ChatController"),
   MessageController: Symbol.for("MessageController"),
+  WalletController: Symbol.for("WalletController"),
+  TransactionController: Symbol.for("TransactionController"),
+  PayoutController: Symbol.for("PayoutController"),
 
   // SERVICES
   AdminService: Symbol.for("AdminService"),
@@ -38,6 +41,9 @@ export const TYPES = {
   CertificateService: Symbol.for("CertificateService"),
   ChatService: Symbol.for("ChatService"),
   MessageService: Symbol.for("MessageService"),
+  WalletService: Symbol.for("WalletService"),
+  TransactionService: Symbol.for("TransactionService"),
+  PayoutService: Symbol.for("PayoutService"),
 
   // REPOSITORIES
   AdminRepository: Symbol.for("AdminRepository"),
@@ -56,4 +62,7 @@ export const TYPES = {
   CertificateRepository: Symbol.for("CertificateRepository"),
   ChatRepository: Symbol.for("ChatRepository"),
   MessageRepository: Symbol.for("MessageRepository"),
+  WalletRepository: Symbol.for("WalletRepository"),
+  TransactionRepository: Symbol.for("TransactionRepository"),
+  PayoutRepository: Symbol.for("PayoutRepository"),
 };

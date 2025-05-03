@@ -68,7 +68,7 @@ const navigate = useNavigate()
 
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <CoursePreview thumbnailUrl={course.thumbnail as string} />
+          <CoursePreview thumbnailUrl={course.thumbnail as string} trailer={course.trailer as string} />
 
           <div className="mt-8">
             <CourseTabs activeTab={activeTab} onTabChange={setActiveTab} />

@@ -1,3 +1,5 @@
+import { AccountSettingsPage } from "@/components/instructor/account_settings/account-settings-page";
+import EarningsPage from "@/components/instructor/earnings/earnings-page";
 import ProtectedRoute from "@/components/user/auth/protected-routes";
 import { UserRole } from "@/lib/constants/role";
 import SingleCoursePage from "@/pages/instructor/CourseDetails";
@@ -14,6 +16,8 @@ export const instructorRoutes = (
     <Route path="/instructor/create-course" element={<CreateCoursePage />} />
     <Route path="/instructor/my-courses" element={<CoursesPage />} />
     <Route path="/instructor/messages" element={<InstructorMessagesPage />} />
+    <Route path="/instructor/earnings" element={<EarningsPage/>}/>
+    <Route path="/instructor/settings" element={<AccountSettingsPage/>}/>
     <Route path="/instructor/messages/:chatId" element={<InstructorMessagesPage />} />
     <Route path="/instructor/my-courses/:courseId" element={<SingleCoursePage />} />
     <Route path="/instructor/my-courses/:courseId/edit" element={<EditCoursePage />} />

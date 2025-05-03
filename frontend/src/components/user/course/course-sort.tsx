@@ -22,7 +22,7 @@ export function CourseSort({sortBy, setSortBy}:CourseSortProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-[160px] justify-between">
+        <Button variant="outline" size={"sm"} className="w-[160px] justify-between">
           <span>Sort by: {sortBy}</span>
           <ChevronDown className="h-4 w-4 opacity-50" />
         </Button>

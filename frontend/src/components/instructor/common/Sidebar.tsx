@@ -69,7 +69,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
           </Button>
         </div>
         <ScrollArea className="flex-1 py-4">
-          <nav className="grid gap-1 px-2">
+          <nav className="grid gap-3 px-2">
             <NavItem
               href="/instructor/dashboard"
               icon={<LayoutDashboard className="h-4 w-4" />}
@@ -95,10 +95,10 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
               My Courses
             </NavItem>
             <NavItem
-              href="/instructor/earning"
+              href="/instructor/earnings"
               icon={<DollarSign className="h-4 w-4" />}
-              active={location.pathname.includes("/instructor/earning")}
-              onClick={() => handleNavigation("/instructor/earning")}
+              active={location.pathname.includes("/instructor/earnings")}
+              onClick={() => handleNavigation("/instructor/earnings")}
             >
               Earning
             </NavItem>
