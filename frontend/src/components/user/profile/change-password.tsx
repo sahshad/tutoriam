@@ -74,7 +74,7 @@ const ChangePassword = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-md space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="max-w-md space-y-4 border rounded-md p-4">
       <h2 className="mb-6 text-xl font-semibold">Change password</h2>
 
       <div>
