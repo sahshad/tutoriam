@@ -54,7 +54,7 @@ const ProfileHeader = () => {
             {user.title || "title"}
           </p>
         </div>
-        <div className="ml-auto flex gap-2">
+        <div className="ml-auto hidden gap-2  md:flex">
           <Link to={"/be-instructor"}>
             <Button variant="outline" className="">
               Become Instructor
