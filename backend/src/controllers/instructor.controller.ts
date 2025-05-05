@@ -5,6 +5,7 @@ import { TYPES } from "../di/types";
 import { IInstructorService } from "../core/interfaces/service/IInstructorService";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
+import { IInstructor } from "../models/Instructor";
 
 @injectable()
 export class InstructorController implements IInstructorController {
@@ -20,6 +21,14 @@ export class InstructorController implements IInstructorController {
       const {userId } = req.params
       const instructor = await this.instructorService.getInstructorProfile(userId as string)
       res.status(StatusCodes.OK).json({message: "instructor profile fetched successfully", instructor})
+    })
+
+    updateInstrucotrProfile = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+      const {userId} = req.params
+      const data: Partial<IInstructor>  = req.body.data
+      console.log(data)
+      const instructor = await this.instructorService.updateInstructorProfile(userId, data)
+      res.status(StatusCodes.OK).json({message: "instructor updated successfully", instructor})
     })
 
     getUserApplications = asyncHandler(async (req: Request, res: Response): Promise<void> => {

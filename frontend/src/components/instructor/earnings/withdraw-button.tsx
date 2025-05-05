@@ -1,4 +1,4 @@
-import { JSX, useState } from "react"
+import { JSX } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { WithdrawForm } from "./withdraw-form"
 
 interface WithdrawButtonProps {
   currentBalance: number

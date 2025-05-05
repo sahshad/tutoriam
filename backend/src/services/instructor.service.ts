@@ -5,7 +5,6 @@ import { IInstructorService } from "../core/interfaces/service/IInstructorServic
 import { IInstructorRepository } from "../core/interfaces/repository/IInstructorRepository";
 import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
 import { IEnrollmentRepository } from "../core/interfaces/repository/IEnrollmentRepository";
-import { FilterQuery } from "mongoose";
 import { PaginatedInstructorsResponse } from "../core/types/userTypes";
 
 @injectable()
@@ -40,6 +39,10 @@ export class InstructorService implements IInstructorService{
             throw new Error("instructor not found ")
         }
         return instructor
+    }
+
+    async updateInstructorProfile(instructorId: string, data: Partial<IInstructor>): Promise<IInstructor | null> {
+        return await this.instructorRepository.updateInstructorProfile(instructorId, data)
     }
 
     async getUserApplications(userId: string):Promise<IInstructor[]|null>{
@@ -86,15 +89,6 @@ export class InstructorService implements IInstructorService{
             console.log(instructorIds)
 
             const skip = (Number(page) - 1) * Number(limit);
-
-            // const filter: FilterQuery<IInstructor> = {
-            //     userId: { $in: instructorIds },
-            //     "adminApproval.status": "approved"
-            //   };
-
-            //   if (searchQuery) {
-            //     filter["userId.name"] = { $regex: searchQuery, $options: "i" };
-            //   }
 
             const instructors = await this.instructorRepository.findInstructorsByUserId(instructorIds, skip, limit, searchQuery)
             

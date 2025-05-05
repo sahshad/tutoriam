@@ -273,7 +273,7 @@ export function WithdrawForm({ onCreateRequest, currentBalance, isSubmitting }: 
         )}
 
         <DialogFooter>
-          <Button type="submit" className="bg-black hover:bg-black/90" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

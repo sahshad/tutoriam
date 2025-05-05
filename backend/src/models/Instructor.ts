@@ -15,11 +15,15 @@ export interface IInstructor extends Document {
   skills: string[];
   preferredSubjects: string[];
   teachingLanguages: string[];
+  phoneNumber: string;
+  countryCode: string;
   bio: string;
   socialLinks: {
     linkedin: { type: String };
     github: { type: String };
     portfolio: { type: String };
+    twitter: {type: String};
+    instagram: {type: String};
   };
   adminApproval: {
     status: {
@@ -57,11 +61,15 @@ const InstructorSchema = new Schema<IInstructor>(
     skills: { type: [String], required: true, min: 1 },
     preferredSubjects: { type: [String], required: true, min: 1 },
     teachingLanguages: { type: [String], required: true, min: 1 },
+    phoneNumber: {type: String, required: false},
+    countryCode: {type: String, required: false},
     bio: { type: String, required: true, minlength: 50, maxlength: 500 },
     socialLinks: {
       linkedin: { type: String, required: false },
       github: { type: String, required: false },
       portfolio: { type: String, required: false },
+      twitter: {type: String, required: false},
+      instagram: {type: String, required: false},
     },
     adminApproval: {
       status: {

@@ -16,7 +16,7 @@ router.get("/",authMiddleware([UserRole.ADMIN]),userController.getAllUsers);
 router.patch("/:userId/status",authMiddleware([UserRole.ADMIN]), userController.toggleUserStatus)
 router.get("/dashboard", authMiddleware([UserRole.USER]), userController.getDashboardData )
 router.get("/profile", authMiddleware([UserRole.USER]), userController.getUserProfile);
-router.put("/profile", authMiddleware([UserRole.USER]), upload.single("profileImage"), userController.updateProfile);
+router.put("/profile", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), upload.single("profileImage"), userController.updateProfile);
 
 router.patch("/change-password", authMiddleware([UserRole.USER]), userController.changePassword);
 router.post(
