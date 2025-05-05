@@ -3,6 +3,7 @@ import authReducer from './slices/authSlice'
 import cartReducer from './slices/cartSlice'
 import chatReducer from './slices/chatSlice'
 import messageReducer from './slices/messageSlice'
+import instructorReducer from './slices/instructorSlice'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 const store = configureStore({
@@ -11,6 +12,7 @@ const store = configureStore({
         cart:cartReducer,
         chat:chatReducer,
         message:messageReducer,
+        instructor: instructorReducer,
     }
 })
 

@@ -13,6 +13,7 @@ const transactionController = container.get<ITransactionController>(TYPES.Transa
 
 router.get("/:userId/dashboard", authMiddleware([UserRole.INSTRUCTOR]));
 router.get("/:userId/profile", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), instructorController.getInstructorProfile);
+router.put("/:userId/profile", authMiddleware([UserRole.INSTRUCTOR]), instructorController.updateInstrucotrProfile)
 router.get("/applications",authMiddleware([UserRole.ADMIN]),instructorController.getInstructorApplications)
 router.get("/enrolled", authMiddleware([UserRole.USER]), instructorController.getEnrolledInstructorsForUser)
 router.get("/revenue", authMiddleware([UserRole.INSTRUCTOR]), transactionController.getRevenueStats )

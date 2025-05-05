@@ -1,6 +1,6 @@
 import apiClient from "@/lib/axios";
+import { IInstructor } from "@/types/instructor";
 import axios, { AxiosResponse } from "axios";
-import { number } from "zod";
 
 export const getInstructorDetails = async (userId: string) => {
   try {
@@ -56,3 +56,13 @@ export const fetchEnrolledInstructors = async (page:number,limit:number,searchQu
     console.log(error);
   }
 };
+
+
+export const updateInstructorProfile = async(instructorId: string, data: Partial<IInstructor>) => {
+  try {
+    const res = await apiClient.put(`instructors/${instructorId}/profile`, {data})
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}

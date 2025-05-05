@@ -23,6 +23,10 @@ constructor() {
     }).populate("userId");
   };
 
+  updateInstructorProfile = async(userId: string, data: Partial<IInstructor>): Promise<IInstructor | null> => {
+    return await Instructor.findOneAndUpdate({userId}, data, {new: true})
+  }
+
   updateInstructorStatus = async (
     id: string,
     updates: Partial<IInstructor>
@@ -47,7 +51,6 @@ constructor() {
   }
 
   async findInstructorsByUserId(instructorIds: string[], skip:number, limit: number, searchQuery?: string): Promise<IInstructor[] | null> {
-    // return await Instructor.find(filter).populate('userId').skip(skip).limit(limit)
     const pipeline: any[] = [
       {
         $match: {
