@@ -26,6 +26,7 @@ import messageRoutes from "./routes/message.routes";
 import walletRoutes from "./routes/wallet.routes";
 import transactionRoutes from "./routes/transaction.routes";
 import payoutRoutes from "./routes/payout.routes";
+import notificationRoutes from "./routes/notification.routes";
 
 import { errorHandler } from "./middlewares/error.middleware";
 import passport from "./config/passport";
@@ -70,6 +71,7 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/wallets", walletRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/payouts", payoutRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.use(errorHandler);
 

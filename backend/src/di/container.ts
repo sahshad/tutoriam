@@ -141,7 +141,7 @@ import { IWebhookService } from "../core/interfaces/service/IWebhookService";
 import { WebhookController } from "../controllers/webhook.controller";
 import { WebhookService } from "../services/webhook.service";
 
-
+// WALLET
 import { IWalletController } from "../core/interfaces/controller/IWalletController";
 import { WalletController } from "../controllers/wallet.controller";
 import { IWalletService } from "../core/interfaces/service/IWalletService";
@@ -149,7 +149,7 @@ import { WalletService } from "../services/wallet.service";
 import { IWalletRepository } from "../core/interfaces/repository/IWalletRepository";
 import { WalletRepository } from "../repositories/wallet.repository";
 
-
+// TRANSACTION
 import { ITransactionController } from "../core/interfaces/controller/ITransactionConroller";
 import { TransactionController } from "../controllers/transaction.controller";
 import { ITransactionService } from "../core/interfaces/service/ITransactionService";
@@ -157,13 +157,21 @@ import { TransactionService } from "../services/transaction.service";
 import { ITransactionRepository } from "../core/interfaces/repository/ITransactionRepository";
 import { TransactionRepository } from "../repositories/transaction.repository";
 
-
+// PAYOUT
 import { IPayoutController } from "../core/interfaces/controller/IPayoutController";
 import { PayoutController } from "../controllers/payout.controllet";
 import { IPayoutService } from "../core/interfaces/service/IPayoutService";
 import { PayoutService } from "../services/payout.service";
 import { IPayoutRepository } from "../core/interfaces/repository/IPayoutRepository";
 import { PayoutRepository } from "../repositories/payout.repository";
+
+// NOTIFICATION
+import { INotificationController } from "../core/interfaces/controller/INotificationController";
+import { NotificationController } from "../controllers/notification.controller";
+import { INotificationService } from "../core/interfaces/service/INotificationService";
+import { NotificationService } from "../services/notification.service";
+import { INotificationRepository } from "../core/interfaces/repository/INotificationRepository";
+import { NotificationRepository } from "../repositories/notification.repository";
 
 const container = new Container()
 
@@ -242,6 +250,10 @@ container.bind<ITransactionRepository>(TYPES.TransactionRepository).to(Transacti
 container.bind<IPayoutController>(TYPES.PayoutController).to(PayoutController)
 container.bind<IPayoutService>(TYPES.PayoutService).to(PayoutService)
 container.bind<IPayoutRepository>(TYPES.PayoutRepository).to(PayoutRepository)
+
+container.bind<INotificationController>(TYPES.NotificationController).to(NotificationController)
+container.bind<INotificationService>(TYPES.NotificationService).to(NotificationService)
+container.bind<INotificationRepository>(TYPES.NotificationRepository).to(NotificationRepository)
 
 container.bind<IPaymentController>(TYPES.PaymentController).to(PaymentController)
 container.bind<IPaymentService>(TYPES.PaymentService).to(PaymentService)

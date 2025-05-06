@@ -14,6 +14,7 @@ import { instructorRoutes } from './routes/instructor-routes';
 import { userRoutes } from './routes/user-routes';
 import { commonRoutes } from './routes/common-routes';
 import { fetchInstructor } from './redux/thunks/instructorThunk';
+import { fetchNotificationsThunk } from './redux/thunks/notificationThunk';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ const App = () => {
         if (user?.role !== 'admin') {
           appDispatch(fetchCartItems());
           appDispatch(fetchChats());
+          appDispatch(fetchNotificationsThunk())
         }
 
         if(user?.role === 'instructor'){

@@ -8,6 +8,9 @@ import { ICartService } from "../core/interfaces/service/ICartService";
 import { ICourseService } from "../core/interfaces/service/ICourseService";
 import { IWalletService } from "../core/interfaces/service/IWalletService";
 import { ITransactionService } from "../core/interfaces/service/ITransactionService";
+import { INotificationService } from "../core/interfaces/service/INotificationService";
+import { getIO, getUserSocketId } from "../infrastructure/socket/socket";
+import { SocketEvents } from "../core/constants/socket.events";
 
 @injectable()
 export class WebhookService implements IWebhookService{
@@ -17,7 +20,8 @@ export class WebhookService implements IWebhookService{
         @inject(TYPES.CartService) private cartService: ICartService,
         @inject(TYPES.CourseService) private courseService: ICourseService,
         @inject(TYPES.WalletService) private walletService: IWalletService,
-        @inject(TYPES.TransactionService) private transactionService: ITransactionService
+        @inject(TYPES.TransactionService) private transactionService: ITransactionService,
+        @inject(TYPES.NotificationService) private notificationsService: INotificationService
     ){}
     async handleCheckoutSuccess(session: Stripe.Checkout.Session): Promise<void> {
         const metadata = session.metadata;
@@ -56,8 +60,33 @@ export class WebhookService implements IWebhookService{
                 method: 'stripe',
                 note: `Earning from course purchase: ${course.title}`,
               });       
-              // 3e. Update instructor wallet
+
               await this.walletService.creditWallet(instructorId, instructorShare);
+
+              const instructorNotification = await this.notificationsService.createNotification({
+                userId: instructorId,
+                type: 'coursePurchase',
+                title: 'course purchased',
+                description: `Your course "${course.title}" has been purchased.`,
+                courseId,
+              });
+
+              const instructorSocketId = getUserSocketId(instructorId)
+                if(instructorSocketId){
+                    getIO().to(instructorSocketId).emit(SocketEvents.RECEIVE_NOTIFICATION, instructorNotification)
+                }
+              const userNotification = await this.notificationsService.createNotification({
+                userId: userId,
+                type: 'enrollment',
+                title: 'enrollment successful',
+                description: `You have successfully enrolled in "${course.title}".`,
+                courseId,
+              });
+
+              const userSocketId = getUserSocketId(userId)
+                if(userSocketId){
+                    getIO().to(userSocketId).emit(SocketEvents.RECEIVE_NOTIFICATION, userNotification)
+                }
         }
 
     }

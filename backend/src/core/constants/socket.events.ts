@@ -1,0 +1,16 @@
+export const SocketEvents = {
+  JOIN_CHAT: "joinChat",
+  SEND_MESSAGE: "sendMessage",
+  NEW_MESSAGE: "newMessage",
+  UPDATE_MESSAGE: "updateMessage",
+  DELETE_MESSAGE: "deleteMessage",
+  TYPING: "typing",
+  STOP_TYPING: "stopTyping",
+  MESSAGE_READ: "messageRead",
+  SET_STATUS: "setStatus",
+  SEND_NOTIFICATION: "sendNotification",
+  RECEIVE_MESSAGE: "receiveMessage",
+  GET_ONLINE_USERS: "getOnlineUsers",
+  RECEIVE_NOTIFICATION: "receiveNotification",
+  ERROR: "error",
+} as const;

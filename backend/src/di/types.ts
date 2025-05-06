@@ -21,6 +21,7 @@ export const TYPES = {
   WalletController: Symbol.for("WalletController"),
   TransactionController: Symbol.for("TransactionController"),
   PayoutController: Symbol.for("PayoutController"),
+  NotificationController: Symbol.for("NotificationController"),
 
   // SERVICES
   AdminService: Symbol.for("AdminService"),
@@ -44,6 +45,7 @@ export const TYPES = {
   WalletService: Symbol.for("WalletService"),
   TransactionService: Symbol.for("TransactionService"),
   PayoutService: Symbol.for("PayoutService"),
+  NotificationService: Symbol.for("NotificationService"),
 
   // REPOSITORIES
   AdminRepository: Symbol.for("AdminRepository"),
@@ -65,4 +67,5 @@ export const TYPES = {
   WalletRepository: Symbol.for("WalletRepository"),
   TransactionRepository: Symbol.for("TransactionRepository"),
   PayoutRepository: Symbol.for("PayoutRepository"),
+  NotificationRepository: Symbol.for("NotificationRepository"),
 };
