@@ -13,10 +13,11 @@ dotenv.config();
 
 @injectable()
 export class AuthController implements IAuthController {
-  constructor(@inject(TYPES.AuthService) private authService: IAuthService,
-  @inject(TYPES.UserService) private userService: IUserService
-) {}
-  
+  constructor(
+    @inject(TYPES.AuthService) private authService: IAuthService,
+    @inject(TYPES.UserService) private userService: IUserService
+  ) {}
+
   register = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const { name, email, password } = req.body;
     await this.authService.register(name, email, password);
@@ -41,14 +42,22 @@ export class AuthController implements IAuthController {
     res.status(StatusCodes.OK).json({ message: "otp resend to your email" });
   });
 
+  adminLogin = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const { email, password } = req.body;
+    const { refreshToken, ...user } = await this.authService.adminLogin(email, password);
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+    res.status(StatusCodes.OK).json(user);
+  });
+
   login = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const { email, password, role } = req.body;
-    console.log(req.body)
-    const { refreshToken, ...user } = await this.authService.login(
-      email,
-      password,
-      role
-    );
+    const { email, password } = req.body;
+    console.log(req.body);
+    const { refreshToken, ...user } = await this.authService.login(email, password);
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -64,7 +73,7 @@ export class AuthController implements IAuthController {
       res.status(403).json({ error: "Refresh token required" });
       return;
     }
-    
+
     const { role } = req.body;
     const { accessToken, user } = await this.authService.refreshAccessToken(refreshToken, role);
     res.status(StatusCodes.OK).json({ accessToken, user });
@@ -91,25 +100,23 @@ export class AuthController implements IAuthController {
     res.status(StatusCodes.OK).json({ message: "password reseted successfully" });
   });
 
-  googleAuth = asyncHandler(async (req:Request, res:Response): Promise<void> => {
-
-    const { id, displayName, emails, photos } = req.user as any
+  googleAuth = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const { id, displayName, emails, photos } = req.user as any;
 
     if (!emails || emails.length === 0) {
-       res.status(400).json({ message: "Email is required" });
-       return
+      res.status(400).json({ message: "Email is required" });
+      return;
     }
 
     const email = emails[0].value;
     const profileImageUrl = photos ? photos[0].value : null;
 
-
-    let user = await this.userService.findUserByGoogleId(id)
+    let user = await this.userService.findUserByGoogleId(id);
     if (!user) {
-      user = await this.userService.createGoogleUser( displayName, email,profileImageUrl, id )
+      user = await this.userService.createGoogleUser(displayName, email, profileImageUrl, id);
     }
 
-    const refreshToken = createRefreshToken(user?.id, 'user')
+    const refreshToken = createRefreshToken(user?.id, "user");
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -117,8 +124,6 @@ export class AuthController implements IAuthController {
       sameSite: "strict",
     });
 
-    res.redirect(process.env.CLIENT_URL!)
-  })
+    res.redirect(process.env.CLIENT_URL!);
+  });
 }
-
-

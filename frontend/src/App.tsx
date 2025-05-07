@@ -54,7 +54,7 @@ const App = () => {
           {adminRoutes}
         </Routes>
       </SocketProvider>
-      <DashboardFooter />
+      {/* <DashboardFooter /> */}
     </Router>
   );
 };

@@ -42,8 +42,7 @@ const LoginForm = () => {
 
   const onSubmit = async (data: FormData) => {
     const { email, password } = data;
-    const role = "";
-    const response = await login(email, password, role, dispatch);
+    const response = await login(email, password, dispatch);
     console.log(response)
     if (response.status === 200) {
       navigate("/");
