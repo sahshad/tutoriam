@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { login } from "@/services/authService";
+import { adminLogin } from "@/services/authService";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
@@ -42,7 +42,7 @@ const LoginForm = () => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    const response = await login(values.email, values.password, 'admin', dispactch)
+    const response = await adminLogin(values.email, values.password, dispactch)
     if(response.status === 200){
         localStorage.setItem("adminLoggedIn", "true")
         navigate('/admin/dashboard')

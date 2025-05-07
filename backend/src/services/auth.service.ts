@@ -1,26 +1,26 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { AuthRepository } from "../repositories/auth.repository";
 import { sendForgotPasswordMail, sendOtpEmail } from "../utils/emailServices";
 import { RedisClient } from "../config/redis";
-import { IUser } from "../models/User";
-import { IAdmin } from "../models/Admin";
-import { verifyResetToken } from "../utils/tokenServices";
+import { createAccessToken, createRefreshToken, verifyResetToken } from "../utils/tokenServices";
 import { refreshedUser, verifiedUer } from "../core/types/userTypes";
 import { IAuthService } from "../core/interfaces/service/IAuthService";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../di/types";
 import { IAuthRepository } from "../core/interfaces/repository/IAuthRepository";
-import { decode } from "punycode";
-
+import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
+import { HttpException } from "../core/exceptions/HttpException";
 
 dotenv.config();
 
 @injectable()
 export class AuthService implements IAuthService {
-  constructor(@inject(TYPES.AuthRepository) private authRepository:IAuthRepository){}
-  
+  constructor(
+    @inject(TYPES.AuthRepository) private authRepository: IAuthRepository,
+    @inject(TYPES.UserRepository) private userRepository: IUserRepository
+  ) {}
+
   async register(name: string, email: string, password: string): Promise<void> {
     const existingUser = await this.authRepository.findUserByEmail(email);
     if (existingUser) throw new Error("Email is already taken");
@@ -33,11 +33,7 @@ export class AuthService implements IAuthService {
 
     await RedisClient.setex(`otp:${email}`, 150, JSON.stringify({ otp }));
 
-    await RedisClient.setex(
-      `user_session:${email}`,
-      600,
-      JSON.stringify({ name, email, hashedPassword })
-    );
+    await RedisClient.setex(`user_session:${email}`, 600, JSON.stringify({ name, email, hashedPassword }));
   }
 
   async verifyOtp(email: string, otp: string): Promise<verifiedUer> {
@@ -55,16 +51,12 @@ export class AuthService implements IAuthService {
     const user = await this.authRepository.createUser(name, email, hashedPassword);
     if (!user) throw new Error("Cannot create user please register again");
     const userId = user._id;
-    const accessToken = jwt.sign({ userId, role:"user" }, process.env.ACCESS_TOKEN_SECRET!, {
+    const accessToken = jwt.sign({ userId, role: "user" }, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: "15m",
     });
-    const refreshToken = jwt.sign(
-      { userId, role: "user" },
-      process.env.REFRESH_TOKEN_SECRET!,
-      {
-        expiresIn: "7d",
-      }
-    );
+    const refreshToken = jwt.sign({ userId, role: "user" }, process.env.REFRESH_TOKEN_SECRET!, {
+      expiresIn: "7d",
+    });
 
     await RedisClient.del(`otp:${email}`);
     await RedisClient.del(`user_session:${email}`);
@@ -88,58 +80,66 @@ export class AuthService implements IAuthService {
     }
   }
 
-  async login(
-    email: string,
-    password: string,
-    role: string
-  ): Promise<verifiedUer> {
-    let user: IUser | null;
-    // if (role === "admin") user = await this.authRepository.findAdminByEmail(email);
-    user = await this.authRepository.findUserByEmail(email);
+  async adminLogin(email: string, password: string): Promise<verifiedUer> {
+    const user = await this.userRepository.findOne({ email });
+    if (!user) {
+      throw new HttpException("Invalid email address", 404);
+    }
+
+    if (user.role !== "admin") {
+      throw new HttpException("Access denied: Not an admin", 403);
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      throw new HttpException("Incorrect password", 401);
+    }
+
+    const userId = user._id;
+    const accessToken = createAccessToken(userId, user.role);
+    const refreshToken = createRefreshToken(userId, user.role);
+
+    return { accessToken, refreshToken, user };
+  }
+
+  async login(email: string, password: string): Promise<verifiedUer> {
+    const user = await this.userRepository.findOne({ email });
 
     if (!user) throw new Error("Invalid email address");
-    
-    if ( "status" in user && user.status === "blocked") {
+
+    if (user.role === "admin") {
+      throw new HttpException("Access denied: Not an User", 403);
+    }
+
+    if ("status" in user && user.status === "blocked") {
       throw new Error("you have been blocked");
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw new Error("Incorrect password");
     const userId = user._id;
-    const accessToken = jwt.sign({ userId, role:user.role }, process.env.ACCESS_TOKEN_SECRET!, {
+    const accessToken = jwt.sign({ userId, role: user.role }, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: "15m",
     });
-    const refreshToken = jwt.sign(
-      { userId, role: user.role },
-      process.env.REFRESH_TOKEN_SECRET!,
-      {
-        expiresIn: "7d",
-      }
-    );
+    const refreshToken = jwt.sign({ userId, role: user.role }, process.env.REFRESH_TOKEN_SECRET!, {
+      expiresIn: "7d",
+    });
 
     return { accessToken, refreshToken, user };
   }
 
-  async refreshAccessToken(
-    refreshToken: string,
-  ): Promise<refreshedUser> {
+  async refreshAccessToken(refreshToken: string): Promise<refreshedUser> {
     try {
-      const decoded = jwt.verify(
-        refreshToken,
-        process.env.REFRESH_TOKEN_SECRET!
-      ) as { userId: string, role:string };
+      const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!) as { userId: string; role: string };
 
       const userId = decoded.userId;
-      const role = decoded.role
-      const newAccessToken = jwt.sign(
-        { userId,role },
-        process.env.ACCESS_TOKEN_SECRET!,
-        {
-          expiresIn: "15m",
-        }
-      );
- 
-    const user = await this.authRepository.findUserById(decoded.userId);
+      const role = decoded.role;
+      const newAccessToken = jwt.sign({ userId, role }, process.env.ACCESS_TOKEN_SECRET!, {
+        expiresIn: "15m",
+      });
+
+      const user = await this.authRepository.findUserById(decoded.userId);
 
       if (!user) {
         throw new Error("cannot find user please try again");
@@ -154,20 +154,14 @@ export class AuthService implements IAuthService {
     try {
       const user = await this.authRepository.findUserByEmail(email);
       if (!user) throw new Error("Invalid email address");
-      const token = jwt.sign(
-        { userId: user._id, email, purpose: "reset-password" },
-        process.env.JWT_TOKEN_SECRET!,
-        { expiresIn: "15m" }
-      );
+      const token = jwt.sign({ userId: user._id, email, purpose: "reset-password" }, process.env.JWT_TOKEN_SECRET!, {
+        expiresIn: "15m",
+      });
       const magicLink = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
       await sendForgotPasswordMail(email, magicLink);
-      await RedisClient.setex(
-        `magicLink:${email}`,
-        900,
-        JSON.stringify({ magicLink })
-      );
-      const link = await RedisClient.getex(`magicLink:${email}`)
-      console.log(link)
+      await RedisClient.setex(`magicLink:${email}`, 900, JSON.stringify({ magicLink }));
+      const link = await RedisClient.getex(`magicLink:${email}`);
+      console.log(link);
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -175,10 +169,7 @@ export class AuthService implements IAuthService {
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
     try {
-      const { userId, email, purpose } = await verifyResetToken(
-        token,
-        "reset-password"
-      );
+      const { userId, email, purpose } = await verifyResetToken(token, "reset-password");
       if (!userId || purpose !== "reset-password") {
         throw new Error("Invalid token");
       }
