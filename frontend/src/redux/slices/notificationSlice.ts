@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchNotificationsThunk, markAllNotificationsAsReadThunk, markNotificationAsReadThunk } from "../thunks/notificationThunk";
+import {
+  deleteNotificationThunk,
+  fetchNotificationsThunk,
+  markAllNotificationsAsReadThunk,
+  markNotificationAsReadThunk,
+} from "../thunks/notificationThunk";
 import { Notification } from "@/types/notification";
 
 interface NotificationState {
@@ -33,25 +38,28 @@ const notificationSlice = createSlice({
       })
       .addCase(fetchNotificationsThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.notifications = action.payload as unknown as typeof state.notifications
+        state.notifications = action.payload as unknown as typeof state.notifications;
       })
       .addCase(fetchNotificationsThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to fetch notifications";
       })
       .addCase(markAllNotificationsAsReadThunk.fulfilled, (state, action) => {
-        if(action.payload){
-            state.notifications = state.notifications.map(n => ({ ...n, isRead: true }))
+        if (action.payload) {
+          state.notifications = state.notifications.map((n) => ({ ...n, isRead: true }));
         }
         // const id = action.payload;
         // const notif = state.notifications.find((n) => n.id === id);
         // if (notif) notif.read = true;
       })
       .addCase(markNotificationAsReadThunk.fulfilled, (state, action) => {
-        state.notifications = state.notifications.map(n => (
-            n._id === action.payload._id ? { ...n, isRead: true } : n
-        ))
+        state.notifications = state.notifications.map((n) =>
+          n._id === action.payload._id ? { ...n, isRead: true } : n
+        );
       })
+      .addCase(deleteNotificationThunk.fulfilled, (state, action) => {
+        state.notifications = state.notifications.filter((n) => n._id !== action.payload);
+      });
   },
 });
 

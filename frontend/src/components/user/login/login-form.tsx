@@ -12,6 +12,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/redux/store";
 import { fetchCartItems } from "@/redux/thunks/cartThunk";
+import { fetchChats } from "@/redux/thunks/chatThunk";
+import { fetchNotificationsThunk } from "@/redux/thunks/notificationThunk";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -42,10 +44,12 @@ const LoginForm = () => {
     const { email, password } = data;
     const role = "";
     const response = await login(email, password, role, dispatch);
-    appDispatch(fetchCartItems())
     console.log(response)
     if (response.status === 200) {
       navigate("/");
+      appDispatch(fetchCartItems())
+      appDispatch(fetchChats());
+      appDispatch(fetchNotificationsThunk());
     } else {
       toast.error(response.data.message || "invalid credentials", {
         position: "top-right",

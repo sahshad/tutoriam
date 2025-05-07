@@ -11,6 +11,7 @@ const notificationController = container.get<INotificationController>(TYPES.Noti
 
 // router.post("/", notificationController.createNotification);
 router.get("/", authMiddleware([UserRole.INSTRUCTOR, UserRole.USER]), notificationController.getNotifications);
+router.delete("/:notificationId", authMiddleware([UserRole.INSTRUCTOR, UserRole.USER]), notificationController.deleteNotification)
 router.patch("/:notificationId/read", authMiddleware([UserRole.INSTRUCTOR, UserRole.USER]), notificationController.markNotificationAsRead);
 router.patch("/read", authMiddleware([UserRole.INSTRUCTOR, UserRole.USER]), notificationController.markAllNotificationsAsRead);
 

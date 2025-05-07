@@ -33,4 +33,10 @@ getNotifications = asyncHandler(async (req: Request, res: Response) => {
     await this.notificationService.markAllNotificationsAsRead(userId);
     res.status(StatusCodes.NO_CONTENT).send();
   });
+
+  deleteNotification = asyncHandler(async (req: Request, res: Response) => {
+    const {notificationId} = req.params
+    const notification = await this.notificationService.delete(notificationId)
+    res.status(StatusCodes.OK).json({message: "notification deleted", notification})
+  })
 }
