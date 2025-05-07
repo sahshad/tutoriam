@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { addMessage, deleteMessageFromState, updateMessageInState } from "@/redux/slices/messageSlice";
 import { updateChat, updateOnlineUsers } from "@/redux/slices/chatSlice";
+import { addNotification } from "@/redux/slices/notificationSlice";
 
-const SOCKET_URL = "http://localhost:5000";
+const SOCKET_URL = import.meta.env.VITE_API_BASE_URL_FOR_SOCKET
 
 const SocketContext = createContext<Socket | null>(null);
 
@@ -33,6 +34,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
         console.log(users)
         dispatch(updateOnlineUsers(users))
       })
+
       newSocket.on("newMessage", (message) => {
         dispatch(addMessage(message))
         dispatch(updateChat({
@@ -40,7 +42,10 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
           lastMessage:message,
           updatedAt:new Date().toISOString()
         }))
-        
+      })
+
+      newSocket.on("receiveNotification", (notification) => {
+        dispatch(addNotification(notification))
       })
 
       newSocket.on("updateMessage", (message) => {

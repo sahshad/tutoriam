@@ -7,6 +7,7 @@ import { BaseService } from "../core/abstracts/base.service";
 import { IChatRepository } from "../core/interfaces/repository/IChatRepository";
 import { getIO, getUserSocketId } from "../infrastructure/socket/socket";
 import { IChat } from "../models/Chat";
+import { SocketEvents } from "../core/constants/socket.events";
 
 @injectable()
 export class MessageService extends BaseService<IMessage> implements IMessageService {
@@ -39,7 +40,7 @@ export class MessageService extends BaseService<IMessage> implements IMessageSer
         participants.forEach(pId => {
             const socketId = getUserSocketId(pId)
             if(socketId){
-                getIO().to(socketId).emit("newMessage", message)
+                getIO().to(socketId).emit(SocketEvents.NEW_MESSAGE, message)
             }
         })
 
@@ -59,7 +60,7 @@ export class MessageService extends BaseService<IMessage> implements IMessageSer
         participants.forEach(pId => {
             const socketId = getUserSocketId(pId)
             if(socketId){
-                getIO().to(socketId).emit("updateMessage", updatedMessage)
+                getIO().to(socketId).emit(SocketEvents.UPDATE_MESSAGE, updatedMessage)
             }
         })
 
@@ -77,7 +78,7 @@ export class MessageService extends BaseService<IMessage> implements IMessageSer
         participants.forEach(pId => {
             const socketId = getUserSocketId(pId)
             if(socketId){
-                getIO().to(socketId).emit("deleteMessage", message)
+                getIO().to(socketId).emit(SocketEvents.DELETE_MESSAGE, message)
             }
         })
 
