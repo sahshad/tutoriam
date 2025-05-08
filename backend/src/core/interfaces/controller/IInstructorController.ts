@@ -7,4 +7,5 @@ export interface IInstructorController {
   getUserApplications: RequestHandler;
   reviewInstructor: RequestHandler;
   getEnrolledInstructorsForUser:RequestHandler;
+  getAllInstructors: RequestHandler;
 }

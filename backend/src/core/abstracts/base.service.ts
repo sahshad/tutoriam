@@ -48,4 +48,20 @@ export abstract class BaseService<T extends Document> implements IBaseService<T>
   //   return await this.repository.findOneAndUpdate(filter, data)
   // }
 
+  async findWithPagination(options: {
+    filter?: FilterQuery<T>;
+    sort?: Record<string, 1 | -1>;
+    page?: number;
+    limit?: number;
+    populate?: string | string[];
+  }): Promise<{
+    data: T[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  }> {
+    return await this.repository.findWithPagination(options);
+  }
+  
+
 }

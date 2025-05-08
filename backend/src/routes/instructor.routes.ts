@@ -11,6 +11,7 @@ const router = express.Router();
 const instructorController = container.get<IInstructorController>(TYPES.InstructorController)
 const transactionController = container.get<ITransactionController>(TYPES.TransactionController);
 
+router.get("/", authMiddleware([UserRole.ADMIN]), instructorController.getAllInstructors)
 router.get("/:userId/dashboard", authMiddleware([UserRole.INSTRUCTOR]));
 router.get("/:userId/profile", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), instructorController.getInstructorProfile);
 router.put("/:userId/profile", authMiddleware([UserRole.INSTRUCTOR]), instructorController.updateInstrucotrProfile)

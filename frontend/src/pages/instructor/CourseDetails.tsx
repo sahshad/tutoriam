@@ -9,6 +9,8 @@ import CourseHeader from "@/components/instructor/courses/CourseHeader";
 import { CourseStats } from "@/components/instructor/courses/CourseStats";
 import { CourseRating } from "@/components/instructor/courses/CourseReview";
 import { CourseCharts } from "@/components/instructor/courses/CourseCharts";
+import CourseReviews from "@/components/user/course-review/course-reviews";
+import CourseEnrolledStudents from "@/components/instructor/courses/course-enrolled-students";
 
 const SingleCoursePage: React.FC = () => {
     const { courseId } = useParams()
@@ -73,8 +75,10 @@ const SingleCoursePage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-            <CourseRating course={course} />
-            <CourseCharts course={course} />
+            {/* <CourseCharts course={course} /> */}
+            <CourseReviews courseId={course._id}/>
+            <CourseEnrolledStudents/>
+            {/* <CourseRating course={course} /> */}
           </div>
         </main>
       </div>

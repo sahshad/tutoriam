@@ -6,6 +6,7 @@ import { TYPES } from "../di/types";
 import { ICourseRepository } from "../core/interfaces/repository/ICourseRepository";
 import { deleteImageFromCloudinary, deleteVideoFromCloudinary, uploadImageToCloudinary, uploadVideoToCloudinary } from "../utils/clodinaryServices";
 import { PaginatedCoursesResponse } from "../core/types/userTypes";
+import { FilterQuery } from "mongoose";
 
 @injectable()
 export class CourseService extends BaseService<ICourse> implements ICourseService {
@@ -182,5 +183,30 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
     }
     console.log(data)
     return  await this.courseRepository.findByIdAndUpdate(courseId,data )
+ }
+
+ async getAllCoursesForAdmin(page: number, limit: number, searchQuery?: string): Promise<PaginatedCoursesResponse | null> {
+  const skip = (Number(page) - 1) * Number(limit);
+
+  const filter:FilterQuery<ICourse> = {};
+
+  if (searchQuery) {
+    const regex = new RegExp(searchQuery, 'i'); 
+    filter.$or = [
+      { title: { $regex: regex } },
+      { description: { $regex: regex } },
+      { "categoryId.name": { $regex: regex } }, 
+      { "instructorId.name": { $regex: regex } }, 
+    ];
+  }
+
+  const courses = await this.courseRepository.getAllCoursesForAdmin(skip, limit, filter)
+  const totalCourses = await this.courseRepository.countDocuments({})
+  return {
+    totalCourses,
+      totalPages: Math.ceil(totalCourses / limit),
+      currentPage: page,
+      courses
+    };
  }
 }

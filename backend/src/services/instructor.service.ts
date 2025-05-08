@@ -6,6 +6,7 @@ import { IInstructorRepository } from "../core/interfaces/repository/IInstructor
 import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
 import { IEnrollmentRepository } from "../core/interfaces/repository/IEnrollmentRepository";
 import { PaginatedInstructorsResponse } from "../core/types/userTypes";
+import { BaseService } from "../core/abstracts/base.service";
 
 @injectable()
 export class InstructorService implements IInstructorService{
@@ -86,7 +87,6 @@ export class InstructorService implements IInstructorService{
 
        async getEnrolledInstructors(userId: string, page:number, limit:number, searchQuery?: string): Promise<PaginatedInstructorsResponse | null> {
             const instructorIds = await this.enrollmentRepository.findDistinctInstructors(userId)
-            console.log(instructorIds)
 
             const skip = (Number(page) - 1) * Number(limit);
 
@@ -98,5 +98,18 @@ export class InstructorService implements IInstructorService{
                 currentPage: page,
                 instructors
               };
+       }
+
+       async getAllInstructors(page: number, limit: number, searchQuery?: string): Promise<PaginatedInstructorsResponse | null>{
+        const skip = (Number(page) - 1) * Number(limit);
+        
+        const instructors = await this.instructorRepository.findAllInstructors( skip, limit, searchQuery)
+        const totalInstructors = await this.instructorRepository.countDocuments({"adminApproval.status": "approved"})
+        return {
+            totalInstructors,
+            totalPages: Math.ceil(totalInstructors / limit),
+            currentPage: page,
+            instructors
+          };
        }
 }

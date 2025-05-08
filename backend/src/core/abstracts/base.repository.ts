@@ -118,4 +118,8 @@ export abstract class BaseRepository<T extends Document> implements IBaseReposit
       { new: true }
     );
   }
+
+  async findForAdmin(skip: number, limit: number, filter: FilterQuery<T>): Promise<T[] | null> {
+      return await this.model.find(filter).skip(skip).limit(limit)
+  }
 }

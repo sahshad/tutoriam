@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { EnrolledCourse } from "@/types/enrollment";
-import { addReview } from "@/services/reviewService";
+import { addReview as addNewReview } from "@/services/reviewService";
 import { toast } from "sonner";
 import ReviewDialog from "../course-review/course-review-dialog";
 import { applyForCertificate, downloadCertificate } from "@/services/certificateService";
+import { useAppDispatch } from "@/redux/store";
+import { addReview } from "@/redux/slices/reviewSlice";
 
 interface CourseHeaderProps {
   title: string;
@@ -26,12 +28,16 @@ export function CourseHeader({
   const navigate = useNavigate();
   const handleBackClick = () => navigate(-1);
   const [dialogOpen, setDialogOpen] = useState(false)
+  const dispatch = useAppDispatch()
 
 
   const handleSubmit = async(rating:number, review:string) => {
     try {
-        const data = await addReview(enrollment.courseId as string, rating.toString(), review.trim())
+        const data = await addNewReview(enrollment.courseId as string, rating.toString(), review.trim())
         toast.success(data.message)
+        console.log(data)
+        dispatch(addReview(data.review))
+
     } catch (error:any) {
         toast.warning(error.message)
     }

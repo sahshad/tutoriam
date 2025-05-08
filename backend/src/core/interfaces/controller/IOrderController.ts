@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 
 export interface IOrderController {
-    getUserOrders: RequestHandler
+  getUserOrders: RequestHandler;
+  getAllOrders: RequestHandler;
 }

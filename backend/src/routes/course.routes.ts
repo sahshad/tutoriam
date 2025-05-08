@@ -10,6 +10,7 @@ const router = express.Router();
 
 const courseController = container.get<ICourseController>(TYPES.CourseController);
 
+router.get("/all", authMiddleware([UserRole.ADMIN]), courseController.getAllcoursesForAdmin)
 router.get("/", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), courseController.getAllCourses);
 router.post(
   "/",

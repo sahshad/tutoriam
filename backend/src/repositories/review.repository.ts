@@ -11,7 +11,7 @@ export class ReviewRepository extends BaseRepository<IReview> implements IReview
   }
    
     async createReview(data: Partial<IReview>): Promise<IReview> {
-      return await Review.create(data);
+      return (await Review.create(data)).populate("userId")
     }
   
     async findReviewsByCourse(courseId: string, skip: number, limit: number, rating?: number, userReviewId?:string): Promise<IReview[]> {

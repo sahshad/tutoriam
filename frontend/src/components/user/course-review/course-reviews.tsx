@@ -4,6 +4,7 @@ import { RatingDistribution } from "./rating-distribution";
 import { StudentReviews } from "./student-review";
 import { fetchCourseReviews } from "@/services/reviewService";
 import { IPopulatedReview } from "@/types/review";
+import { useAppSelector } from "@/redux/store";
 
 interface CourseReviewsProps {
   courseId: string;
@@ -14,6 +15,8 @@ export default function CourseReviews({ courseId }: CourseReviewsProps) {
   const [filter, setFilter] = useState<string>("all");
   const [skip, setSkip] = useState<number>(0);
   const [loadMore, setLoadMore] = useState<boolean>(false);
+
+  const newReview = useAppSelector(state => state.review.reviews)
 
   const getCourseReviews = async () => {
     try {
@@ -34,6 +37,10 @@ export default function CourseReviews({ courseId }: CourseReviewsProps) {
   useEffect(() => {
     getCourseReviews();
   }, [filter, skip]);
+
+  useEffect(()=> {
+    setReviews(prev => [...newReview, ...prev])
+  },[newReview])
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">

@@ -46,7 +46,7 @@ const CourseSchema = new Schema<ICourse>(
       congratulationsMessage: {type: String, required: true},
       // targetAudience: { type: String, required: true },
       // requirements: [{ type: String, required: true }],
-      instructorId: { type: Schema.Types.ObjectId, ref: "Instructor", required: true },
+      instructorId: { type: Schema.Types.ObjectId, ref: "User", required: true },
       modules: [{ type: Schema.Types.ObjectId, ref: "Module" }],
       // status: { type: String, enum: ["draft", "published", "archived"], default: "draft" },
       isPublic:{type: Boolean},

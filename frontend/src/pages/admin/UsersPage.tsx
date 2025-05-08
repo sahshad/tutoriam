@@ -1,3 +1,4 @@
+import { GenericPagination } from "@/components/common/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -19,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getUsers, toggleUserStatus } from "@/services/userServices";
-import { MoreHorizontal } from "lucide-react";
+import { CodeSquare, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -34,18 +36,35 @@ interface User {
 }
 
 const UsersPage = () => {
-  const [users, setUsers] = useState<User[] | []>([]);
-  useEffect(() => {
-    if (users.length === 0) {
-      const fetchUsers = async () => {
-        const response = await getUsers();
-        console.log(response);
-        setUsers(response.data.users);
-      };
+  const [users, setUsers] = useState<User[] >([]);
+  const [page, setPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(10);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [search, setSearch] = useState<string>("")
+  const [searchQuery, setSearchQuery] = useState<string>("")
 
-      fetchUsers();
+  useEffect(()=> {
+    const debouce = setTimeout(()=>{
+        setSearchQuery(search)
+        setPage(1);
+    },500)
+
+    return ()=> clearTimeout(debouce)
+  },[search])
+
+  const fetchUsers = async() => {
+    try {
+      const data = await getUsers(page, limit, searchQuery)
+      // console.log(data)
+      setUsers(data.usersWithPagination.users)
+      setTotalPages(data.usersWithPagination.totalPages)
+    } catch (error) {
+      console.log(error)
     }
-  }, [users]);
+  }
+  useEffect(() => {
+     fetchUsers();
+  }, [page, searchQuery]);
 
   const handleChangeStatus = async (userId: string) => {
     const response = await toggleUserStatus(userId);
@@ -75,9 +94,15 @@ const UsersPage = () => {
   };
   return (
     <div className="flex-1 space-y-4 md:pl-64">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mt-2">
         <h2 className="text-3xl font-bold tracking-tight">Users</h2>
-        <div className="flex items-center gap-2"></div>
+        <div className="flex items-center gap-2">
+          <Input
+          placeholder="Search...."
+          value={search}
+          onChange={(e:React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value) }
+          />
+        </div>
       </div>
       <Card>
         <CardContent>
@@ -86,7 +111,7 @@ const UsersPage = () => {
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead>Courses Enrolled</TableHead>
+                {/* <TableHead>Courses Enrolled</TableHead> */}
                 <TableHead>Status</TableHead>
                 <TableHead>Joined Date</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
@@ -108,7 +133,7 @@ const UsersPage = () => {
                     {user.name}
                   </TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.courses}</TableCell>
+                  {/* <TableCell>{user.courses}</TableCell> */}
                   <TableCell>
                     <Badge
                       variant={
@@ -150,7 +175,11 @@ const UsersPage = () => {
           </Table>
         </CardContent>
       </Card>
+      { totalPages > 1 &&
+      <GenericPagination currentPage={page} onPageChange={setPage} totalPages={totalPages}/>
+      }
     </div>
+    
   );
 };
 

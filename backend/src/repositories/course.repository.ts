@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 import { BaseRepository } from "../core/abstracts/base.repository";
 import { ICourseRepository } from "../core/interfaces/repository/ICourseRepository";
 import { Course, ICourse } from "../models/Course";
@@ -26,12 +26,22 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
   }
 
   async getAllCourses(filter:any, skip:any, limit:any, sort:any): Promise<ICourse[] | null> {
-    console.log(filter)
       return await Course.find(filter).skip(skip).limit(limit).sort(sort).populate({
         path: 'categoryId',
         select: 'name',
       })
   }
+
+  async getAllCoursesForAdmin(skip: number, limit: number, filter:FilterQuery<ICourse>): Promise<ICourse[] | null> {
+    return await Course.find(filter).skip(skip).limit(limit).populate({
+      path: 'categoryId',
+      select: 'name',
+    })
+    .populate({
+      path: 'instructorId',
+      select: 'name email profileImageUrl'
+    });
+}
 
   async getCoursescount (filter:any):Promise<number>  {
     return await Course.countDocuments(filter);

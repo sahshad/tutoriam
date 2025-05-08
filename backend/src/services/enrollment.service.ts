@@ -8,6 +8,7 @@ import { ILessonRepository } from "../core/interfaces/repository/ILessonReposito
 import { IEnrollment } from "../models/Enrollment";
 import { BaseService } from "../core/abstracts/base.service";
 import { FilterQuery } from "mongoose";
+import { EnrolledStudent } from "../core/types/userTypes";
 
 @injectable()
 export class EnrollmentService extends BaseService<IEnrollment> implements IEnrollmentService {
@@ -155,5 +156,9 @@ export class EnrollmentService extends BaseService<IEnrollment> implements IEnro
     lessonId: string
   ): Promise<IEnrollment | null> {
     return await this.enrollmentRepository.updateLastVisitedLesson(filter, lessonId)
+  }
+
+  async getEnrolledStudentsOfACourse(courseId: string): Promise<EnrolledStudent[] | null>{
+    return await this.enrollmentRepository.getEnrolledStudentsOfACourse(courseId)
   }
 }
