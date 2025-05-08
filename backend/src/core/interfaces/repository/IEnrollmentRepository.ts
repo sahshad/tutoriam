@@ -5,7 +5,7 @@ import { EnrolledStudent } from "../../types/userTypes";
 
 export interface IEnrollmentRepository extends IBaseRepository<IEnrollment> {
   getEnrollmentsWithPagination(filter: FilterQuery<IEnrollment>, skip: number, limit: number): Promise<IEnrollment[]>;
-  isUserEnrolled(userId: string, courseId: string): Promise<boolean>;
+  isUserEnrolled(userId:string, courseId:string): Promise<IEnrollment | null>
   createEnrollment(userId: string, courseId: string, totalLessons: number): Promise<IEnrollment>;
   findEnrollmentsByUser(userId: string): Promise<IEnrollment[]>;
   updateLessonCompletion(userId: string, courseId: string, lessonId: string): Promise<IEnrollment | null>;

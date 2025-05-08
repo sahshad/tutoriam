@@ -62,3 +62,4 @@ export interface EnrolledStudent {
   user: Partial<IUser>;
   enrollmentDate: Date;
 }
+

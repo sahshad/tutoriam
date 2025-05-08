@@ -9,6 +9,7 @@ const router = express.Router();
 
 const certificateController = container.get<ICertificateController>(TYPES.CertificateController)
 
+router.get("/", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), certificateController.getMyCertificates)
 router.get("/download", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]) ,certificateController.downloadCertificate)
 router.post("/issue",authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]) ,certificateController.issueCertificate);
 router.get("/:certificateId",authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]) ,certificateController.getCertificate);

@@ -52,3 +52,13 @@ export const fetchCertificate = async (courseId: string) => {
     throw new Error(errorMessage);
   }
 };
+
+export const getUserCertificates = async() => {
+  try {
+    const res = await apiClient.get("/certificates")
+    console.log(res.data)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}

@@ -34,8 +34,9 @@ export class EnrollmentController implements IEnrollmentController{
     enroll = asyncHandler(async(req: Request, res:Response) :Promise<void> => {
         const userId = req.user?._id as string
         const { courseId } = req.body;
-        await this.enrollmentService.enrollUserInCourses(userId, [courseId]);
-        res.status(StatusCodes.OK).json({ message: "Enrollment successful" });
+         await this.enrollmentService.enrollUserInCourses(userId, [courseId]);
+         const enrollment = await this.enrollmentService.isUserEnrolled(userId, courseId)
+        res.status(StatusCodes.OK).json({ message: "Enrollment successful" , enrollment});
     })
 
     getEnrolledCourses= asyncHandler(async(req: Request, res:Response) :Promise<void> => {        

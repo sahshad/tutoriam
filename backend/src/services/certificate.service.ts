@@ -38,5 +38,9 @@ export class CertificateService implements ICertificateService {
     async getCertificateById(certificateId: string): Promise<ICertificate | null> {
       return await this.certificateRepository.findByCertificateId(certificateId);
     }
+
+    async getMyCertificates(userId: string): Promise<ICertificate[] | null> {
+      return await this.certificateRepository.findMyCertificate(userId)
+    }
   }
   

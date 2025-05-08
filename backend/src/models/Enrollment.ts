@@ -5,10 +5,11 @@ export interface IEnrollment extends Document {
     courseId: ObjectId | string;
     enrolledAt: Date;
     progress: {
-        totalLessons:number
+      totalLessons:number
       completedLessons: mongoose.Types.ObjectId[] ;
       lastVisited?: mongoose.Types.ObjectId | string
       percentage: number;
+      visitedLessons: string[];
     };
     completed: boolean;
     createdAt: Date;
@@ -24,7 +25,8 @@ export interface IEnrollment extends Document {
         totalLessons:{type:Number,required:true },
         completedLessons: [{ type: Schema.Types.ObjectId, ref: 'Lesson' }],
         lastVisited: { type: Schema.Types.ObjectId, ref: 'Lesson' },
-        percentage: { type: Number, default: 0 }
+        percentage: { type: Number, default: 0 },
+        visitedLessons: [{ type: String }],
       },
       completed: { type: Boolean, default: false }
     },

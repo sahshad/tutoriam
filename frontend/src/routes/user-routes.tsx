@@ -13,6 +13,7 @@ import MessagingPage from "@/components/user/messaging/message-page";
 import PurchaseHistoryContent from "@/components/user/purchase-history/purchase-history-content";
 import AccountSettings from "@/components/user/profile/account-settings";
 import { InstructorsPage } from "@/components/user/instructors/instructor-page";
+import CertificatesPage from "@/pages/user/certificates-page";
 
 export const userRoutes = (
   <Route element={<ProtectedRoute role={[UserRole.USER]} />}>
@@ -32,6 +33,7 @@ export const userRoutes = (
     <Route path="purchase-history" element={<PurchaseHistoryContent />} />
     <Route path="settings" element={<AccountSettings />} />
     <Route path="instructors" element={<InstructorsPage/>}/>
+    <Route path="certificates" element={<CertificatesPage/>}/>
   </Route>
 </Route>
 )

@@ -11,7 +11,7 @@ export interface getUserEnrollmentsArgument {
 }
 
 export interface IEnrollmentService extends IBaseService<IEnrollment> {
-  isUserEnrolled(userId: string, courseId: string): Promise<boolean>;
+  isUserEnrolled(userId: string, courseId: string): Promise<IEnrollment | null>;
   enrollUserInCourses(userId: string, courseIds: string[]): Promise<void>;
   enrollUserIntoCourse(userId: string, courseId: string): Promise<void>;
   getUserEnrollments(

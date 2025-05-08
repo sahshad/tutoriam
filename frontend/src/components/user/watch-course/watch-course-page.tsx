@@ -6,13 +6,14 @@ import { VideoPlayer } from "./video-player";
 import { CourseContents } from "./watch-course-content";
 import { CourseHeader } from "./watch-course-header";
 import { useParams } from "react-router-dom";
-import { fetchEnrolledCourseWithModulesAndLessons } from "@/services/enrollmentService";
+import { completeLesson, fetchEnrolledCourseWithModulesAndLessons, updateLastVisitedLesson } from "@/services/enrollmentService";
 import { Course } from "@/types/course";
 import { formatDate, formatTimeFromSeconds } from "@/lib/utils/formatDate";
 import ReactPlayer from "react-player";
 import { EnrolledCourse } from "@/types/enrollment";
 import { Lesson } from "@/types/lessons";
 import CourseReviews from "../course-review/course-reviews";
+import { toast } from "sonner";
 
 export default function WatchCoursePage() {
   const [enrolledCourse, setEnrolledCourse] = useState<EnrolledCourse>();
@@ -41,6 +42,38 @@ export default function WatchCoursePage() {
       console.log(error);
     }
   };
+
+  const allLessons: Lesson[] = courseDetails?.modules?.flatMap((module: any) => module.lessons || []) || [];
+
+
+  const handleVideoEnd = async () => {
+    if(!enrolledCourse?.progress.completedLessons.includes(currentLesson?._id.toString() as string)){
+      try {
+        const data = await completeLesson(currentLesson?.courseId as string, currentLesson?._id as string);
+        setEnrolledCourse(data.enrollment);
+        const currentIndex = allLessons.findIndex((l) => l._id === currentLesson?._id);
+        const nextLesson = allLessons[currentIndex + 1];
+        console.log(nextLesson)
+        if(nextLesson){
+          setCurrentLesson(nextLesson)
+          await updateLastVisitedLesson(nextLesson?.courseId as string, nextLesson?._id as string);
+        }
+      } catch (error: any) {
+        const message = error?.data?.message || "Could not complete the lesson";
+        toast.error(message);
+      }
+    }else{
+      const currentIndex = allLessons.findIndex((l) => l._id === currentLesson?._id);
+        const nextLesson = allLessons[currentIndex + 1];
+        setCurrentLesson(nextLesson)
+        if(nextLesson){
+          setCurrentLesson(nextLesson)
+          await updateLastVisitedLesson(nextLesson?.courseId as string, nextLesson?._id as string);
+        }
+    }
+    
+  };
+
   useEffect(() => {
     getEnrolledCourse();
   }, []);
@@ -79,7 +112,7 @@ export default function WatchCoursePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
           <div className="lg:col-span-2">
             {/* <VideoPlayer url={courseDetails.modules?.[0]?.lessons?.[0]?.videoUrl ?? ""} /> */}
-            <ReactPlayer url={currentLesson?.videoUrl} controls={true} width="100%" />
+            <ReactPlayer url={currentLesson?.videoUrl} controls={true} width="100%" onEnded={handleVideoEnd}/>
             <LectureInfo
               title={currentLesson?.title as string}
               students={courseDetails.enrollmentCount as number}
