@@ -71,3 +71,13 @@ export const enrollUserIntoCourse = async (courseId: string) => {
     console.log(error)
   }
 }
+
+export const getEnrolledStudents = async (courseId: string) => {
+  try {
+    const res = await apiClient.get(`/enrollments/${courseId}/students`)
+    console.log(res.data)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}

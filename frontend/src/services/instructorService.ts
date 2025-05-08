@@ -66,3 +66,19 @@ export const updateInstructorProfile = async(instructorId: string, data: Partial
     console.log(error)
   }
 }
+
+export const fetchAllInstructors = async(page:number,limit:number,searchQuery:string) => {
+  try {
+    const res = await apiClient.get("/instructors/", {
+      params:{
+        page,
+        limit,
+        searchQuery
+      }
+    })
+    console.log(res.data)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}

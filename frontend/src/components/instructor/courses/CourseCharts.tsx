@@ -57,7 +57,7 @@ export function CourseCharts({ course }: CourseChartsProps) {
           </div>
         </CardContent>
       </Card>
-
+{/* 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Course Overview</CardTitle>
@@ -108,7 +108,7 @@ export function CourseCharts({ course }: CourseChartsProps) {
             </div>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
   )
 }

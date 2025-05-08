@@ -3,7 +3,7 @@ import { IUser } from "./user";
 export interface IInstructor {
   _id: string;
   userId: string | IUser;
-  courses: string[];
+  courses?:string;
   idCardImageUrl: string;
   education: {
     highestDegree: string;
@@ -34,6 +34,8 @@ export interface IInstructor {
     };
     reason: { type: String };
   };
+  rating?:string;
+  students?: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -82,3 +82,19 @@ export const updateCourse = async(courseId:string, data:any) => {
     throw error
   }
 }
+
+export const getAllcoursesForAdmin = async(page:number,limit:number,searchQuery:string) => {
+  try {
+    const res = await apiClient.get("/courses/all", {
+      params:{
+        page,
+        limit,
+        searchQuery
+      }
+    })
+    console.log(res.data)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}
