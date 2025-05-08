@@ -21,7 +21,7 @@ export class EnrollmentService extends BaseService<IEnrollment> implements IEnro
     super(enrollmentRepository);
   }
 
-  async isUserEnrolled(userId: string, courseId: string): Promise<boolean> {
+  async isUserEnrolled(userId: string, courseId: string): Promise<IEnrollment | null> {
     return this.enrollmentRepository.isUserEnrolled(userId, courseId);
   }
 

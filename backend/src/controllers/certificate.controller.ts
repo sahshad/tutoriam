@@ -26,8 +26,7 @@ export class CertificateController implements ICertificateController {
     }
     
     const response = await fetch(certificateUrl);
-    console.log(response)
-  
+
     if (!response.ok) {
        res.status(StatusCodes.BAD_GATEWAY).send("Could not fetch certificate from source");
        return
@@ -37,7 +36,6 @@ export class CertificateController implements ICertificateController {
   
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", 'attachment; filename="certificate.pdf"');
-  
     res.send(Buffer.from(buffer));
   })
 
@@ -47,4 +45,10 @@ export class CertificateController implements ICertificateController {
 
     res.status(StatusCodes.OK).json({ message: "certificate fetched successfully", certificate });
   });
+
+  getMyCertificates = asyncHandler(async (req: Request, res: Response) => {
+    const userId = req.user?._id as string
+    const certificates = await this.certificateService.getMyCertificates(userId)
+    res.status(StatusCodes.OK).json({message: "certificates fetched succeefully", certificates})
+  })
 }

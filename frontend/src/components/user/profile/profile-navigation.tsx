@@ -7,6 +7,7 @@ const tabs = [
   { value: "instructors", label: "Instructor" },
   { value: "messages", label: "Message" },
   { value: "purchase-history", label: "Purchase History" },
+  { value: "certificates", label: "Certificates" },
   { value: "settings", label: "Settings" },
 ];
 

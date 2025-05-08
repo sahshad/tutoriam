@@ -7,6 +7,8 @@ import { Lesson } from "@/types/lessons";
 import { Module } from "@/types/module";
 import { formatTimeFromSeconds } from "@/lib/utils/formatDate";
 import { Clock, Play, Pause } from "lucide-react";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 interface CourseContentsProps {
   modules: Module[];
@@ -23,8 +25,14 @@ export function CourseContents({ modules, enrolledCourse, setCurrentLesson, setE
   };
 
   const handleCompletLesson = async (lesson: Lesson) => {
-    const data = await completeLesson(lesson.courseId, lesson._id);
+    try {
+      const data = await completeLesson(lesson.courseId, lesson._id);
     setEnrolledCourse(data.enrollment);
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+    const message = axiosError.response?.data?.message || axiosError.message || "Something went wrong";
+    toast.error(message);
+    }
   };
 
   return (

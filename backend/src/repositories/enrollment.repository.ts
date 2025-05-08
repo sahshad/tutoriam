@@ -5,6 +5,7 @@ import { injectable } from "inversify";
 import { BaseRepository } from "../core/abstracts/base.repository";
 import { IUser } from "../models/User";
 import { EnrolledStudent } from "../core/types/userTypes";
+import { HttpException } from "../core/exceptions/HttpException";
 
 @injectable()
 export class EnrollmentRepository extends BaseRepository<IEnrollment> implements IEnrollmentRepository {
@@ -17,9 +18,8 @@ export class EnrollmentRepository extends BaseRepository<IEnrollment> implements
       return await Enrollment.find(filter).skip(skip).limit(limit).populate("courseId")
   }
 
-  async isUserEnrolled(userId:string, courseId:string): Promise<boolean>{
-    const enrollment = await Enrollment.findOne({userId, courseId})
-    return enrollment ? true : false
+  async isUserEnrolled(userId:string, courseId:string): Promise<IEnrollment | null>{
+    return await Enrollment.findOne({userId, courseId})
   }
 
   async createEnrollment(userId:string, courseId:string, totalLessons:number) {
@@ -62,6 +62,10 @@ export class EnrollmentRepository extends BaseRepository<IEnrollment> implements
   async updateLessonCompletion(userId: string, courseId: string, lessonId: string) {
     const enrollment = await Enrollment.findOne({ userId, courseId });
     if (!enrollment) return null;
+
+    if(! enrollment.progress.visitedLessons.includes(lessonId)){
+      throw new HttpException("cannot complete lesson before watch it",400)
+    }
   
     const lessonObjectId = new mongoose.Types.ObjectId(lessonId);
     const { completedLessons } = enrollment.progress;
@@ -85,9 +89,13 @@ export class EnrollmentRepository extends BaseRepository<IEnrollment> implements
     return enrollment.save();
   }
 
-  async updateLastVisitedLesson(filter: mongoose.FilterQuery<IEnrollment>, lessonId: string): Promise<IEnrollment | null> {
-     return await Enrollment.findOneAndUpdate(filter, { 'progress.lastVisited': lessonId }, {new: true})
-  }
+    async updateLastVisitedLesson(filter: mongoose.FilterQuery<IEnrollment>, lessonId: string): Promise<IEnrollment | null> {
+     console.log(filter)
+      return await Enrollment.findOneAndUpdate(filter, {
+        $set: { 'progress.lastVisited': lessonId },
+        $addToSet: { 'progress.visitedLessons': lessonId }
+      }, {new: true})
+    }
 
   async findDistinctInstructors(userId: string): Promise<string[]> {
     const objectId = new mongoose.Types.ObjectId(userId);

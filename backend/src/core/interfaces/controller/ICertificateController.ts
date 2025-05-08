@@ -1,7 +1,8 @@
-import { RequestHandler } from "express"
+import { RequestHandler } from "express";
 
 export interface ICertificateController {
-    issueCertificate: RequestHandler
-    getCertificate: RequestHandler
-    downloadCertificate: RequestHandler
-  }
+  issueCertificate: RequestHandler;
+  getCertificate: RequestHandler;
+  downloadCertificate: RequestHandler;
+  getMyCertificates: RequestHandler;
+}

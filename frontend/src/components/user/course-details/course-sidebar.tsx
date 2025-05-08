@@ -1,4 +1,4 @@
-import { Clock, BarChart, Users, Globe, CheckCircle } from "lucide-react"
+import { Clock, BarChart, Users, Globe, CheckCircle, Download, BookOpenText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { useAppDispatch } from "@/redux/store"
@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import { enrollUserIntoCourse, fetchUserEnrollmentStatus } from "@/services/enrollmentService"
 import { Link } from "react-router-dom"
 import { addCourseToWishlist } from "@/services/wishlistService"
+import { EnrolledCourse } from "@/types/enrollment"
 
 export default function CourseSidebar({
   id,
@@ -17,7 +18,7 @@ export default function CourseSidebar({
   language,
   subtitleLanguage,
 }: any) {
-  const [isUserEnrolled, setIsUserEnrolled] = useState<boolean>(false)
+  const [isUserEnrolled, setIsUserEnrolled] = useState<EnrolledCourse>()
   const dispatch = useAppDispatch()
 
   const handleAddToCart = async () => {
@@ -43,7 +44,7 @@ export default function CourseSidebar({
     try {
       const data = await enrollUserIntoCourse(courseId)
       console.log(data)
-      setIsUserEnrolled(true)
+      setIsUserEnrolled(data.enrollment)
       toast.success(data.message || "enrolled successfully")
     } catch (error) {
       console.log(error)
@@ -53,7 +54,6 @@ export default function CourseSidebar({
   const getUserEnrollmentStatus = async () => {
     try {
       const data = await fetchUserEnrollmentStatus(id)
-      console.log(data)
       setIsUserEnrolled(data.userEnrolled)
     } catch (error) {
       console.log(error)
@@ -79,9 +79,20 @@ export default function CourseSidebar({
       <div className="space-y-4">
         {
           isUserEnrolled ? 
-          <Link to={`/courses/watch/${id}`}>
-            <Button className="w-full">watch Now</Button>
+          (
+            <div className="flex gap-4">
+            <Link to={`/courses/watch/${id}`} className="flex-1">
+            <Button className="w-full flex gap-4 ">
+              <BookOpenText className="mt-1"/>
+              watch Now</Button>
           </Link>
+          { isUserEnrolled.completed &&
+           <Button className="flex-1 gap-4 ">
+            <Download/>
+            Certificate</Button>
+          }
+            </div>
+          )
           :
           price === 0 ?
             <Button className="w-full" onClick={()=> handleEnrollCourse(id)}>Enroll Now</Button>

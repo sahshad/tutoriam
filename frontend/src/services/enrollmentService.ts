@@ -1,4 +1,5 @@
 import apiClient from "@/lib/axios";
+import { AxiosError } from "axios";
 
 interface FetchEnrolledCoursesParams {
   page: number;
@@ -49,14 +50,17 @@ export const completeLesson = async (courseId: string, lessonId: string) => {
         const res = await apiClient.post(`/enrollments/${courseId}/complete-lesson`, { lessonId})
         return res.data
     } catch (error) {
-        console.log(error)
+      const axiosError = error as AxiosError<{ message: string }>;
+
+      const message = axiosError.response?.data?.message || axiosError.message || "Something went wrong.";
+      throw new Error(message);
+    
     }
 };
 
 export const fetchUserEnrollmentStatus = async (courseId: string) => {
   try {
     const res = await apiClient.get(`/enrollments/${courseId}/status`)
-
     return res.data
   } catch (error) {
     console.log(error)
