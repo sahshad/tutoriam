@@ -14,4 +14,5 @@ export interface IInstructorService {
     limit: number,
     searchQuery?: string
   ): Promise<PaginatedInstructorsResponse | null>;
+  getAllInstructors(page: number, limit: number, searchQuery?: string): Promise<PaginatedInstructorsResponse | null>;
 }

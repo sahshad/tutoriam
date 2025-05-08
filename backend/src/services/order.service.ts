@@ -2,6 +2,7 @@ import { inject, injectable } from "inversify";
 import { IOrderService } from "../core/interfaces/service/IOrderService";
 import { TYPES } from "../di/types";
 import { IOrderRepository } from "../core/interfaces/repository/IOrderRespoitory";
+import { PaginatedOrdersResponse } from "../core/types/userTypes";
 
 @injectable()
 export class OrderService implements IOrderService {
@@ -13,5 +14,18 @@ export class OrderService implements IOrderService {
 
   getUserOrders(userId: string) {
     return this.orderRepository.getOrdersByUser(userId);
+  }
+
+  async getAllOrder(page: number, limit: number): Promise<PaginatedOrdersResponse | null>{
+    const skip = (Number(page) - 1) * Number(limit);
+    
+    const orders = await this.orderRepository.findAllOrders( skip, limit)
+    const totalOrders = await this.orderRepository.countDocuments({})
+    return {
+      totalOrders,
+        totalPages: Math.ceil(totalOrders / limit),
+        currentPage: page,
+        orders
+      };
   }
 }

@@ -15,6 +15,7 @@ router.get("/:courseId", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), e
 router.get("/:courseId/status", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), enrollmentController.isUserEnrolled)
 router.patch("/:courseId/update-lastvisit", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), enrollmentController.updateLastVisitedLesson)
 router.post("/:courseId/complete-lesson", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), enrollmentController.completeLesson)
+router.get("/:courseId/students", authMiddleware([UserRole.INSTRUCTOR]), enrollmentController.getEnrolledStudentsOfACourse)
 
 
 export default router

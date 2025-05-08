@@ -73,12 +73,16 @@ export class UserController implements IUserController {
   });
 
   getAllUsers = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const users = await this.userService.find({ role: "user" });
-    if (!users) {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const search = (req.query.searchQuery as string)?.trim() || '';
+
+    const usersWithPagination = await this.userService.getAllUsers(page, limit, search)
+    if (!usersWithPagination) {
       res.status(StatusCodes.NOT_FOUND).json({ message: "users not found" });
       return;
     }
-    res.status(StatusCodes.OK).json({ users });
+    res.status(StatusCodes.OK).json({ usersWithPagination });
   });
 
   toggleUserStatus = asyncHandler(async (req: Request, res: Response): Promise<void> => {

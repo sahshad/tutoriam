@@ -8,8 +8,9 @@ import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
 import { IInstructor } from "../models/Instructor";
 import { IInstructorRepository } from "../core/interfaces/repository/IInstructorRepository";
 import { BaseService } from "../core/abstracts/base.service";
-import { DashboardData } from "../core/types/userTypes";
+import { DashboardData, PaginatedUsersResponse } from "../core/types/userTypes";
 import { IEnrollmentRepository } from "../core/interfaces/repository/IEnrollmentRepository";
+import { FilterQuery } from "mongoose";
 
 @injectable()
 export class UserService extends BaseService<IUser> implements IUserService {
@@ -95,20 +96,41 @@ export class UserService extends BaseService<IUser> implements IUserService {
   }
 
   async getDashboardData(userId: string): Promise<DashboardData> {
-    const enrollments = await this.enrollmentRepository.findEnrollmentsByUser(userId) ?? []
-    const instructors = (await this.enrollmentRepository.findDistinctInstructors(userId)).length
-    const enrolledCourses = enrollments?.length ?? 0
-    const coursesInProgress = enrollments?.filter(enroll => !enroll.completed)
-    const activeCourses = coursesInProgress?.length ?? 0
-    const completedCourses = enrollments?.filter(enroll => enroll.completed).length ?? 0
+    const enrollments = (await this.enrollmentRepository.findEnrollmentsByUser(userId)) ?? [];
+    const instructors = (await this.enrollmentRepository.findDistinctInstructors(userId)).length;
+    const enrolledCourses = enrollments?.length ?? 0;
+    const coursesInProgress = enrollments?.filter((enroll) => !enroll.completed);
+    const activeCourses = coursesInProgress?.length ?? 0;
+    const completedCourses = enrollments?.filter((enroll) => enroll.completed).length ?? 0;
 
     return {
       enrolledCourses,
       activeCourses,
       completedCourses,
       instructors,
-      enrollments: coursesInProgress?.slice(0,4)
+      enrollments: coursesInProgress?.slice(0, 4),
+    };
+  }
+
+  async getAllUsers(page: number, limit: number, searchQuery?: string): Promise<PaginatedUsersResponse | null> {
+    const skip = (Number(page) - 1) * Number(limit);
+
+    let filter: FilterQuery<IUser> = { role: "user" };
+    if (searchQuery) {
+      filter = {
+        ...filter,
+        $or: [{ name: { $regex: searchQuery, $options: "i" } }, { email: { $regex: searchQuery, $options: "i" } }],
+      };
     }
-    
+
+    const totalUsers = await this.userRepository.countDocuments(filter);
+    const users = await this.userRepository.findAllUsers(skip, limit, filter)
+
+    return {
+      totalUsers,
+      totalPages: Math.ceil(totalUsers / limit),
+      currentPage: page,
+      users,
+    };
   }
 }

@@ -1,6 +1,7 @@
 import { FilterQuery } from "mongoose";
 import { IEnrollment } from "../../../models/Enrollment";
 import { IBaseService } from "./IBaseService";
+import { EnrolledStudent } from "../../types/userTypes";
 
 export interface getUserEnrollmentsArgument {
   page: number;
@@ -22,4 +23,5 @@ export interface IEnrollmentService extends IBaseService<IEnrollment> {
     filter: FilterQuery<IEnrollment>,
     lessonId: string
   ): Promise<IEnrollment | null>
+  getEnrolledStudentsOfACourse(courseId: string): Promise<EnrolledStudent[] | null>
 }

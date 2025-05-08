@@ -26,4 +26,5 @@ export interface IBaseRepository<T> {
     }>;
     findOneAndUpdate(filter: FilterQuery<T>, data: Partial<T>): Promise<T | null>
     toggleStatus(id: string): Promise<T | null>
+    findForAdmin(skip: number, limit: number, filter:FilterQuery<T>): Promise<T[] | null>
   }

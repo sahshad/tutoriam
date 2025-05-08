@@ -3,6 +3,8 @@ import { IEnrollmentRepository } from "../core/interfaces/repository/IEnrollment
 import Enrollment, { IEnrollment } from "../models/Enrollment";
 import { injectable } from "inversify";
 import { BaseRepository } from "../core/abstracts/base.repository";
+import { IUser } from "../models/User";
+import { EnrolledStudent } from "../core/types/userTypes";
 
 @injectable()
 export class EnrollmentRepository extends BaseRepository<IEnrollment> implements IEnrollmentRepository {
@@ -118,5 +120,24 @@ export class EnrollmentRepository extends BaseRepository<IEnrollment> implements
     ]);
   
     return result.map((r) => r.instructorId.toString());
+  }
+
+  async getEnrolledStudentsOfACourse(courseId: string):Promise<EnrolledStudent[] | null> {
+    const enrollments = await Enrollment.find({ courseId })
+    .populate<{ userId: Partial<IUser> }>("userId", "name profileImageUrl _id")
+    .lean()
+    .exec();
+
+  return enrollments.map((enrollment) => {
+    const user = enrollment.userId as Partial<IUser>;
+    return {
+      user: {
+        _id: user?._id?.toString(),
+        name: user?.name,
+        profileImageUrl: user?.profileImageUrl,
+      },
+      enrollmentDate: enrollment.enrolledAt,
+    };
+  });
   }
 }

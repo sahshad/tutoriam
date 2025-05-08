@@ -16,4 +16,12 @@ export class OrderController implements IOrderController{
         const orders = await this.orderService.getUserOrders(userId as string);
         res.status(StatusCodes.OK).json({message: "order fetched successfully", orders});
     })
+
+    getAllOrders = asyncHandler(async(req: Request, res:Response) :Promise<void> => {
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+
+        const ordersWithPagination = await this.orderService.getAllOrder(page, limit)
+        res.status(StatusCodes.OK).json({message: "order fetched successfully", ordersWithPagination })
+    })
 }

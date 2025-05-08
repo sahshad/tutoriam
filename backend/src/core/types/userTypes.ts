@@ -2,6 +2,7 @@ import { IAdmin } from "../../models/Admin";
 import { ICourse } from "../../models/Course";
 import { IEnrollment } from "../../models/Enrollment";
 import { IInstructor } from "../../models/Instructor";
+import { IOrder } from "../../models/Order";
 import { IUser } from "../../models/User";
 
 export interface verifiedUer {
@@ -41,4 +42,23 @@ export interface DashboardData {
   completedCourses: number
   instructors: number
   enrollments: IEnrollment[] | null
+}
+
+export interface PaginatedUsersResponse {
+  totalUsers: number;
+  totalPages: number;
+  currentPage: number;
+  users: IUser[] | null;
+}
+
+export interface PaginatedOrdersResponse {
+  totalOrders: number;
+  totalPages: number;
+  currentPage: number;
+  orders: IOrder[] | null;
+}
+
+export interface EnrolledStudent {
+  user: Partial<IUser>;
+  enrollmentDate: Date;
 }

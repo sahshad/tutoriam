@@ -1,3 +1,4 @@
+import { FilterQuery } from "mongoose";
 import { BaseRepository } from "../core/abstracts/base.repository";
 import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
 import { AdminDashboardStats } from "../core/types/userTypes";
@@ -75,5 +76,9 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
         ],
         { new: true }
       )
+  }
+
+  async findAllUsers(skip: number, limit: number, filter:FilterQuery<IUser>): Promise<IUser[] | null> {
+    return await User.find(filter).skip(skip).limit(limit)
   }
 }
