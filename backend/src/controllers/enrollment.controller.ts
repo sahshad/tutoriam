@@ -86,4 +86,10 @@ export class EnrollmentController implements IEnrollmentController{
         const enrolledStudents = await this.enrollmentService.getEnrolledStudentsOfACourse(courseId)
         res.status(StatusCodes.OK).json({message: "enrolled users fetched succeefully", enrolledStudents})
     })
+
+    getInstructorStats = asyncHandler(async(req: Request, res:Response) :Promise<void> =>{
+        const instructorId = req.user?._id as string
+        const enrollmentStats = await this.enrollmentService.getInstructorStats(instructorId);
+        res.status(200).json({message: "enrollment stats fetched succeefully",enrollmentStats });
+    })
 }

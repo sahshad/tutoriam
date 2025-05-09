@@ -18,7 +18,7 @@ export interface ICourse extends Document {
     requirements?: string[];
     instructorId: ObjectId;
     modules?: ObjectId[];
-    status?: "draft" | "published" | "archived";
+    status?: boolean;
     price?: string;
     discountPrice?: number;
     rating?: number;
@@ -48,7 +48,7 @@ const CourseSchema = new Schema<ICourse>(
       // requirements: [{ type: String, required: true }],
       instructorId: { type: Schema.Types.ObjectId, ref: "User", required: true },
       modules: [{ type: Schema.Types.ObjectId, ref: "Module" }],
-      // status: { type: String, enum: ["draft", "published", "archived"], default: "draft" },
+      status: { type: Boolean, default: true },
       isPublic:{type: Boolean},
       price: { type: Number, default: 0 },
       discountPrice: { type: Number, default: 0 },

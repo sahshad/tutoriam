@@ -7,10 +7,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Input } from '@/components/ui/input'
 import { TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table'
 import { fetchAllInstructors } from '@/services/instructorService'
+import { toggleUserStatus } from '@/services/userServices'
 import { IInstructor } from '@/types/instructor'
 import { IUser } from '@/types/user'
 import { MoreHorizontal, Star } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 
 const TutorsPage = () => {
@@ -39,7 +41,31 @@ const TutorsPage = () => {
     } catch (error) {
       console.log(error)
     }
-  } 
+  }
+  
+  const handleStatusChange = async(userId: string) => {
+    try {
+      await toggleUserStatus(userId); // server handles the toggle
+
+      toast.info("Instructor status changed successfully");
+  
+      setInstructors(prev =>
+        prev.map(inst =>
+          typeof inst.userId === "object" && inst.userId._id === userId
+            ? {
+                ...inst,
+                userId: {
+                  ...inst.userId,
+                  status: inst.userId.status === "active" ? "blocked" : "active",
+                },
+              }
+            : inst
+        )
+      );
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(()=> {
     getAllInstructors()
@@ -116,7 +142,7 @@ const TutorsPage = () => {
                         <DropdownMenuItem>View profile</DropdownMenuItem>
                         <DropdownMenuItem>View courses</DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleStatusChange(instructorDetails._id)}>
                           {instructorDetails.status === "active" ? "Block tutor" : "Unblock tutor"}
                         </DropdownMenuItem>
                       </DropdownMenuContent>

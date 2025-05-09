@@ -24,4 +24,10 @@ export class OrderController implements IOrderController{
         const ordersWithPagination = await this.orderService.getAllOrder(page, limit)
         res.status(StatusCodes.OK).json({message: "order fetched successfully", ordersWithPagination })
     })
+
+    getRecentOrders = asyncHandler(async (req: Request, res: Response) => {
+        const limit = Number(req.query.limit) || 10;
+        const orders = await this.orderService.getRecentOrders(limit);
+        res.status(StatusCodes.OK).json({orders});
+      });
 }

@@ -30,6 +30,10 @@ export class WalletService implements IWalletService {
   }
 
   async creditWallet(instructorId: string, amount: number, method?: string, referenceId?: string): Promise<IWallet> {
+    let wallet = await this.walletRepo.findByInstructor(instructorId);
+    if (!wallet) {
+      wallet = await this.walletRepo.createWallet({ instructorId });
+    }
     const updatedWallet = await this.walletRepo.updateBalance(instructorId, amount, true);
     if (!updatedWallet) throw new Error("Wallet update failed");
 

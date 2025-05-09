@@ -5,6 +5,7 @@ import { ITransactionRepository } from "../core/interfaces/repository/ITransacti
 import { IWalletRepository } from "../core/interfaces/repository/IWalletRepository";
 import { TYPES } from "../di/types";
 import { IPayoutRequest } from "../models/PayoutRequest";
+import { HttpException } from "../core/exceptions/HttpException";
 
 @injectable()
 export class PayoutService implements IPayoutService {
@@ -31,9 +32,18 @@ export class PayoutService implements IPayoutService {
   }
   
   async approveRequest(id: string, adminNote?: string): Promise<IPayoutRequest> {
+    const PayoutRequest = await this.payoutRepo.findById(id)
+    if (!PayoutRequest) throw new Error("Payout request not found.");
+    const wallet = await this.walletRepo.findByInstructor(PayoutRequest?.instructorId as string)
+    if (!wallet) throw new Error("Wallet not found.");
+
+    if(wallet.balance < PayoutRequest.amount){
+      throw new Error("insufficient balance to approve")
+    }
+    
     const payout = await this.payoutRepo.updateStatus(id, "approved", adminNote);
     if (!payout) throw new Error("Payout request not found.");
-
+    
     await this.walletRepo.updateBalance(payout.instructorId.toString(), payout.amount, false);
     await this.transactionRepo.createTransaction({
       instructorId: payout.instructorId,

@@ -1,31 +1,60 @@
-import type React from "react"
-
-import { useState } from "react"
+import type React from "react";
+import { useEffect, useState } from "react";
 import {
   BarChart,
   LineChart,
   Star,
-  Download,
-  ChevronDown,
   Users,
   BookOpen,
   DollarSign,
   Layers,
-  User,
-} from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Sidebar } from "@/components/instructor/common/Sidebar"
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Sidebar } from "@/components/instructor/common/Sidebar";
+import { RevenueStats } from "@/components/instructor/earnings/revenue-stats";
+import { Wallet } from "@/types/wallet";
+import { fetchInstructorWallet } from "@/services/earningService";
+import { RevenueChart } from "@/components/instructor/earnings/revenue-chart";
+import { fetchInstructorRating } from "@/services/reviewService";
+import { RatingCard } from "@/components/instructor/dashboard/rating-card";
+import { InstructorRating } from "@/types/review";
+import { InstructorStats } from "@/types/enrollment";
+import { fetchInstructorEnrollemtStats } from "@/services/enrollmentService";
+import { fetchActiveCourseCount } from "@/services/courseService";
 
-const  InstructorDashboardPage = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+const InstructorDashboardPage = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [walletData, setWalletData] = useState<Wallet | null>(null);
+  const [ratings, setRatings] = useState<InstructorRating | null>(null);
+  const [enrollmentStats, setEnrollmentStats] = useState<InstructorStats>()
+  const [activeCourse, setActiveCourse] = useState<string>("0")
+
+  useEffect(() => {
+    getDahsboardData();
+  }, []);
+
+  const getDahsboardData = async () => {
+    try {
+      const walletData = await fetchInstructorWallet();
+      setWalletData(walletData.wallet);
+      const ratingData = await fetchInstructorRating();
+      setRatings(ratingData.instructorRating)
+      const enrollmentData = await fetchInstructorEnrollemtStats()
+      setEnrollmentStats(enrollmentData.enrollmentStats)
+      const activeCourseData = await fetchActiveCourseCount()
+      setActiveCourse(activeCourseData.activeCourses)
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
 
   return (
     <div className="flex h-screen bg-background">
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-      
+
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-6">
           <div className="flex flex-1 items-center gap-4">
@@ -87,9 +116,9 @@ const  InstructorDashboardPage = () => {
             </Avatar>
           </div>
         </header>
-        
+
         <main className="flex-1 overflow-y-auto p-6 pb-16">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {/* <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             <StatsCard 
               icon={<Layers className="h-5 w-5 text-primary" />}
               title="957"
@@ -110,32 +139,20 @@ const  InstructorDashboardPage = () => {
               title="951"
               subtitle="Completed Courses"
             />
-          </div>
-          
+          </div> */}
+
           <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <StatsCard 
-              icon={<Users className="h-5 w-5 text-primary" />}
-              title="1,674,767"
-              subtitle="Students"
-            />
-            <StatsCard 
-              icon={<BookOpen className="h-5 w-5 text-primary" />}
-              title="3"
-              subtitle="Online Courses"
-            />
-            <StatsCard 
+            <StatsCard icon={<Users className="h-5 w-5 text-primary" />} title={enrollmentStats?.studentCount.toString() as string} subtitle="Students" />
+            <StatsCard icon={<BookOpen className="h-5 w-5 text-primary" />} title={activeCourse} subtitle="Online Courses" />
+            <StatsCard
               icon={<DollarSign className="h-5 w-5 text-primary" />}
-              title="$7,461,767"
+              title={`₹${walletData?.balance.toFixed(2)}`}
               subtitle="USD Total Earning"
             />
-            <StatsCard 
-              icon={<Layers className="h-5 w-5 text-primary" />}
-              title="56,489"
-              subtitle="Course Sold"
-            />
+            <StatsCard icon={<Layers className="h-5 w-5 text-primary" />} title={enrollmentStats?.coursesSold.toString() as string} subtitle="Course Sold" />
           </div>
-          
-          <div className="mt-6">
+
+          {/* <div className="mt-6">
             <Card className="bg-gray-950 text-white">
               <CardContent className="p-6">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -167,10 +184,12 @@ const  InstructorDashboardPage = () => {
                 </div>
               </CardContent>
             </Card>
+          </div> */}
+          <div className="mt-5">
+            <RevenueStats wallet={walletData} />
           </div>
-          
           <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Card>
+            {/* <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <h3 className="font-medium">Recent Activity</h3>
@@ -202,9 +221,9 @@ const  InstructorDashboardPage = () => {
                   />
                 </div>
               </CardContent>
-            </Card>
-            
-            <Card>
+            </Card> */}
+
+            {/* <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <h3 className="font-medium">Revenue</h3>
@@ -220,9 +239,9 @@ const  InstructorDashboardPage = () => {
                   <LineChartPlaceholder />
                 </div>
               </CardContent>
-            </Card>
-            
-            <Card>
+            </Card> */}
+
+            {/* <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <h3 className="font-medium">Profile View</h3>
@@ -239,11 +258,20 @@ const  InstructorDashboardPage = () => {
                   <p className="text-sm text-muted-foreground">USD Dollar you earned</p>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
-          
+
           <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <Card>
+            {ratings && (
+              <RatingCard
+                averageRating={ratings?.averageRating}
+                starPercentages={Object.fromEntries(
+                  ratings?.breakdown.map(({ rating, percentage }) => [rating, percentage])
+                )}
+                totalReviews={ratings.totalReviews}
+              />
+            )}
+            {/* <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <h3 className="font-medium">Overall Course Rating</h3>
@@ -274,9 +302,9 @@ const  InstructorDashboardPage = () => {
                   <RatingBar stars={1} percentage={0.5} />
                 </div>
               </CardContent>
-            </Card>
-            
-            <Card>
+            </Card> */}
+
+            {/* <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <h3 className="font-medium">Course Overview</h3>
@@ -289,13 +317,14 @@ const  InstructorDashboardPage = () => {
                   <MultiLineChartPlaceholder />
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
+            <RevenueChart />
           </div>
         </main>
       </div>
     </div>
-  )
-}
+  );
+};
 
 function StatsCard({ icon, title, subtitle }: { icon: React.ReactNode; title: string; subtitle: string }) {
   return (
@@ -310,7 +339,7 @@ function StatsCard({ icon, title, subtitle }: { icon: React.ReactNode; title: st
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function ActivityItem({ name, action, time }: { name: string; action: string; time: string }) {
@@ -326,7 +355,7 @@ function ActivityItem({ name, action, time }: { name: string; action: string; ti
         <p className="text-xs text-muted-foreground">{time}</p>
       </div>
     </div>
-  )
+  );
 }
 
 function RatingBar({ stars, percentage }: { stars: number; percentage: number }) {
@@ -342,7 +371,7 @@ function RatingBar({ stars, percentage }: { stars: number; percentage: number })
       </div>
       <span className="text-xs font-medium w-8">{percentage}%</span>
     </div>
-  )
+  );
 }
 
 function LineChartPlaceholder({ height = 200 }: { height?: number }) {
@@ -350,7 +379,7 @@ function LineChartPlaceholder({ height = 200 }: { height?: number }) {
     <div className="h-full w-full flex items-center justify-center">
       <LineChart className="h-full w-full text-muted-foreground/50" />
     </div>
-  )
+  );
 }
 
 function BarChartPlaceholder() {
@@ -358,7 +387,7 @@ function BarChartPlaceholder() {
     <div className="h-full w-full flex items-center justify-center">
       <BarChart className="h-full w-full text-muted-foreground/50" />
     </div>
-  )
+  );
 }
 
 function MultiLineChartPlaceholder() {
@@ -383,7 +412,7 @@ function MultiLineChartPlaceholder() {
       </div>
       <LineChart className="h-full w-full text-muted-foreground/50" />
     </div>
-  )
+  );
 }
 
-export default InstructorDashboardPage
+export default InstructorDashboardPage;

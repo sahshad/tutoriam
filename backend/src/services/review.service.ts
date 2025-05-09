@@ -3,15 +3,22 @@ import { TYPES } from "../di/types";
 import { IReviewRepository } from "../core/interfaces/repository/IReviewRepository";
 import { IReviewService } from "../core/interfaces/service/IReviewService";
 import { IReview } from "../models/Review";
+import { ICourseRepository } from "../core/interfaces/repository/ICourseRepository";
+import { InstructorRating } from "../core/types/userTypes";
 
 @injectable()
 export class ReviewService implements IReviewService {
-    constructor(@inject(TYPES.ReviewRepository) private reviewRepository: IReviewRepository) {}
+    constructor(
+      @inject(TYPES.ReviewRepository) private reviewRepository: IReviewRepository,
+      @inject(TYPES.CourseRepository) private courseRepository: ICourseRepository
+  ) {}
   
     async addReview(userId: string, courseId: string, rating: number, comment?: string): Promise<IReview> {
       const existing = await this.reviewRepository.findUserReview(courseId, userId);
       if (existing) throw new Error("You have already reviewed this course.");
-      return await this.reviewRepository.createReview({ userId, courseId, rating, comment });
+      const course = await this.courseRepository.findById(courseId)
+      const instructorId = course?.instructorId ? course.instructorId.toString() : "";
+      return await this.reviewRepository.createReview({ userId,instructorId, courseId, rating, comment });
     }
   
     // async getCourseReviews(userId:string,  courseId: string,
@@ -89,6 +96,10 @@ export class ReviewService implements IReviewService {
       const review = await this.reviewRepository.deleteReview(reviewId);
       if (!review || review.userId.toString() !== userId.toString()) throw new Error("Unauthorized or review not found");
       return review;
+    }
+
+    async getInstructorRating(instructorId: string): Promise<InstructorRating>{
+      return await this.reviewRepository.getInstructorRatingStats(instructorId)
     }
   }
   

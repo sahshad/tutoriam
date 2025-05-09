@@ -22,6 +22,8 @@ router.post(
   courseController.createCourse
 );
 
+router.get("/active-count", authMiddleware([UserRole.INSTRUCTOR]), courseController.getMyActiveCourseCount)
+
 router.put(
   "/:courseId",
   authMiddleware([UserRole.INSTRUCTOR]),
@@ -31,6 +33,8 @@ router.put(
   ]),
   courseController.updateCourse
 );
+
+router.patch("/:courseId", authMiddleware([UserRole.ADMIN]), courseController.toggleStatus)
 
 router.get("/my-courses", authMiddleware([UserRole.INSTRUCTOR]), courseController.getMyCourses);
 router.get("/:courseId", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), courseController.getCourseWithContent);

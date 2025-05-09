@@ -6,6 +6,7 @@ import {
   Book,
   BookOpen,
   ChartBarStacked,
+  DollarSign,
   GraduationCap,
   LogOutIcon,
   Settings,
@@ -56,6 +57,11 @@ const sidebarItems = [
     title: "Category",
     href: "/admin/categories",
     icon: ChartBarStacked,
+  },
+  {
+    title: "Payouts",
+    href: "/admin/payouts",
+    icon: DollarSign,
   },
   {
     title: "Settings",

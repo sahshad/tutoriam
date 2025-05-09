@@ -9,6 +9,7 @@
 //   }
 
 import { Course } from "./course";
+import { IUser } from "./user";
 
   
 //   export interface PurchaseDetails {
@@ -44,7 +45,7 @@ import { Course } from "./course";
 
 export interface IOrder {
     _id:string;
-    userId: string;
+    userId: string | IUser;
     courseIds: Course[];
     totalAmount: number;
     paymentIntentId: string;

@@ -29,4 +29,5 @@ export interface ICourseService extends IBaseService<ICourse> {
     instructorId: string
   ): Promise<PaginatedCoursesResponse | null>;
   getAllCoursesForAdmin(page: number, limit: number, searchQuery?: string): Promise<PaginatedCoursesResponse | null>;
+  toggleCourseStatus(courseId: string): Promise<ICourse | null>;
 }

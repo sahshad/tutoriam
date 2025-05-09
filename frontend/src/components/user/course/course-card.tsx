@@ -33,9 +33,9 @@ export function CourseCard({ course }: CourseCardProps) {
         <h3 className="mb-2 line-clamp-2 flex-1 font-medium leading-tight">{title}</h3>
         <div className="mt-auto flex items-center justify-between">
           <div className="flex items-center gap-1">
-            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm font-medium">{rating}</span>
-            <span className="text-xs text-muted-foreground">({enrollmentCount?.toLocaleString()} students)</span>
+            {/* <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" /> */}
+            {/* <span className="text-sm font-medium">{rating}</span> */}
+            {/* <span className="text-xs text-muted-foreground">({enrollmentCount?.toLocaleString()} students)</span> */}
           </div>
           <div className="text-lg font-bold text-[16px] ">
   {Number(price) === 0 || isFree ? "Free" : `₹ ${price}`}

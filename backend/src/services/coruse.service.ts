@@ -109,6 +109,7 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
 
   let filter:any = {};
   filter.isPublic = true
+  filter.status = true
   if (searchQuery) {
     filter.$or = [
       { title: { $regex: searchQuery, $options: 'i' } }, 
@@ -209,4 +210,8 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
       courses
     };
  }
+
+ async toggleCourseStatus(courseId: string) {
+  return this.courseRepository.toggleCourseStatus(courseId);
+}
 }

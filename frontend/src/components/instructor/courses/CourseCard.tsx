@@ -90,14 +90,14 @@ export function CourseCard({ course:initialCourse  }: CourseCardProps) {
 
         <div className="flex items-center gap-1 mb-2">
           <div className="flex">
-            {Array.from({ length: 5 }).map((_, i) => (
+            {/* {Array.from({ length: 5 }).map((_, i) => (
               <Star
                 key={i}
                 className={cn("h-4 w-4", i < Math.floor(rating) ? "text-black fill-black" : "text-gray-300")}
               />
-            ))}
+            ))} */}
           </div>
-          <span className="text-sm font-medium">{rating.toFixed(1)}</span>
+          {/* <span className="text-sm font-medium">{rating.toFixed(1)}</span> */}
         </div>
 
         <div className="flex items-center text-xs mb-3">

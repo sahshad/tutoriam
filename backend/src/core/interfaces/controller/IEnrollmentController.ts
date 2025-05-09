@@ -8,4 +8,5 @@ export interface IEnrollmentController {
   getOneEnrolledCourse: RequestHandler;
   updateLastVisitedLesson: RequestHandler;
   getEnrolledStudentsOfACourse: RequestHandler;
+  getInstructorStats: RequestHandler;
 }

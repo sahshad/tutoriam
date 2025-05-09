@@ -3,6 +3,7 @@ import { Course } from "./course";
 export interface EnrolledCourse {
     _id:string
     userId: string;
+    instructorId?: string;
     courseId: Course | string;
     enrolledAt: Date;
     progress: {
@@ -14,4 +15,9 @@ export interface EnrolledCourse {
     completed: boolean;
     createdAt: Date;
     updatedAt: Date;
+  }
+
+  export interface InstructorStats {
+    coursesSold: number;
+    studentCount: number;
   }

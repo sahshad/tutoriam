@@ -8,4 +8,6 @@ export interface ICourseController {
   getAllCourses: RequestHandler;
   updateCourse: RequestHandler;
   getAllcoursesForAdmin: RequestHandler;
+  getMyActiveCourseCount: RequestHandler;
+  toggleStatus: RequestHandler;
 }

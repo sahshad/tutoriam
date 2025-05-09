@@ -169,4 +169,11 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
 
     return result.length > 0 ? result[0] : null;
   }
+
+  async toggleCourseStatus(courseId: string): Promise<ICourse | null> {
+    const course = await Course.findById(courseId);
+    if (!course) return null;
+    course.status = !course.status;
+    return await course.save();
+  }
 }
