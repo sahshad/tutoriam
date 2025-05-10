@@ -131,7 +131,7 @@ const OrdersPage = () => {
                         {order.courseIds.length}
                       </TableCell>
                       <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
-                      <TableCell>${order.totalAmount.toFixed(2)}</TableCell>
+                      <TableCell>₹{order.totalAmount.toFixed(2)}</TableCell>
                       <TableCell>
                         <Badge variant={order.status === "Paid" ? "default" : "destructive"}>
                           {order.status}

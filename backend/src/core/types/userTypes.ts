@@ -63,3 +63,17 @@ export interface EnrolledStudent {
   enrollmentDate: Date;
 }
 
+export interface InstructorRating {
+  averageRating: number
+  totalReviews: number
+  breakdown: {
+    rating: number;
+    count: any;
+    percentage: number;
+}[]
+}
+
+export interface InstructorStats {
+  coursesSold: number;
+  studentCount: number;
+}

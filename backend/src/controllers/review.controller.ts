@@ -16,7 +16,6 @@ export class ReviewController implements IReviewController {
   addReview = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const userId = req.user?._id
     const { courseId, rating, comment } = req.body;
-    console.log(courseId)
     const review = await this.reviewService.addReview(userId as string,courseId as string, rating, comment);
     res.status(StatusCodes.CREATED).json({ message: "Review added", review });
   });
@@ -50,4 +49,10 @@ export class ReviewController implements IReviewController {
     await this.reviewService.removeUserReview(reviewId, userId);
     res.status(StatusCodes.OK).json({ message: "Review deleted" });
   });
+
+  getInstructorRating = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const instructorId = req.user?._id as string
+    const instructorRating = await this.reviewService.getInstructorRating(instructorId) 
+    res.status(StatusCodes.OK).json({message: "instructor rating fetched successfully", instructorRating})
+  })
 }

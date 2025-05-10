@@ -22,10 +22,11 @@ export class EnrollmentRepository extends BaseRepository<IEnrollment> implements
     return await Enrollment.findOne({userId, courseId})
   }
 
-  async createEnrollment(userId:string, courseId:string, totalLessons:number) {
+  async createEnrollment(userId:string, courseId:string,instructorId: string, totalLessons:number) {
     return Enrollment.create({
       userId,
       courseId,
+      instructorId,
       enrolledAt: new Date(),
       progress: {
         completedLessons: [],
@@ -147,5 +148,20 @@ export class EnrollmentRepository extends BaseRepository<IEnrollment> implements
       enrollmentDate: enrollment.enrolledAt,
     };
   });
+  }
+
+  async countEnrollmentsByInstructor(instructorId: string): Promise<number> {
+      return await Enrollment.countDocuments({
+        instructorId: new mongoose.Types.ObjectId(instructorId),
+      });
+  }
+
+  async countDistinctStudentsByInstructor(instructorId: string): Promise<number> {
+      const result = await Enrollment.aggregate([
+        { $match: { instructorId: new mongoose.Types.ObjectId(instructorId) } },
+        { $group: { _id: "$userId" } },
+        { $count: "studentCount" },
+      ]);
+      return result.length > 0 ? result[0].studentCount : 0;
   }
 }

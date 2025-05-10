@@ -8,7 +8,7 @@ import { ILessonRepository } from "../core/interfaces/repository/ILessonReposito
 import { IEnrollment } from "../models/Enrollment";
 import { BaseService } from "../core/abstracts/base.service";
 import { FilterQuery } from "mongoose";
-import { EnrolledStudent } from "../core/types/userTypes";
+import { EnrolledStudent, InstructorStats } from "../core/types/userTypes";
 
 @injectable()
 export class EnrollmentService extends BaseService<IEnrollment> implements IEnrollmentService {
@@ -30,9 +30,10 @@ export class EnrollmentService extends BaseService<IEnrollment> implements IEnro
       const course = await this.courseRepository.findById(courseId);
       if (!course) continue;
 
+      const instructorId = course.instructorId.toString()
       const totalLessons = await this.lessonRepository.countDocuments({ courseId: courseId });
       
-      await this.enrollmentRepository.createEnrollment(userId, courseId, totalLessons);
+      await this.enrollmentRepository.createEnrollment(userId, courseId,instructorId, totalLessons);
 
       await this.userRepository.updateWithOperators(userId, { $addToSet: { enrolledCourses: courseId } });
       await this.courseRepository.updateWithOperators(courseId, { $inc: { enrolledCount: 1 } });
@@ -44,10 +45,10 @@ export class EnrollmentService extends BaseService<IEnrollment> implements IEnro
     if (!course) {
       throw new Error("course not found");
     }
-
+    const instructorId = course.instructorId.toString()
     const totalLessons = await this.lessonRepository.countDocuments({ courseId: courseId });
     console.log(totalLessons);
-    await this.enrollmentRepository.createEnrollment(userId, courseId, totalLessons);
+    await this.enrollmentRepository.createEnrollment(userId, courseId,instructorId, totalLessons);
 
     // await this.userRepository.updateWithOperators(userId, { $addToSet: { enrolledCourses: courseId } });
     await this.courseRepository.updateWithOperators(courseId, { $inc: { enrollmentCount: 1 } });
@@ -160,5 +161,18 @@ export class EnrollmentService extends BaseService<IEnrollment> implements IEnro
 
   async getEnrolledStudentsOfACourse(courseId: string): Promise<EnrolledStudent[] | null>{
     return await this.enrollmentRepository.getEnrolledStudentsOfACourse(courseId)
+  }
+
+  async getInstructorStats(instructorId: string): Promise<InstructorStats> {
+      const [coursesSold, studentCount] = await Promise.all([
+        this.enrollmentRepository.countEnrollmentsByInstructor(instructorId),
+        this.enrollmentRepository.countDistinctStudentsByInstructor(instructorId),
+      ]);
+
+      return {
+        coursesSold,
+        studentCount,
+      };
+ 
   }
 }

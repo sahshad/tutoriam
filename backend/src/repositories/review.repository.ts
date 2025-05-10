@@ -1,8 +1,10 @@
 import { injectable } from "inversify";
 import { IReview, Review } from "../models/Review";
 import { IReviewRepository } from "../core/interfaces/repository/IReviewRepository";
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { BaseRepository } from "../core/abstracts/base.repository";
+import { promises } from "dns";
+import { InstructorRating } from "../core/types/userTypes";
 
 @injectable()
 export class ReviewRepository extends BaseRepository<IReview> implements IReviewRepository {
@@ -38,4 +40,66 @@ export class ReviewRepository extends BaseRepository<IReview> implements IReview
     async deleteReview(reviewId: string): Promise<IReview | null> {
       return await Review.findByIdAndDelete(reviewId);
     }
+
+    async getInstructorRatingStats(instructorId: string): Promise<InstructorRating> {
+      const objectId = new mongoose.Types.ObjectId(instructorId);
+      const stats = await Review.aggregate([
+        { $match: { instructorId: objectId} },
+        {
+          $group: {
+            _id: "$rating",
+            count: { $sum: 1 }
+          }
+        },
+        {
+          $facet: {
+            breakdown: [
+              {
+                $project: {
+                  rating: "$_id",
+                  count: 1,
+                  _id: 0
+                }
+              }
+            ],
+            average: [
+              {
+                $group: {
+                  _id: null,
+                  averageRating: { $avg: "$_id" },
+                  totalReviews: { $sum: "$count" }
+                }
+              }
+            ]
+          }
+        }
+      ]);
+    
+      const breakdown = stats[0]?.breakdown || [];
+      const averageData = stats[0]?.average?.[0] || {
+        averageRating: 0,
+        totalReviews: 0
+      };
+    
+      const { totalReviews } = averageData;
+    
+      // Fill in missing stars and add percentage
+      const fullBreakdown = [1, 2, 3, 4, 5].map((star) => {
+        const found = breakdown.find((b: any) => b.rating === star);
+        const count = found?.count || 0;
+        const percentage = totalReviews ? (count / totalReviews) * 100 : 0;
+        return {
+          rating: star,
+          count,
+          percentage: Math.round(percentage * 10) / 10 // round to 1 decimal place
+        };
+      });
+    
+      return {
+        averageRating: Math.round(averageData.averageRating * 10) / 10,
+        totalReviews,
+        breakdown: fullBreakdown
+      };
+    };
+    
   }

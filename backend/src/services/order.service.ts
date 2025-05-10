@@ -3,6 +3,7 @@ import { IOrderService } from "../core/interfaces/service/IOrderService";
 import { TYPES } from "../di/types";
 import { IOrderRepository } from "../core/interfaces/repository/IOrderRespoitory";
 import { PaginatedOrdersResponse } from "../core/types/userTypes";
+import { IOrder } from "../models/Order";
 
 @injectable()
 export class OrderService implements IOrderService {
@@ -27,5 +28,9 @@ export class OrderService implements IOrderService {
         currentPage: page,
         orders
       };
+  }
+
+  async getRecentOrders(limit: number): Promise<IOrder[]> {
+    return await this.orderRepository.getRecentOrders(limit);
   }
 }

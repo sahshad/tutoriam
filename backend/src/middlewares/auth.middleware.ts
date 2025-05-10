@@ -3,6 +3,9 @@ import jwt, { TokenExpiredError } from "jsonwebtoken";
 import { IUser } from "../models/User";
 import { StatusCodes } from "http-status-codes";
 import { UserRole } from "../core/constants/user.enum";
+import container from "../di/container";
+import { IUserService } from "../core/interfaces/service/IUserService";
+import { TYPES } from "../di/types";
 
 declare module "express-serve-static-core"{
   interface Request {
@@ -11,10 +14,12 @@ declare module "express-serve-static-core"{
   }
  }
 
+ const userService = container.get<IUserService>(TYPES.UserService)
+
 export const authMiddleware = (
   roles:UserRole[],
 ) => {
-  return (  req: Request,res: Response,next: NextFunction) => {
+  return async (  req: Request,res: Response,next: NextFunction) => {
     try {
       const accessToken =
       req.cookies.accessToken || req.header("Authorization")?.split(" ")[1];
@@ -28,6 +33,15 @@ export const authMiddleware = (
       
         if(roles.length && !roles.includes(decoded.role as UserRole)){
           res.status(StatusCodes.FORBIDDEN).json({message: "permisson denied"})
+          return
+        }
+
+        const user = await userService.findById(decoded.userId)
+
+        if(user?.status === 'blocked'){
+           res.status(StatusCodes.FORBIDDEN).json({
+            message: "Your account has been blocked. Please contact support."
+          });
           return
         }
     

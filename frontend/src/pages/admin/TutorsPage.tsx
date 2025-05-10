@@ -7,10 +7,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Input } from '@/components/ui/input'
 import { TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table'
 import { fetchAllInstructors } from '@/services/instructorService'
+import { toggleUserStatus } from '@/services/userServices'
 import { IInstructor } from '@/types/instructor'
 import { IUser } from '@/types/user'
 import { MoreHorizontal, Star } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 
 const TutorsPage = () => {
@@ -39,7 +41,31 @@ const TutorsPage = () => {
     } catch (error) {
       console.log(error)
     }
-  } 
+  }
+  
+  const handleStatusChange = async(userId: string) => {
+    try {
+      await toggleUserStatus(userId); // server handles the toggle
+
+      toast.info("Instructor status changed successfully");
+  
+      setInstructors(prev =>
+        prev.map(inst =>
+          typeof inst.userId === "object" && inst.userId._id === userId
+            ? {
+                ...inst,
+                userId: {
+                  ...inst.userId,
+                  status: inst.userId.status === "active" ? "blocked" : "active",
+                },
+              }
+            : inst
+        )
+      );
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(()=> {
     getAllInstructors()
@@ -63,9 +89,11 @@ const TutorsPage = () => {
             <TableRow>
               <TableHead>Tutor</TableHead>
               <TableHead>Expertise</TableHead>
-              <TableHead>Courses</TableHead>
-              <TableHead>Students</TableHead>
-              <TableHead>Rating</TableHead>
+              {/* <TableHead>Courses</TableHead> */}
+              <TableHead>Primary Language</TableHead>
+              <TableHead>Current Occupation</TableHead> 
+              {/* <TableHead>Students</TableHead>  */}
+              {/* <TableHead>Rating</TableHead> */}
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -90,14 +118,14 @@ const TutorsPage = () => {
                     </div>
                   </TableCell>
                   <TableCell>{instructor.preferredSubjects[0]}</TableCell>
-                  <TableCell>{ 0}</TableCell>
-                  <TableCell>{instructor.students || 0}</TableCell>
-                  <TableCell>
+                  <TableCell className='text-center'>{ instructor.teachingLanguages[0]}</TableCell>
+                  <TableCell>{instructor.currentOccupation}</TableCell>
+                  {/* <TableCell>
                     <div className="flex items-center">
                       {instructor.rating}
                       <Star className="ml-1 h-4 w-4 fill-primary text-primary" />
                     </div>
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <Badge variant={instructorDetails.status === "active" ? "default" : "destructive"}>
                       {instructorDetails.status === "active" ? "Active" : "Blocked"}
@@ -113,10 +141,10 @@ const TutorsPage = () => {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>View profile</DropdownMenuItem>
-                        <DropdownMenuItem>View courses</DropdownMenuItem>
+                        {/* <DropdownMenuItem>View profile</DropdownMenuItem>
+                        <DropdownMenuItem>View courses</DropdownMenuItem> */}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleStatusChange(instructorDetails._id)}>
                           {instructorDetails.status === "active" ? "Block tutor" : "Unblock tutor"}
                         </DropdownMenuItem>
                       </DropdownMenuContent>

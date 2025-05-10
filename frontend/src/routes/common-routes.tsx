@@ -12,6 +12,8 @@ import WishlistPage from "@/pages/user/WishlistPage";
 import AdminLoginPage from "../pages/admin/LoginPage";
 
 import { Route } from "react-router-dom";
+import AboutPage from "@/pages/user/about-page";
+import ContactPage from "@/pages/user/contact-page";
 export const commonRoutes = (
   <>
     <Route path="/login" element={<LoginPage />} />
@@ -19,6 +21,8 @@ export const commonRoutes = (
     <Route path="/" element={<HomePage />} />
     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
     <Route path="/reset-password" element={<ResetPasswordPage />} />
+    <Route path="/about" element={<AboutPage/>}/>
+    <Route path="/contact" element={<ContactPage/>}/>
 
     <Route element={<ProtectedRoute role={[UserRole.USER, UserRole.INSTRUCTOR]} />}>
       <Route path="/courses" element={<UserCoursesPage />} />

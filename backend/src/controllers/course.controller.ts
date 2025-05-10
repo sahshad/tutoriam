@@ -81,4 +81,16 @@ export class CourseController implements ICourseController {
     const coursesWithPagination = await this.courseService.getAllCoursesForAdmin(page, limit, search)
     res.status(StatusCodes.OK).json({ message: "course updated successfully", coursesWithPagination })
   });
+
+  getMyActiveCourseCount = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const instructorId = req.user?._id as string
+    const activeCourses = await this.courseService.find({instructorId, isPublic: true})
+    res.status(StatusCodes.OK).json({message: "active course count of a instructor", activeCourses: activeCourses?.length})
+  })
+
+  toggleStatus = asyncHandler(async (req: Request, res: Response) => {
+    const { courseId } = req.params;
+    const updatedCourse = await this.courseService.toggleStatus(courseId)
+    res.status(StatusCodes.OK).json({ message: "Course status updated", updatedCourse });
+  });
 }

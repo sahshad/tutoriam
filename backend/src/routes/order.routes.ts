@@ -10,6 +10,7 @@ const router = express.Router();
 const orderController = container.get<IOrderController>(TYPES.OrderController);
 
 router.get("/all", authMiddleware([UserRole.ADMIN]), orderController.getAllOrders)
+router.get("/recent", authMiddleware([UserRole.ADMIN]), orderController.getRecentOrders)
 router.get("/", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), orderController.getUserOrders);
 
 export default router;

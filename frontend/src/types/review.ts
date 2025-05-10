@@ -19,3 +19,14 @@ export interface IPopulatedReview {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface InstructorRating {
+  averageRating: number
+  totalReviews: number
+  breakdown: {
+    rating: number;
+    count: any;
+    percentage: number;
+}[]
+}
+

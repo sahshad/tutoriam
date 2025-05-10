@@ -10,6 +10,7 @@ const router = express.Router();
 const reviewController = container.get<IReviewController>(TYPES.ReviewController);
 
 router.post("/", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), reviewController.addReview);
+router.get("/instructor", authMiddleware([UserRole.INSTRUCTOR]), reviewController.getInstructorRating)
 router.patch("/:reviewId", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), reviewController.updateReview);
 router.get("/:courseId", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), reviewController.getCourseReviews);
 router.delete("/:reviewId", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), reviewController.deleteReview);

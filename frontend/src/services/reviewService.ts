@@ -55,3 +55,13 @@ export const deleteReview = async (reviewId: string) => {
     throw error;
   }
 };
+
+export const fetchInstructorRating = async() => {
+  try {
+    const res = await apiClient.get("/reviews/instructor")
+    console.log(res.data)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}

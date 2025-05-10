@@ -7,6 +7,8 @@ import CoursesPage from "@/pages/admin/courses-page";
 import DashboardPage from "@/pages/admin/DashboardPage";
 import InstructorApplicationsPage from "@/pages/admin/InstructorApplications";
 import OrdersPage from "@/pages/admin/orders-page";
+import PayoutRequestsPage from "@/pages/admin/payout-requests- page";
+import SettingsPage from "@/pages/admin/settings-page";
 import TutorsPage from "@/pages/admin/TutorsPage";
 import UsersPage from "@/pages/admin/UsersPage";
 import { Navigate, Route } from "react-router-dom";
@@ -22,6 +24,8 @@ export const adminRoutes = (
       <Route path="categories" element={<CategoriesPage />} />
       <Route path="courses" element={<CoursesPage/>}/>
       <Route path="purchases" element={<OrdersPage/>}/>
+      <Route path="payouts" element={<PayoutRequestsPage/>}/>
+      <Route path="settings" element={<SettingsPage/>}/>
     </Route>
   </Route>
 );

@@ -1,5 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { getAdminDashboard } from '@/services/adminService'
+import { fetchRecentOrders } from '@/services/orderService';
+import { IOrder } from '@/types/order';
+import { IUser } from '@/types/user';
 import { ArrowDownRight, ArrowUpRight, BookOpen, DollarSign, GraduationCap, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -12,12 +15,15 @@ export interface AdminDashboardStats {
 const DashboardPage = () => {
   const [dashboardData, setDashboardData] = useState<AdminDashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [recentOrders, setRecentOrders] = useState<IOrder[]>([])
   useEffect(()=> {
     const fetchDashboardData = async()=> {
       try {
         const data = await getAdminDashboard()
         console.log(data)
         setDashboardData(data.dashboardDetails)
+        const orderData = await fetchRecentOrders(5)
+        setRecentOrders(orderData.orders)
         setLoading(false)
       } catch (error) {
         console.log(error)
@@ -89,7 +95,7 @@ const DashboardPage = () => {
           <DollarSign className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">$45,231.89</div>
+          <div className="text-2xl font-bold">₹45,231.89</div>
           <p className="text-xs text-muted-foreground">
             <span className="text-rose-500 flex items-center">
               <ArrowDownRight className="mr-1 h-4 w-4" />
@@ -111,14 +117,32 @@ const DashboardPage = () => {
         </CardContent>
       </Card>
       <Card className="col-span-3">
-        <CardHeader>
-          <CardTitle>Recent Sales</CardTitle>
-          <CardDescription>Latest course purchases</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {/* <RecentSales /> */}
-        </CardContent>
-      </Card>
+      <CardHeader>
+        <CardTitle>Recent Sales</CardTitle>
+        <CardDescription>Latest course purchases</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {recentOrders.map((order) => {
+          const user = order.userId as IUser
+          return(
+            <div key={order._id} className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">{user.name}</p>
+                <p className="text-sm text-muted-foreground">
+                  {order.courseIds.map((course) => course.title).join(", ")}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="font-semibold text-green-600">₹{order.totalAmount}</p>
+                <p className="text-xs text-muted-foreground">
+                  {new Date(order.createdAt).toLocaleDateString()}
+                </p>
+              </div>
+            </div>
+          )
+        })}
+      </CardContent>
+    </Card>
     </div>
   </div>
   )

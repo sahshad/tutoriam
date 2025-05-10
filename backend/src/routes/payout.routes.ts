@@ -13,7 +13,7 @@ router.post("/", authMiddleware([UserRole.INSTRUCTOR]), payoutController.createR
 router.get("/", authMiddleware([UserRole.INSTRUCTOR]), payoutController.getMyPayoutRequests);
 
 // Admin - approve/reject payout requests
-router.get("/admin", authMiddleware([UserRole.ADMIN]), payoutController.getAllPayoutRequests);
+router.get("/all", authMiddleware([UserRole.ADMIN]), payoutController.getAllPayoutRequests);
 router.patch("/:id/approve", authMiddleware([UserRole.ADMIN]), payoutController.approveRequest);
 router.patch("/:id/reject", authMiddleware([UserRole.ADMIN]), payoutController.rejectRequest);
 

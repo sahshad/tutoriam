@@ -21,7 +21,7 @@ export interface Course {
     requirements?: string[];
     instructorId: string;
     modules?: Module[];
-    status?: "draft" | "published" | "archived";
+    status?: boolean
     price?: string;
     discountPrice?: number;
     rating?: number;

@@ -96,4 +96,5 @@ export class UserController implements IUserController {
     const dashboardData = await this.userService.getDashboardData(userId);
     res.status(StatusCodes.OK).json({ message: "user dashboard fetched successfully", dashboardData });
   });
+
 }

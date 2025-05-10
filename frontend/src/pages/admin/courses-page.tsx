@@ -13,11 +13,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
-import { getAllcoursesForAdmin } from "@/services/courseService";
+import { getAllcoursesForAdmin, toggleCourseStatus } from "@/services/courseService";
 import { Course } from "@/types/course";
 import { IUser } from "@/types/user";
 import { AlertCircle, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 
 const CoursesPage = () => {
@@ -50,6 +51,20 @@ const CoursesPage = () => {
       setIsLoading(false);
     }
   };
+
+  const handleChangeStatus = async(courseId: string) => {
+    try {
+        await toggleCourseStatus(courseId);
+        setCourses(prev =>
+          prev.map(course =>
+            course._id === courseId ? { ...course, status: !course.status } : course
+          )
+        );
+        toast.info("course status changed successfully")
+      } catch (error:any) {
+       toast.error(error.message || "unexpected error while updating status")
+      }
+  }
 
   useEffect(() => {
     getAllCourses();
@@ -126,8 +141,8 @@ const CoursesPage = () => {
                       <TableCell>{course.categoryId.name}</TableCell>
                       <TableCell className="text-center">{course.enrollmentCount}</TableCell>
                       <TableCell>
-                        <Badge variant={course.status === "published" ? "default" : "destructive"}>
-                          {course.status === "published" ? "Published" : "Draft"}
+                        <Badge variant={course.status ? "default" : "destructive"}>
+                          {course.status  ? "Published" : "Draft"}
                         </Badge>
                       </TableCell>
                       <TableCell>{course.price ? `$${course.price}` : "Free"}</TableCell>
@@ -141,9 +156,9 @@ const CoursesPage = () => {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>View details</DropdownMenuItem>
-                            <DropdownMenuItem>Edit course</DropdownMenuItem>
-                            <DropdownMenuItem>Delete course</DropdownMenuItem>
+                            {/* <DropdownMenuItem>View details</DropdownMenuItem>
+                            <DropdownMenuItem>Edit course</DropdownMenuItem> */}
+                            <DropdownMenuItem onClick={() => handleChangeStatus(course._id)}>{course.status ? "Unlist" : " List"}</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>

@@ -183,7 +183,7 @@ const AccountSettings: React.FC = () => {
                       Title
                     </label>
                     <span className="text-xs text-muted-foreground">
-                      {title.length}/50
+                      {title?.length}/50
                     </span>
                   </div>
                   <Input
