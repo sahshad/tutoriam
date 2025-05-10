@@ -33,6 +33,7 @@ export interface IInstructor extends Document {
     };
     reason: { type: String };
   };
+  students:number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -79,6 +80,7 @@ const InstructorSchema = new Schema<IInstructor>(
       },
       reason: { type: String, required: false },
     },
+    students: {type: Number, default: 0}
   },
   { timestamps: true }
 );

@@ -155,7 +155,7 @@ export default function InstructorApplicationsPage() {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>{application.education.highestDegree}</TableCell>
+                  <TableCell>{application.education.highestDegree} degree</TableCell>
                   {/* {application.preferredSubjects.map((subject:any) => (
                     <TableCell>{subject}</TableCell>
                   ))} */}

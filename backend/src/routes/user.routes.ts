@@ -15,10 +15,10 @@ const instructorController = container.get<IInstructorController>(TYPES.Instruct
 router.get("/",authMiddleware([UserRole.ADMIN]),userController.getAllUsers);
 router.patch("/:userId/status",authMiddleware([UserRole.ADMIN]), userController.toggleUserStatus)
 router.get("/dashboard", authMiddleware([UserRole.USER]), userController.getDashboardData )
-router.get("/profile", authMiddleware([UserRole.USER]), userController.getUserProfile);
-router.put("/profile", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR]), upload.single("profileImage"), userController.updateProfile);
+router.get("/profile", authMiddleware([UserRole.USER, UserRole.ADMIN]), userController.getUserProfile);
+router.put("/profile", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR, UserRole.ADMIN]), upload.single("profileImage"), userController.updateProfile);
 
-router.patch("/change-password", authMiddleware([UserRole.USER]), userController.changePassword);
+router.patch("/change-password", authMiddleware([UserRole.USER, UserRole.ADMIN]), userController.changePassword);
 router.post(
   "/become-instructor",
   authMiddleware([UserRole.USER]),
@@ -26,6 +26,7 @@ router.post(
   userController.becomeInstructor
 );
 router.get("/applications", authMiddleware([UserRole.USER]), instructorController.getUserApplications);
+
 
 export default router;
 
