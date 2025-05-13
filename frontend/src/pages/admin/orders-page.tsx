@@ -7,7 +7,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -15,7 +14,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
 import { IOrder } from "@/types/order"; // Adjust path based on your project structure
 import { IUser } from "@/types/user";
-import { Course } from "@/types/course";
 import { AlertCircle, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchAllOrders } from "@/services/orderService";
@@ -23,7 +21,7 @@ import { fetchAllOrders } from "@/services/orderService";
 const OrdersPage = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(10);
+  const [limit] = useState<number>(10);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");

@@ -1,5 +1,6 @@
 import { Lesson } from "./lessons";
 import { Module } from "./module";
+import { IUser } from "./user";
 
 export interface Course {
     _id: string;
@@ -19,7 +20,7 @@ export interface Course {
     congratulationsMessage: string;
     targetAudience?: string;
     requirements?: string[];
-    instructorId: string;
+    instructorId: string | IUser;
     modules?: Module[];
     status?: boolean
     price?: string;

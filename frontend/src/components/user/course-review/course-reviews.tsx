@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { CourseRatingOverview } from "./course-rating-review";
-import { RatingDistribution } from "./rating-distribution";
 import { StudentReviews } from "./student-review";
 import { fetchCourseReviews } from "@/services/reviewService";
 import { IPopulatedReview } from "@/types/review";

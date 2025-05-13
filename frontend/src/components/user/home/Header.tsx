@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../../ui/dropdown-menu";
 import { Button } from "../../ui/button";
-import { Bell, ChevronDown, Heart, LogOutIcon, Search, ShoppingCart, User, Menu, X } from "lucide-react";
+import { ChevronDown, Heart, LogOutIcon, Search, ShoppingCart, User, Menu, X } from "lucide-react";
 import { Input } from "../../ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { userLogout } from "@/services/authService";

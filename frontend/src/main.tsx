@@ -5,7 +5,6 @@ import App from './App.tsx'
 import {Provider} from 'react-redux'
 import store from './redux/store.ts'
 import ThemeProvider from './components/common/theme-provider.tsx'
-import { SocketProvider } from './context/socket-context.tsx'
 
 createRoot(document.getElementById('root')!).render(
   // <StrictMode>

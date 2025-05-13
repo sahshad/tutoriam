@@ -1,11 +1,11 @@
 
 import { Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import type { CartItemType } from "@/lib/mock-data"
 import { Link } from "react-router-dom"
+import { Course } from "@/types/course"
 
 interface CartItemProps {
-  item: CartItemType
+  item: Course
   onRemove: () => void
   onMoveToWishlist: () => void
 }
@@ -32,7 +32,7 @@ export function CartItem({ item, onRemove, onMoveToWishlist }: CartItemProps) {
                     viewBox="0 0 24 24"
                     fill="currentColor"
                     className={`h-3 w-3 ${
-                      i < Math.floor(item.rating) ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"
+                      i < Math.floor(Number(item.rating)) ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"
                     }`}
                   >
                     <path
@@ -57,10 +57,10 @@ export function CartItem({ item, onRemove, onMoveToWishlist }: CartItemProps) {
       </div>
       <div className="col-span-3 flex items-center justify-center sm:justify-center">
         <div className="flex flex-col items-start sm:items-center">
-          {item.originalPrice && item.originalPrice > item.price && (
-            <span className="text-sm text-muted-foreground line-through">${item.originalPrice.toFixed(2)}</span>
+          {item.price && (
+            <span className="text-sm text-muted-foreground line-through">${Number(item.price).toFixed(2)}</span>
           )}
-          <span className="text-md font-bold">₹{item?.price?.toFixed(2)}</span>
+          <span className="text-md font-bold">₹{Number(item.price).toFixed(2)}</span>
         </div>
       </div>
 

@@ -16,7 +16,6 @@ export default function CourseSidebar({
   level,
   studentsEnrolled,
   language,
-  subtitleLanguage,
 }: any) {
   const [isUserEnrolled, setIsUserEnrolled] = useState<EnrolledCourse>()
   const dispatch = useAppDispatch()
@@ -33,7 +32,7 @@ export default function CourseSidebar({
 
   const handleAddToWishlist = async () => {
     try {
-      const res = await addCourseToWishlist(id)
+      await addCourseToWishlist(id)
       toast.success("course added to wishlist", {position:"top-right"})
     } catch (error:any) {
       toast.error(error.data.message ||"error while adding course to cart", {position:"top-right"})

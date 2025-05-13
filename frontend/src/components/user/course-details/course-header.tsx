@@ -8,7 +8,7 @@ interface CourseHeaderProps {
   instructor: any
 }
 
-export default function CourseHeader({ title, subtitle, rating, reviewCount, instructor }: CourseHeaderProps) {
+export default function CourseHeader({ title, rating, reviewCount, instructor }: CourseHeaderProps) {
   return (
     <div>
       <h1 className="mb-2 text-2xl font-bold leading-tight sm:text-3xl md:text-2xl">{title}</h1>

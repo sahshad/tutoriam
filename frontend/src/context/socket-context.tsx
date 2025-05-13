@@ -13,7 +13,7 @@ const SocketContext = createContext<Socket | null>(null);
 export const useSocketContext = () => useContext(SocketContext);
 
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isConnected, setIsConnected] = useState(false);
+  const [, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
   const { user, accessToken } = useSelector((state: RootState) => state.auth);
 

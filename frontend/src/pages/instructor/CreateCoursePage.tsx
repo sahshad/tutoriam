@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { FileText, Layers, CheckCircle } from "lucide-react"
 import StepItem from "@/components/instructor/create_course/common/StepItem"
@@ -19,7 +19,7 @@ const CreateCoursePage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submissionStatus, setSubmissionStatus] = useState<{
+  const [submissionStatus] = useState<{
     success: boolean
     message: string
     courseId?: string
@@ -119,7 +119,7 @@ const markLastStep = (status: ProgressStep["status"]) => {
           updateStep(`Creating lesson: ${lecture.name || "Untitled"}...`);
 
           const lessonData = createLessonData(lecture,courseId,moduleId);
-          const response = await createLesson(lessonData)
+           await createLesson(lessonData)
           markLastStep("success");
         }
       }

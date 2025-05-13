@@ -1,17 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { AlertCircle, MoreHorizontal } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { IUser } from "@/types/user"; // Adjust path based on your project structure
 import { getEnrolledStudents } from "@/services/enrollmentService";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

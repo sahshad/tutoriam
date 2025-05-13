@@ -2,8 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fetchListedCategories } from "@/services/categoryService";
 import { Category } from "@/types/category";
-import { values } from "lodash";
-import { CodeSquare, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface CourseFiltersProps {
@@ -24,11 +23,8 @@ export function CourseFilters({
   setSortBy,
   category,
   setCategory,
-  // rating,
-  // setRating,
   subCategory,
   setSubCategory,
-  searchQuery,
   setSearchQuery,
 }: CourseFiltersProps) {
   const [search, setSearch] = useState("");

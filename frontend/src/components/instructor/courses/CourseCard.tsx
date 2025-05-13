@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Star, MoreHorizontal, Users } from "lucide-react";
+import { MoreHorizontal, Users } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,9 +9,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import type { Course } from "@/types/course";
-import { cn } from "@/lib/utils/classname";
-// import { updateCoursePublishStatus } from "@/services/instructorService";
-import { useCourses } from "@/hooks/useCourse";
 import { toast } from "sonner";
 import { updateCoursePublishStatus } from "@/services/courseService";
 
@@ -21,7 +18,7 @@ interface CourseCardProps {
 
 export function CourseCard({ course:initialCourse  }: CourseCardProps) {
     const [course, setCourse] = useState<Course>(initialCourse); 
-    const [showActions, setShowActions] = useState(false);
+    const [, setShowActions] = useState(false);
     const navigate = useNavigate();
     // const {setCourses, loading} = useCourses()
     
@@ -35,7 +32,7 @@ export function CourseCard({ course:initialCourse  }: CourseCardProps) {
     navigate(`/instructor/my-courses/${course._id}/edit`);
   };
   
-  const handlePublishToggle = async(e:React.MouseEvent) => {
+  const handlePublishToggle = async() => {
       
      try {
          const res = await updateCoursePublishStatus(course._id)
@@ -52,18 +49,10 @@ export function CourseCard({ course:initialCourse  }: CourseCardProps) {
             console.log(course)
         }
   }
-  // useEffect(()=>{
-  // },[course])
 
   const handleCardClick = () => {
       navigate(`/instructor/my-courses/${course._id}`);
     };
-    
-    const rating = course.rating ?? 0;
-    
-//     if(loading){
-//         return <div></div>
-//   }
 
   return (
     <div

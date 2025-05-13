@@ -1,6 +1,5 @@
-import Header from '@/components/user/home/header'
+import Header from '@/components/user/home/Header'
 import MessagingPage from '@/components/user/messaging/message-page'
-import React from 'react'
 
 const MessagePage = () => {
   return (

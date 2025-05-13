@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
-import Header from "@/components/user/home/header";
+import Header from "@/components/user/home/Header";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({

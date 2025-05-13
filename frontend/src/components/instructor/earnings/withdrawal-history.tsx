@@ -1,8 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { MoreHorizontal } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { PayoutRequestData } from "@/types/revenue"
 
 // const withdrawals = [

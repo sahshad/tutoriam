@@ -7,8 +7,6 @@ import { refreshToken } from './services/authService';
 import { fetchCartItems } from './redux/thunks/cartThunk';
 import { fetchChats } from './redux/thunks/chatThunk';
 import { SocketProvider } from './context/socket-context';
-import { DashboardFooter } from './components/common/footer';
-
 import { adminRoutes } from './routes/admin-routes';
 import { instructorRoutes } from './routes/instructor-routes';
 import { userRoutes } from './routes/user-routes';

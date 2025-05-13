@@ -47,7 +47,7 @@ const cartSlice = createSlice({
       .addCase(removeFromCart.fulfilled, (state, action) => {
         const courseIdToRemove = action.meta.arg;
         state.cartItems = state.cartItems.filter(
-          (item) => item._id !== courseIdToRemove
+          (item: CartItem) => item._id !== courseIdToRemove
         );
       })
 
@@ -55,7 +55,7 @@ const cartSlice = createSlice({
       .addCase(moveToWishlist.fulfilled, (state, action) => {
         const courseIdToRemove = action.meta.arg;
         state.cartItems = state.cartItems.filter(
-            (item) => item._id !== courseIdToRemove
+            (item: CartItem) => item._id !== courseIdToRemove
         )
       })
   },

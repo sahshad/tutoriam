@@ -2,8 +2,6 @@ import type { Course } from "@/types/course"
 import { CourseCardSkeleton } from "./course-card-skeleton"
 import { CourseCard } from "./course-card"
 import { motion } from "framer-motion"
-import { useEffect, useState } from "react"
-
 
 interface CourseGridProps {
   courses: Course[]

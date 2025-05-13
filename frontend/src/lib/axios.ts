@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios from "axios";
 import store  from "../redux/store";
 import { refreshToken } from "../services/authService";
 import {logout  } from '../redux/slices/authSlice'

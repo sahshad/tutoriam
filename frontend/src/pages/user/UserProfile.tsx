@@ -1,4 +1,4 @@
-import Header from '@/components/user/home/header'
+import Header from '@/components/user/home/Header'
 import ProfileHeader from '@/components/user/profile/profile-header'
 import ProfileNavigation from '@/components/user/profile/profile-navigation'
 import { useEffect } from 'react'
