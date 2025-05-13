@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState, useAppSelector } from "@/redux/store";
+import { useAppSelector } from "@/redux/store";
 import { Certificate } from "@/types/certificate";
 import { getUserCertificates, downloadCertificate } from "@/services/certificateService";
 import { toast } from "sonner";

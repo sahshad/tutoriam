@@ -1,5 +1,5 @@
 import CategorySection from '@/components/user/home/category-section'
-import Header from '@/components/user/home/header'
+import Header from '@/components/user/home/Header'
 import HeroSection from '@/components/user/home/hero-section'
 
 const HomePage = () => {

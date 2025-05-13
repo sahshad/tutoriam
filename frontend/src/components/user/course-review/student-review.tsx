@@ -12,7 +12,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import ReviewDialog from "./course-review-dialog";
 import { ConfirmationDialog } from "@/components/common/confirmation-dialog";
 import { deleteReview, updateReview } from "@/services/reviewService";
-import { toast } from "sonner";
 
 interface StudentReviewsProps {
   reviews: IPopulatedReview[];
@@ -58,7 +57,7 @@ export function StudentReviews({ reviews, hasMore, setFilter, setSkip, setLoadMo
 
   const handleDeleteReview = async (reviewId: string) => {
     try {
-      const data = await deleteReview(reviewId)
+       await deleteReview(reviewId)
       setReviews(prev =>
         prev.filter(review => review._id !== reviewId)
       );

@@ -10,7 +10,7 @@ import { fetchAllInstructors } from '@/services/instructorService'
 import { toggleUserStatus } from '@/services/userServices'
 import { IInstructor } from '@/types/instructor'
 import { IUser } from '@/types/user'
-import { MoreHorizontal, Star } from 'lucide-react'
+import { MoreHorizontal } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -18,7 +18,7 @@ import { toast } from 'sonner'
 const TutorsPage = () => {
   const [instructors, setInstructors] = useState<IInstructor[]>([])
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(10);
+  const [limit] = useState<number>(10);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [search, setSearch] = useState<string>("")
   const [searchQuery, setSearchQuery] = useState<string>("")

@@ -7,8 +7,6 @@ import { Course } from "@/types/course";
 import { getCourseById } from "@/services/courseService";
 import CourseHeader from "@/components/instructor/courses/CourseHeader";
 import { CourseStats } from "@/components/instructor/courses/CourseStats";
-import { CourseRating } from "@/components/instructor/courses/CourseReview";
-import { CourseCharts } from "@/components/instructor/courses/CourseCharts";
 import CourseReviews from "@/components/user/course-review/course-reviews";
 import CourseEnrolledStudents from "@/components/instructor/courses/course-enrolled-students";
 

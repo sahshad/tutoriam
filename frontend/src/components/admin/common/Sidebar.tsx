@@ -11,7 +11,6 @@ import {
   LogOutIcon,
   Settings,
   ShoppingCart,
-  Tag,
   Users,
 } from "lucide-react";
 import { useDispatch } from "react-redux";

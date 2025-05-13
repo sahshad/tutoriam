@@ -7,7 +7,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -24,7 +23,7 @@ import { toast } from "sonner";
 const CoursesPage = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(10);
+  const [limit] = useState<number>(10);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");

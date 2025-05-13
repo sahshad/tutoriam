@@ -47,7 +47,7 @@ export function CourseHeader({
     try {
       const data = await applyForCertificate(enrollment.courseId as string)
       console.log(data)
-      const download = await downloadCertificate(data.certificateUrl)
+       await downloadCertificate(data.certificateUrl)
     } catch (error) {
       console.log(error)
     }

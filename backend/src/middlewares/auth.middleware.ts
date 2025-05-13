@@ -23,8 +23,10 @@ export const authMiddleware = (
     try {
       const accessToken =
       req.cookies.accessToken || req.header("Authorization")?.split(" ")[1];
-      if (!accessToken)
+      if (!accessToken){
         res.status(StatusCodes.UNAUTHORIZED).json({ error: "Unauthorized: No token provided" });
+        return 
+      }
       
       const decoded = jwt.verify(
         accessToken,

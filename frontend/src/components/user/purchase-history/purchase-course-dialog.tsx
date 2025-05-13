@@ -45,7 +45,9 @@ export default function PurchaseDetailsDialog({
               </div>
 
               <h3 className="text-base font-medium text-gray-900 mb-1">{course.title}</h3>
-              <div className="text-sm text-gray-500 mb-2">Course by: {course.instructorId}</div>
+              <div className="text-sm text-gray-500 mb-2">
+                Course by: {typeof course.instructorId === "object" && "name" in course.instructorId ? course.instructorId.name : course.instructorId}
+              </div>
               <div className="text-lg font-medium text-[#ff6b38]">${Number(course.price).toFixed(2)}</div>
             </div>
           </div>

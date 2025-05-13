@@ -12,15 +12,12 @@ import ExperienceInfoSection from "./forms/experience-section"
 import SkillsInfoSection from "./forms/skills-section"
 import BioSection from "./forms/bio-section"
 import { sendInstructorApplication } from "@/services/userServices"
-import { useSelector } from "react-redux"
 import { toast } from "sonner"
 
 const TutorApplicationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [currentStep, setCurrentStep] = useState(0) 
-
-  const user = useSelector((state: any) => state.auth.user);
 
 
   const form = useForm<FormValues>({

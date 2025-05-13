@@ -1,17 +1,10 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Course } from "@/types/course"
 
-interface CourseChartsProps {
-  course: Course
-}
 
-export function CourseCharts({ course }: CourseChartsProps) {
+export function CourseCharts() {
   const [revenueTimeframe, setRevenueTimeframe] = useState("month")
-  const [overviewTimeframe, setOverviewTimeframe] = useState("month")
-  const [overviewTab, setOverviewTab] = useState("comments")
 
   return (
     <div className="space-y-6">

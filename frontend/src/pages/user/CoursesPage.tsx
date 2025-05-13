@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Filter, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +6,7 @@ import { CourseSort } from "@/components/user/course/course-sort";
 import { CourseFilters } from "@/components/user/course/course-filter";
 import { CourseGrid } from "@/components/user/course/course-grid";
 import { CoursePagination } from "@/components/user/course/course-pagination";
-import Header from "@/components/user/home/header";
+import Header from "@/components/user/home/Header";
 import { useCourses } from "@/hooks/useCourse";
 
 export default function UserCoursesPage() {

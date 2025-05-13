@@ -16,7 +16,7 @@ export const markAllNotificationsAsReadThunk = createAsyncThunk(
     "notification/markAllNotificationsAsRead",
     async(_, {rejectWithValue}) => {
         try {
-            const data = await markAllNotificationsAsRead()
+             await markAllNotificationsAsRead()
             return true
         } catch (error:any) {
             return rejectWithValue(error?.data.message || "Fialed to mark all notifications as read")

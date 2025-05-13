@@ -1,24 +1,63 @@
-export const formatDate = (date: Date | string, format: string = "dd/MM/yyyy", includeTime: boolean = false) => {
-  if (!date) return "";
-  const d = new Date(date);
+// export const formatDate = (date: Date | string, format: string = "dd/MM/yyyy", includeTime: boolean = false) => {
+//   if (!date) return "";
+//   const d = new Date(date);
 
-  const options: Record<string, any> = {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
+//   const options: Record<string, any> = {
+//     year: "numeric",
+//     month: "2-digit",
+//     day: "2-digit",
+//   };
+
+//   if (includeTime) {
+//     options.hour = "2-digit";
+//     options.minute = "2-digit";
+//     options.hour12 = true;
+//   }
+
+//   if (!includeTime) {
+//     return new Intl.DateTimeFormat("en-GB", options).format(d);
+//   }
+
+//   return new Intl.DateTimeFormat("en-US", options).format(d);
+// };
+
+export const formatDate = (
+  date: Date | string,
+  format: string = "dd/MM/yyyy",
+  includeTime: boolean = false
+): string => {
+  if (!date) return "";
+
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return ""; 
+
+  const pad = (n: number) => n.toString().padStart(2, "0");
+
+  const map: Record<string, string> = {
+    dd: pad(d.getDate()),
+    MM: pad(d.getMonth() + 1),
+    yyyy: d.getFullYear().toString(),
+    hh: pad(d.getHours() % 12 || 12),
+    HH: pad(d.getHours()),
+    mm: pad(d.getMinutes()),
+    ss: pad(d.getSeconds()),
+    a: d.getHours() >= 12 ? "PM" : "AM",
   };
 
-  if (includeTime) {
-    options.hour = "2-digit";
-    options.minute = "2-digit";
-    options.hour12 = true;
-  }
-
   if (!includeTime) {
-    return new Intl.DateTimeFormat("en-GB", options).format(d);
+    format = format
+      .replace(/(hh|HH|mm|ss|a)/g, "")
+      .replace(/[:\s]+/g, " ")  
+      .trim()
+      .replace(/\s{2,}/g, " "); 
   }
 
-  return new Intl.DateTimeFormat("en-US", options).format(d);
+  let formatted = format;
+  for (const token in map) {
+    formatted = formatted.replace(new RegExp(token, "g"), map[token]);
+  }
+
+  return formatted;
 };
 
 

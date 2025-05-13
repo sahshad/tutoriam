@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useAppSelector } from "@/redux/store"
 import { makePayment } from "@/services/paymentService"
-import { stat } from "fs"
 
 interface CartSummaryProps {
   subtotal: number

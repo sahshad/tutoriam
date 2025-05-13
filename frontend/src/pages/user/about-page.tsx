@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Header from "@/components/user/home/header";
+import Header from "@/components/user/home/Header";
 import { BookOpen, Users, Award } from "lucide-react";
 
 export default function AboutPage() {

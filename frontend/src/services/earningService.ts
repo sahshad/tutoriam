@@ -46,9 +46,6 @@ export const fetchPayoutRequests = async () => {
 
 
 export const getAllPayoutRequestsForAdmin = async (
-    page: number,
-    limit: number,
-    searchQuery: string
   ) => {
     try {
       const res = await apiClient.get("/payouts/all")

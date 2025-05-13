@@ -29,7 +29,7 @@ export function AccountSettings() {
   const [title, setTitle] = useState<string>("");
   const [biography, setBiography] = useState<string>("");
   const [image, setImage] = useState<File | string | null>(null);
-  const [initialImage, setInitialImage] = useState<string | null>(null);
+  const [, setInitialImage] = useState<string | null>(null);
 
   const initialValues = {
     firstName: instructor?.name || "",

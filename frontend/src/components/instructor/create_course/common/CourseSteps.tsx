@@ -1,6 +1,5 @@
 import { FileText, Layers, CheckCircle } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { useCourse } from "@/contexts/couseContext"
 import StepItem from "./StepItem"
 
 interface CourseStepsProps {

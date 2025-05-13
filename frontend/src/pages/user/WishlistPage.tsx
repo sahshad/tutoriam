@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-// import { useToast } from "@/hooks/use-toast"
-import { WishlistItemType } from "@/lib/mock-data"
 import { Link } from "react-router-dom"
 import { EmptyWishlist } from "@/components/user/wishlist/empty-wishlist"
 import { WishlistItem } from "@/components/user/wishlist/wishlist-itmes"
-import Header from "@/components/user/home/header"
+import Header from "@/components/user/home/Header"
 import { toast } from "sonner"
 import { addCourseToCart } from "@/services/cartService"
 import { getWishlistItems, removeCourseFromWishlist } from "@/services/wishlistService"
+import { Course } from "@/types/course"
 
 export default function WishlistPage() {
-//   const { toast } = useToast()
-  const [wishlistItems, setWishlistItems] = useState<WishlistItemType[]>([])
+  const [wishlistItems, setWishlistItems] = useState<Course[]>([])
 
   useEffect(()=> {
    const getWishlistData = async () => {

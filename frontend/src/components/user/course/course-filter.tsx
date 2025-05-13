@@ -1,7 +1,4 @@
-import type React from "react";
-import type { ChevronDown } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Slider } from "@/components/ui/slider";
 import {
   Accordion,
   AccordionContent,
@@ -31,18 +28,8 @@ interface CourseFiltersProps {
 
 export function CourseFilters(
   {
-    userCatagories,
-    setUserCatagories,
     userSubCatagories,
     setUserSubCatagories,
-    rating,
-    setRating,
-    priceRange,
-    setPriceRange,
-    level: selectedLevels,
-    setLevel: setSelectedLevels,
-    duration: selectedDurations,
-    setDuration: setSelectedDurations,
   }: CourseFiltersProps
 ) {
 
@@ -56,31 +43,8 @@ export function CourseFilters(
       console.log(updatedSubCategories);
   };
 
-  const handlePriceTypeChange = (value: string) => {
-    // setPriceTypes((prev) =>
-    //   prev.includes(value) ? prev.filter((type) => type !== value) : [...prev, value]
-    // );
-    // const updatedPriceTypes = priceRange.includes(+value)
-    //   ? priceRange.filter((type) => +type !== +value) 
-    //   : [...priceRange, +value];
-
-    // setPriceRange(updatedPriceTypes);
-  };
-
-  const handleLevelChange = (level: string) => {
-    // setSelectedLevels((prev) =>
-    //   prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level]
-    // );
-  };
-
-  const handleDurationChange = (duration: string) => {
-    // setSelectedDurations((prev) =>
-    //   prev.includes(duration) ? prev.filter((d) => d !== duration) : [...prev, duration]
-    // );
-  };
-
-   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const [subCategories, setSubCategories] = useState<any[]>([]); 
+   const [selectedCategory] = useState<string | null>(null);
+    const [, setSubCategories] = useState<any[]>([]); 
     const [categories, setCategories]= useState<Category[] >([])
   
     useEffect(()=> {
@@ -128,103 +92,6 @@ export function CourseFilters(
           }
         </Accordion>
       </div>
-
-      {/* <div>
-        <h2 className="mb-4 text-lg font-semibold uppercase">Course Level</h2>
-        <Accordion type="multiple" defaultValue={["level"]}>
-          <AccordionItem value="level">
-            <AccordionTrigger className="py-2">Level</AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-2">
-                {["All Levels", "Beginner", "Intermediate", "Advanced"].map((level) => (
-                  <div key={level} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`level-${level}`}
-                      checked={selectedLevels.includes(level)}
-                      onCheckedChange={() => handleLevelChange(level)}
-                    />
-                    <label
-                      htmlFor={`level-${level}`}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {level}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div> */}
-
-      {/* <div>
-        <h2 className="mb-4 text-lg font-semibold uppercase">Price</h2>
-        <Accordion type="multiple" defaultValue={["price"]}>
-          <AccordionItem value="price">
-            <AccordionTrigger className="py-2">Price Range</AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-6 px-1 pt-2">
-                <Slider
-                  defaultValue={[0, 200]}
-                  max={200}
-                  step={1}
-                  value={priceRange}
-                  onValueChange={setPriceRange}
-                />
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">${priceRange[0]}</span>
-                  <span className="text-sm">${priceRange[1]}</span>
-                </div>
-                <div className="space-y-2">
-                  {["Free", "Paid"].map((price) => (
-                    <div key={price} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`price-${price}`}
-                        checked={price.includes(price)}
-                        onCheckedChange={() => handlePriceTypeChange(price)}
-                      />
-                      <label
-                        htmlFor={`price-${price}`}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {price}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
-
-      <div>
-        <h2 className="mb-4 text-lg font-semibold uppercase">Duration</h2>
-        <Accordion type="multiple" defaultValue={["duration"]}>
-          <AccordionItem value="duration">
-            <AccordionTrigger className="py-2">Duration</AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-2">
-                {["0-2 Hours", "3-6 Hours", "7-16 Hours", "17+ Hours"].map((duration) => (
-                  <div key={duration} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`duration-${duration}`}
-                      checked={selectedDurations.includes(duration)}
-                      onCheckedChange={() => handleDurationChange(duration)}
-                    />
-                    <label
-                      htmlFor={`duration-${duration}`}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {duration}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div> */}
     </div>
   );
 }
@@ -275,24 +142,5 @@ function CategoryAccordionItem({
         </div>
       </AccordionContent>
     </AccordionItem>
-  );
-}
-
-function Star(props: React.ComponentProps<typeof ChevronDown>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
   );
 }

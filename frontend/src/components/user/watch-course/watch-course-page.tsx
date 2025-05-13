@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import Header from "../home/header";
+import Header from "../home/Header";
 import { LectureDescription } from "./lecture-description";
 import { LectureInfo } from "./lecture-info";
-import { VideoPlayer } from "./video-player";
 import { CourseContents } from "./watch-course-content";
 import { CourseHeader } from "./watch-course-header";
 import { useParams } from "react-router-dom";

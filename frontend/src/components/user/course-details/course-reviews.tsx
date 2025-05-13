@@ -1,5 +1,4 @@
 import { Star } from "lucide-react"
-import { Progress } from "@/components/ui/progress"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 interface CourseReviewsProps {

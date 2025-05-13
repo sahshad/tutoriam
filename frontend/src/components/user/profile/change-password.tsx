@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSelector } from "react-redux";
 import { changePassword } from "@/services/userServices";
 import { toast } from "sonner";
 import { AxiosResponse } from "axios";
@@ -36,8 +35,6 @@ const ChangePassword = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const user = useSelector((state: any) => state.auth.user);
 
   const {
     register,

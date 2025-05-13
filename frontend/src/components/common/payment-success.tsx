@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { CheckCircle2 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import Header from "../user/home/header"
+import Header from "@/components/user/home/Header"
 
 export default function PaymentSuccess() {
   const navigate = useNavigate()

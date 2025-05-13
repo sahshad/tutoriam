@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { XCircle } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import Header from "../user/home/header"
+import Header from "../user/home/Header"
+
 
 export default function PaymentFailed() {
   const navigate = useNavigate()

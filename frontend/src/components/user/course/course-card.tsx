@@ -1,4 +1,3 @@
-import { Star } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils/classname"
 import { Link } from "react-router-dom" // Replaced next/link with react-router-dom
@@ -10,7 +9,7 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ course }: CourseCardProps) {
-  const { _id, title, thumbnail, price, categoryId, rating, enrollmentCount, isFree } = course
+  const { _id, title, thumbnail, price, categoryId, enrollmentCount, isFree } = course
   return (
     <Link to={`/courses/${_id}`} className="group flex h-full flex-col overflow-hidden rounded-lg border transition-all hover:shadow-md">
       <div className="relative aspect-video overflow-hidden">
