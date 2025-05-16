@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  backend:
+    image: shahzad18/tutoriam-backend:latest
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    networks:
+      - app-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  frontend:
+    image: shahzad18/tutoriam-frontend:latest
+    ports:
+      - "80:80"
+    env_file:
+      - ./frontend/.env
+    networks:
+      - app-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+networks:
+  app-network:
+    driver: bridge
