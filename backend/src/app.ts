@@ -37,19 +37,22 @@ connectDB();
 const app = express();
 const CLIENT_URL = process.env.CLIENT_URL;
 
+app.use(
+  cors({
+    origin: CLIENT_URL,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
+app.options('*', cors());
+
 app.use("/api/webhook", webhookRoutes);
 
 app.use(passport.initialize());
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: CLIENT_URL,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);

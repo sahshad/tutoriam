@@ -2,7 +2,7 @@ import { setAuthData, logout } from "../redux/slices/authSlice";
 import { AppDispatch } from "../redux/store";
 import apiClient from "@/lib/axios";
 
-const API_URL = "http://localhost:5000/api/auth";
+// const API_URL = import.meta.env.VITE_API_BASE_URL
 
 export const registerUser = async (name: string, email: string, password: string) => {
   try {
@@ -128,5 +128,5 @@ export const resetPassword = async (token: string, newPassword: string) => {
 };
 
 export const googleLogin = () => {
-  window.location.href = `${API_URL}/google`;
+  window.location.href = `/api/auth/google`;
 };
