@@ -18,15 +18,12 @@ export class MessageController implements IMessageController {
     });
 
     createMessage = asyncHandler(async (req: Request, res: Response) => {
-        const { chatId, body, attachments } = req.body;
+        const { chatId, body } = req.body;
         const senderId = req.user?._id as string;
 
         const messageData: Partial<IMessage> = {chatId, senderId, body}
-        if(attachments){
-            messageData.attachments = attachments
-        }
 
-        const message = await this.messageService.createMessage(messageData);
+        const message = await this.messageService.createMessage(messageData, req.file);
         res.status(StatusCodes.CREATED).json({ message: "Message sent successfully", messageData: message });
     });
 

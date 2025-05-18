@@ -26,12 +26,16 @@ export class MessageService extends BaseService<IMessage> implements IMessageSer
         return this.messageRepository.findMessagesByChatId(chatId)
     }
 
-    async createMessage(data: Partial<IMessage>): Promise<IMessage | null> {
+    async createMessage(data: Partial<IMessage>, attachment?:Express.Multer.File): Promise<IMessage | null> {
         const chat = await this.chatRepositroy.findById(data.chatId as string);
         if (!chat) {
             throw new Error("Chat not found");
         }
         const participants  = chat.participants.filter(p => p.toString() !== data.senderId?.toString())
+
+        if(attachment){
+            
+        }
 
         const message = await this.messageRepository.create(data)
 
