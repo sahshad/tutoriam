@@ -16,7 +16,7 @@ export const fetchMessages = createAsyncThunk(
 
 export const sendMessage = createAsyncThunk(
     "message/sendMessage",
-      async ({ chatId, content }: { chatId: string; content: string }, { rejectWithValue }) => {
+      async ({ chatId, content }: { chatId: string; content: FormData }, { rejectWithValue }) => {
         try {
           const data = await sendMessageToUser(chatId, content)
           return data.messageData
@@ -29,9 +29,9 @@ export const sendMessage = createAsyncThunk(
 
 export const updateMessage = createAsyncThunk(
     "message/updateMessage",
-      async ({ messageId, content }: { messageId: string; content: string }, { rejectWithValue }) => {
+      async ({ messageId, body }: { messageId: string; body: string }, { rejectWithValue }) => {
         try {
-          const data = await updateChatMessage(messageId, content)
+          const data = await updateChatMessage(messageId, body)
           return data.messageData
         } catch (err: any) {
           return rejectWithValue(err?.data?.message || "Failed to update message");

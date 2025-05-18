@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Message } from "@/redux/slices/messageSlice";
 import { sendMessage, updateMessage } from "@/redux/thunks/messageThunk";
 import { IUser } from "@/types/user";
-import { updateChat } from "@/redux/slices/chatSlice";
+// import { updateChat } from "@/redux/slices/chatSlice";
 
 interface MessagePanelProps {
   activeChatId: string | null;
@@ -34,28 +34,35 @@ export function MessagePanel({ activeChatId, onBackClick }: MessagePanelProps) {
   }, [chatMessages]);
   const dispatch = useAppDispatch();
 
-  const handleSendMessage = (content: string) => {
-    if (!content.trim()) return;
+  const handleSendMessage = (body: string, file?:File) => {
+    if (!body.trim()) return;
 
     if (isEditing) {
       console.log(isEditing)
       setIsEditing(null);
-      dispatch(updateMessage({messageId:isEditing, content}))
+      dispatch(updateMessage({messageId:isEditing, body}))
       return;
     }
 
+    const content = new FormData()
+
+    content.append("body", body)
+    if(file){
+      content.append("attachment", file)
+    }
+
     dispatch(sendMessage({ chatId: activeChatId as string, content }));
-    dispatch(
-      updateChat({
-        _id: activeChatId,
-        lastMessage: {
-          body: content,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        updatedAt: new Date().toISOString(),
-      })
-    );
+    // dispatch(
+    //   updateChat({
+    //     _id: activeChatId,
+    //     lastMessage: {
+    //       body: content,
+    //       createdAt: new Date().toISOString(),
+    //       updatedAt: new Date().toISOString(),
+    //     },
+    //     updatedAt: new Date().toISOString(),
+    //   })
+    // );
   };
 
   if (!activeChatId) {

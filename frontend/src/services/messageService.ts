@@ -10,9 +10,10 @@ export const fetchChatMessages = async (chatId: string) => {
     }
 }
 
-export const sendMessageToUser = async(chatId: string, body: string) => {
+export const sendMessageToUser = async(chatId: string, content: FormData ) => {
+    content.append("chatId", chatId)
     try {
-        const res = await apiClient.post('messages/send', {chatId, body})
+        const res = await apiClient.post('messages/send', content)
         return res.data
     } catch (error) {
         console.log(error)

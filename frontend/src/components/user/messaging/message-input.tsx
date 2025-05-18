@@ -22,7 +22,7 @@ export function MessageInput({ onSendMessage, inputRef, message, setMessage }: M
         const url = URL.createObjectURL(file)
         setPreviewUrl(url)
       } else if (file.type.startsWith('video/') || file.type === 'application/pdf') {
-        setPreviewUrl(null) // We'll show a thumbnail instead
+        setPreviewUrl(null)
       }
     }
   }
@@ -37,8 +37,13 @@ export function MessageInput({ onSendMessage, inputRef, message, setMessage }: M
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
+    console.log(attachedFile)
     if (message.trim() || attachedFile) {
-      onSendMessage(message)
+      if(attachedFile){
+        onSendMessage(message, attachedFile)
+      }else{
+        onSendMessage(message)
+      }
       setMessage("")
       setAttachedFile(null)
       setPreviewUrl(null)
@@ -53,7 +58,7 @@ export function MessageInput({ onSendMessage, inputRef, message, setMessage }: M
 
     if (attachedFile.type.startsWith('image/') && previewUrl) {
       return (
-        <div className="relative max-w-[200px] max-h-[200px] mt-2">
+        <div className="relative max-w-[200px] mt-2 mb-2">
           <img src={previewUrl} alt="Preview" className="w-full h-full object-cover rounded-lg border border-border" />
           <Button
             size="icon"
