@@ -31,7 +31,6 @@ export function MessageList({ messages, inputRef, isEditing, setIsEditing, setIn
 
   const handleEditClick = (message: string, messageId: string) => {
     setIsEditing(messageId);
-    console.log(message);
     setInputMessage(message);
     setTimeout(() => {
       const inputEl = inputRef.current;
@@ -43,7 +42,7 @@ export function MessageList({ messages, inputRef, isEditing, setIsEditing, setIn
     }, 0);
   };
 
-  const hanldeCancelEdit = () => {
+  const handleCancelEdit = () => {
     setIsEditing(null);
     setInputMessage("");
   };
@@ -75,6 +74,43 @@ export function MessageList({ messages, inputRef, isEditing, setIsEditing, setIn
 
   let lastDateLabel: string | null = null;
 
+  const renderAttachment = (attachment: { url: string; mime: string; size: number }, messageMaxWidth: number) => {
+    const fileName = attachment.url.split('/').pop() || 'Attachment';
+
+    if (attachment.mime.startsWith('image/')) {
+      return (
+        <a href={attachment.url} target="_blank" rel="noopener noreferrer">
+          <img
+            src={attachment.url}
+            alt="Image attachment"
+            className="mt-2 w-full max-w-[160px] h-auto object-cover rounded-lg"
+            style={{ maxWidth: `${messageMaxWidth}px` }}
+          />
+        </a>
+      );
+    }
+
+    if (attachment.mime.startsWith('video/') || attachment.mime === 'application/pdf') {
+      const label = attachment.mime.startsWith('video/') ? 'Video' : 'PDF';
+      return (
+        <a
+          href={attachment.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 flex items-center gap-2 p-2 bg-muted rounded-lg"
+          style={{ maxWidth: `${messageMaxWidth}px` }}
+        >
+          <div className="w-12 h-12 bg-background flex items-center justify-center rounded">
+            <span className="text-foreground font-semibold text-sm">{label}</span>
+          </div>
+          <span className="text-sm truncate text-foreground">{fileName}</span>
+        </a>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div ref={containerRef} className="flex-1 overflow-y-auto p-4 no-scrollbar">
       <div className="space-y-4">
@@ -104,27 +140,42 @@ export function MessageList({ messages, inputRef, isEditing, setIsEditing, setIn
                     )}
                   >
                     <div
-                      className="break-words "
+                      className="break-words flex flex-col"
                       style={{
                         maxWidth: `${messageMaxWidth}px`,
                       }}
                     >
-                      {message.body}
+                      {message.attachments && message.attachments.length > 0 && (
+                        <div className="space-y-2">
+                          {message.attachments.map((attachment, idx) => (
+                            <div key={idx}>
+                              {renderAttachment(attachment, messageMaxWidth)}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {message.body && (
+                        <div className={cn("mt-2", !!message.attachments && message.attachments.length > 0 && "pt-1")}>
+                          {message.body}
+                        </div>
+                      )}
                     </div>
 
                     {isUser && isEditing !== message._id && (
                       <div className="flex-1 no-scrollbar">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <button className="rounded flex-col align-bottom justify-end ">
+                            <button className="rounded flex-col align-bottom justify-end">
                               <MoreHorizontal className="w-3 h-3 p-0" />
                             </button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleEditClick(message.body, message._id)}>
+                            <DropdownMenuItem onClick={() => handleEditClick(message.body ?? "", message._id)}>
                               Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleDeleteClick(message._id)}>Delete</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleDeleteClick(message._id)}>
+                              Delete
+                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
@@ -135,8 +186,8 @@ export function MessageList({ messages, inputRef, isEditing, setIsEditing, setIn
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <button onClick={hanldeCancelEdit}>
-                                <XCircle className="w-4 h-4 text-red-400" />
+                              <button onClick={handleCancelEdit}>
+                                <XCircle className="w-4 h-4 text-muted-foreground" />
                               </button>
                             </TooltipTrigger>
                             <TooltipContent side="top" className="text-xs gap-2">
@@ -149,7 +200,7 @@ export function MessageList({ messages, inputRef, isEditing, setIsEditing, setIn
                   </div>
 
                   {showTime && (
-                    <span className={`text-[11px] text-muted-foreground ${isUser ? "text-end" : "text-start"} `}>
+                    <span className={`text-[11px] text-muted-foreground ${isUser ? "text-end" : "text-start"}`}>
                       {formatTimeWithoutSeconds(new Date(message.createdAt)) || "Time"}
                     </span>
                   )}

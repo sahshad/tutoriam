@@ -4,7 +4,7 @@ import { refreshToken } from "../services/authService";
 import {logout  } from '../redux/slices/authSlice'
 
 const apiClient = axios.create({ 
-  baseURL: "/api/",
+  baseURL:"/api/",
   withCredentials: true, 
 });
 

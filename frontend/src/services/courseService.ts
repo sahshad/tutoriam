@@ -96,8 +96,12 @@ export const updateCourse = async (courseId: string, data: any) => {
   try {
     const res = await apiClient.put(`/courses/${courseId}`, data);
     return res.data;
-  } catch (error) {
-    throw error;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data?.message || error.message || "An unknown error occurred";
+    } else {
+      throw "An unexpected error occurred";
+    }
   }
 };
 
