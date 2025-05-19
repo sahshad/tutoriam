@@ -73,6 +73,34 @@ const extractPublicIdFromUrl = (secureUrl: string): string | null => {
       return false;
     }
   };
+
+
+  export const deletePdfFromCloudinary = async (pdfUrl: string): Promise<boolean> => {
+  try {
+    const regex = /\/raw\/upload\/(?:v\d+\/)?(.*?)(?:\.pdf)$/;
+    const match = pdfUrl.match(regex);
+
+    if (!match || !match[1]) {
+      console.error('Could not extract public_id from PDF URL');
+      return false;
+    }
+    const publicId = match[1];
+
+    const result = await cloudinary.uploader.destroy(publicId, { resource_type: 'raw' });
+
+    if (result.result === 'ok') {
+      console.log(`PDF with public_id ${publicId} deleted successfully.`);
+      return true;
+    } else {
+      console.error(`Failed to delete PDF with public_id ${publicId}.`, result);
+      return false;
+    }
+  } catch (error) {
+    console.error('Error deleting PDF from Cloudinary:', error);
+    return false;
+  }
+};
+
   
 
 

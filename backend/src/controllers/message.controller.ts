@@ -21,7 +21,11 @@ export class MessageController implements IMessageController {
         const { chatId, body } = req.body;
         const senderId = req.user?._id as string;
 
-        const messageData: Partial<IMessage> = {chatId, senderId, body}
+        const messageData: Partial<IMessage> = {
+        chatId,
+        senderId,
+        ...(body ? { body } : {})
+        };
 
         const message = await this.messageService.createMessage(messageData, req.file);
         res.status(StatusCodes.CREATED).json({ message: "Message sent successfully", messageData: message });

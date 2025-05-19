@@ -5,7 +5,7 @@ export interface Message {
   _id: string;
   chatId:  string;
   senderId: string;
-  body: string;
+  body?: string;
   readBy: { userId: string; read: boolean }[];
   attachments?: { url: string; mime: string; size: number }[];
   createdAt: Date;

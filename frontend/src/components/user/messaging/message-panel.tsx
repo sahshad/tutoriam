@@ -35,7 +35,7 @@ export function MessagePanel({ activeChatId, onBackClick }: MessagePanelProps) {
   const dispatch = useAppDispatch();
 
   const handleSendMessage = (body: string, file?:File) => {
-    if (!body.trim()) return;
+    if (!body.trim() && !file) return;
 
     if (isEditing) {
       console.log(isEditing)
@@ -46,7 +46,9 @@ export function MessagePanel({ activeChatId, onBackClick }: MessagePanelProps) {
 
     const content = new FormData()
 
-    content.append("body", body)
+    if(body){
+      content.append("body", body)
+    }
     if(file){
       content.append("attachment", file)
     }
