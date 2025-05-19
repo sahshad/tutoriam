@@ -9,7 +9,7 @@ export const registerUser = async (name: string, email: string, password: string
     const response = await apiClient.post("auth/register", { name, email, password });
 
     return response;
-  } catch (error: any) {
+  } catch (error:    any) {
     return error.response;
   }
 };

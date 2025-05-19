@@ -230,7 +230,9 @@ import { createLesson, deleteLesson, updateLesson } from "@/services/lessonServi
            const res = await updateCourse(courseId as string,courseDate)
            console.log(res)
           } catch (error) {
+            toast.error(error as string || "error while updating course")
             console.log(error)
+            return
           }
         }
         await compareAndUpdateModulesAndLessons();

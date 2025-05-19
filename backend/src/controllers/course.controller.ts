@@ -69,6 +69,14 @@ export class CourseController implements ICourseController {
     const data = req.body;
     const files = req.files ? (req.files as { [fieldname: string]: Express.Multer.File[] }) : undefined;
 
+    if(data.title){
+      const course = await this.courseService.findOne({title: data.title})
+      const isCourseExists = course?._id !== courseId
+      if(isCourseExists){
+        res.status(StatusCodes.CONFLICT).json({message: "course name already exist"})
+        return
+      }
+    }
     const course = await this.courseService.updateCourse(courseId, data, files);
     res.status(StatusCodes.OK).json({ message: "course updated successfully", course });
   });
