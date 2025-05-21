@@ -10,6 +10,7 @@ import { useState } from "react";
 import ThemeToggle from "@/components/common/ThemeToggle";
 import { useAppSelector } from "@/redux/store";
 import NotificationPopover from "@/components/common/notification-popover";
+import TutoriamLogo from "@/components/common/tutoriam-logo";
 
 const Header = () => {
   const user = useSelector((state: any) => state.auth.user);
@@ -116,11 +117,12 @@ const Header = () => {
 
       <div className="container flex h-16 items-center justify-between px-4 sm:px-[2%]">
         <div className="flex items-center space-x-4 flex-wrap">
-          <Link to="/" className="text-xl font-bold">
+          {/* <Link to="/" className="text-xl font-bold">
             TUTORIAM
-          </Link>
+          </Link> */}
+          <TutoriamLogo text size={30}/>
 
-          <DropdownMenu>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="h-8 gap-1 text-muted-foreground sm:flex hidden">
                 Browse <ChevronDown className="h-4 w-4" />
@@ -131,7 +133,7 @@ const Header = () => {
               <DropdownMenuItem>Popular</DropdownMenuItem>
               <DropdownMenuItem>New Releases</DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
 
           <div className="relative w-full max-w-md items-center sm:flex hidden">
             <Search className="absolute left-3 h-4 w-4 text-muted-foreground" />

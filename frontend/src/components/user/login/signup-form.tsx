@@ -1,16 +1,17 @@
-import { Button } from "../../ui/button";
-import { ArrowRight, Eye, EyeOff } from "lucide-react";
-import { Input } from "../../ui/input";
-import { Label } from "../../ui/label";
-import { useState } from "react";
-import { googleLogin, registerUser } from "@/services/authService";
-import { AxiosResponse } from "axios";
-import { useNavigate } from "react-router-dom";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { BarLoader} from "react-spinners"; 
-import { toast } from "sonner";
+import { Button } from "../../ui/button"
+import { ArrowRight, Eye, EyeOff } from "lucide-react"
+import { Input } from "../../ui/input"
+import { Label } from "../../ui/label"
+import { useState } from "react"
+import { googleLogin, registerUser } from "@/services/authService"
+import type { AxiosResponse } from "axios"
+import { useNavigate } from "react-router-dom"
+import * as z from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { BarLoader } from "react-spinners"
+import { toast } from "sonner"
+import { motion } from "framer-motion"
 
 const passwordSchema = z
   .string()
@@ -23,179 +24,179 @@ const passwordSchema = z
         type: "string",
         inclusive: true,
         message: "Password must be at least 8 characters",
-      });
+      })
     }
 
     if (!/[a-zA-Z]/.test(val)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Password must contain at least one letter",
-      });
+      })
     }
 
     if (!/[0-9]/.test(val)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Password must contain at least one number",
-      });
+      })
     }
 
     if (!/[\W_]/.test(val)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Password must contain at least one special character",
-      });
+      })
     }
 
     if (!/[A-Z]/.test(val)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Password must contain at least one uppercase letter",
-      });
+      })
     }
 
     if (/password|123456|qwerty|letmein/i.test(val)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Password cannot contain common patterns",
-      });
+      })
     }
-  });
+  })
 
-
-const formSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Please enter a valid email address"),
-  password: passwordSchema,
-    // .string()
-    // .min(8, "Password must be at least 8 characters")
-    // .regex(/[a-zA-Z]/, "Password must contain at least one letter")
-    // .regex(/[0-9]/, "Password must contain at least one number")
-    // .regex(/[\W_]/, "Password must contain at least one special character") // Special characters
-    // .regex(/[A-Z]/, "Password must contain at least one uppercase letter")// Uppercase letters
-    // .regex(/^(?!.*(?:password|123456|qwerty|letmein)).*$/, "Password cannot contain common patterns"), // Block common patterns
-  confirmPassword: z
-  .string()
-  .min(8, "Password must be at least 8 characters")
-    .regex(/[a-zA-Z]/, "Password must contain at least one letter")
-    .regex(/[0-9]/, "Password must contain at least one number")
-    .regex(/[\W_]/, "Password must contain at least one special character")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter"),
-}).refine(
-  (data) => data.password === data.confirmPassword,
-  {
-    message: "Passwords don't match",
-    path: ["confirmPassword"]
-  }
-);
-
-type FormData = z.infer<typeof formSchema>;
+const formSchema = z
+  .object({
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    email: z.string().email("Please enter a valid email address"),
+    password: passwordSchema,
+  })
+  
+type FormData = z.infer<typeof formSchema>
 
 const SignupForm = () => {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(formSchema) });
+  } = useForm<FormData>({ resolver: zodResolver(formSchema) })
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+    setShowPassword(!showPassword)
+  }
 
   const onSubmit = async (data: FormData) => {
-    if(loading)
-      return
+    if (loading) return
     setLoading(true)
-    const { firstName, lastName, email, password } = data;
-    const response: AxiosResponse = await registerUser(
-      `${firstName} ${lastName}`,
-      email,
-      password
-    );
+    const { firstName, lastName, email, password } = data
+    const response: AxiosResponse = await registerUser(`${firstName} ${lastName}`, email, password)
     setLoading(false)
     if (response.status === 200) {
-      const data = { email, time: 120, length: 6 };
-      navigate("/verify-otp", { state: data });
+      const data = { email, time: 120, length: 6 }
+      navigate("/verify-otp", { state: data })
     } else {
       toast.error(response.data.message, {
-        position:"top-right",
-        duration:2000,
-        style:{
-          color:"red"
-        }
+        position: "top-right",
+        duration: 2000,
+        style: {
+          color: "red",
+        },
       })
     }
-  };
+  }
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center md:p-6 md:py-0">
-      <div className="mx-auto w-full max-w-sm space-y-5">
-        <div className=" text-center">
-          <h1 className="text-3xl font-bold mb-10">Join Us Today!</h1>
+    <motion.div
+      className="flex flex-1 flex-col items-center justify-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="w-full max-w-sm space-y-4">
+        <div className="text-center mb-6">
+          <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ duration: 0.5 }}>
+            <h1 className="text-3xl font-bold text-black dark:text-white">Join Us Today!</h1>
+          </motion.div>
         </div>
+
         <form className="" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
-            <div className="space-y-2">
+            <motion.div
+              className="space-y-2"
+              initial={{ x: -10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
-              <Label htmlFor="fullName">First name</Label>
+                  <Label htmlFor="firstName" className="text-sm font-medium">
+                    First name
+                  </Label>
                   <Input
                     type="text"
+                    id="firstName"
+                    className="pl-3 pr-3 py-2 rounded-lg border "
                     {...register("firstName")}
                     placeholder="First name..."
                   />
-                  {errors.firstName && (
-                    <p className="text-red-500 font-mono text-xs">
-                      {errors.firstName.message}
-                    </p>
-                  )}
+                  {errors.firstName && <p className="text-red-500 font-mono text-xs">{errors.firstName.message}</p>}
                 </div>
                 <div className="flex flex-col gap-2">
-              <Label htmlFor="fullName">Last name</Label>
+                  <Label htmlFor="lastName" className="text-sm font-medium">
+                    Last name
+                  </Label>
                   <Input
                     type="text"
+                    id="lastName"
+                    className="pl-3 pr-3 py-2 rounded-lg border "
                     {...register("lastName")}
                     placeholder="Last name..."
                   />
-
-                  {errors.lastName && (
-                    <p className="text-red-500 font-mono text-xs">
-                      {errors.lastName.message}
-                    </p>
-                  )}
+                  {errors.lastName && <p className="text-red-500 font-mono text-xs">{errors.lastName.message}</p>}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+            <motion.div
+              className="space-y-2"
+              initial={{ x: -10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+            >
+              <Label htmlFor="email" className="text-sm font-medium">
+                Email
+              </Label>
               <Input
                 type="text"
+                id="email"
+                className="pl-3 pr-3 py-2 rounded-lg border "
                 {...register("email")}
                 placeholder="Email address"
               />
               {errors.email && <p className="text-red-500 font-mono text-xs">{errors.email.message}</p>}
-            </div>
+            </motion.div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <motion.div
+              className="space-y-2"
+              initial={{ x: -10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.3 }}
+            >
+              <Label htmlFor="password" className="text-sm font-medium">
+                Password
+              </Label>
               <div className="relative">
                 <Input
-                className="pr-10"
+                  id="password"
+                  className="pl-3 pr-10 py-2 rounded-lg border "
                   type={showPassword ? "text" : "password"}
                   placeholder="Create password"
                   {...register("password")}
                 />
-                
+
                 <Button
                   variant="ghost"
                   size="icon"
@@ -203,79 +204,60 @@ const SignupForm = () => {
                   onClick={togglePasswordVisibility}
                   className="absolute right-0 top-0 h-full cursor-pointer"
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
-              {errors.password && (
-                  <p className="text-red-500 font-mono text-xs">{errors.password.message}</p>
-                )}
-            </div>
+              {errors.password && <p className="text-red-500 font-mono text-xs">{errors.password.message}</p>}
+            </motion.div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Confirm Password</Label>
-              <div className="relative">
-                <Input
-                className="pr-10"
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Cnfirm password"
-                  {...register("confirmPassword")}
-                />
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  type="button"
-                  onClick={toggleConfirmPasswordVisibility}
-                  className="absolute right-0 top-0 h-full cursor-pointer"
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
-              {errors.confirmPassword && (
-                  <p className="text-red-500 font-mono text-xs">{errors.confirmPassword.message}</p>
+            <motion.div
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.5 }}
+            >
+              <Button
+                className="w-full mt-5 cursor-pointer bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 transition-all duration-300"
+                type="submit"
+              >
+                {loading ? (
+                  <BarLoader color="#fff" width={280} height={1} />
+                ) : (
+                  <>
+                    Create Account
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
                 )}
-            </div>
-
-            <Button className="w-full mt-5 cursor-pointer" type="submit" >
-              {loading ? 
-            <BarLoader color="#fff" width={280} height={1} />
-            :
-            <>
-            Create Account
-            <ArrowRight className="ml-2 h-4 w-4" />
-            </>
-            }
-              
-            </Button>
+              </Button>
+            </motion.div>
           </div>
         </form>
-        <div className="relative ">
+
+        <motion.div
+          className="relative"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.6 }}
+        >
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
+            <span className="w-full border-t dark:border-gray-800" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-muted-foreground">
-              SIGN UP WITH
-            </span>
+            <span className="bg-white dark:bg-black px-2 text-muted-foreground">SIGN UP WITH</span>
           </div>
-        </div>
+        </motion.div>
 
-        <div className=" w-full">
-          <Button variant="outline" className="w-full cursor-pointer" onClick={googleLogin}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24"
-              viewBox="0 0 24 24"
-              width="24"
-            >
+        <motion.div
+          className="w-full"
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.7 }}
+        >
+          <Button
+            variant="outline"
+            className="w-full cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-300 border-gray-200 dark:border-gray-800"
+            onClick={googleLogin}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                 fill="#4285F4"
@@ -296,10 +278,10 @@ const SignupForm = () => {
             </svg>
             <span className="ml-2">Google</span>
           </Button>
-        </div>
+        </motion.div>
       </div>
-    </div>
-  );
-};
+    </motion.div>
+  )
+}
 
-export default SignupForm;
+export default SignupForm
