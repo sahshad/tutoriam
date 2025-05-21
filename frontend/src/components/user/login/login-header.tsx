@@ -1,30 +1,76 @@
-import { Link } from 'react-router-dom'
-import { Button } from '../../ui/button'
+import TutoriamLogo from "@/components/common/tutoriam-logo";
+import { useMediaQuery } from "@/hooks/useMobile";
+import { motion } from "framer-motion";
 
 interface HeaderProps {
-    signState: 'signIn' | 'signUp'
-    setSignState:(state: 'signIn' | 'signUp')=> void
-  }
-
-const Header:React.FC<HeaderProps> = ({signState,setSignState}) => {
-      
-  return (
-         <header className="flex justify-between p-6">
-          <Link to="/">
-          <div className="font-bold text-xl">TUTORIAM</div>
-          </Link>
-          <div className="flex items-center gap-2">
-            <span className=" hidden md:flex text-sm text-muted-foreground">{signState === 'signIn'?"Don't have account?":"Already have account"}</span>
-            <Button
-              variant="outline"
-              className="hover:cursor-pointer"
-              onClick={() => setSignState(signState === 'signIn' ? 'signUp' : 'signIn')}
-            >
-              {signState === 'signIn' ? 'Create Account' : 'Login'}
-            </Button>
-          </div>
-        </header>
-  )
+  signState: "signIn" | "signUp";
+  setSignState: (state: "signIn" | "signUp") => void;
 }
 
-export default Header
+const Header = ({ signState, setSignState }: HeaderProps) => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  return (
+    <div className="container mx-auto px-4 py-6">
+      <div className="absolute top-5 left-6  ">{!isMobile && <TutoriamLogo text={true} />}</div>
+      <div className="flex justify-center items-center">
+        <div className="bg-white dark:bg-black shadow-md rounded-full p-1 inline-flex border border-gray-200 dark:border-gray-800">
+          <motion.button
+            className={`relative px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+              signState === "signIn"
+                ? "text-white"
+                : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+            }`}
+            onClick={() => setSignState("signIn")}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {signState === "signIn" && (
+              <motion.div
+                className="absolute inset-0 bg-black dark:bg-white rounded-full"
+                layoutId="activeTab"
+                initial={false}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+            )}
+            <span
+              className={`relative z-10  ${
+                signState === "signIn" ? `text-white dark:text-black` : `text-black dark:text-white`
+              }`}
+            >
+              Sign In
+            </span>
+          </motion.button>
+
+          <motion.button
+            className={`relative px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+              signState === "signUp"
+                ? "text-white"
+                : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+            }`}
+            onClick={() => setSignState("signUp")}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {signState === "signUp" && (
+              <motion.div
+                className="absolute inset-0 bg-black dark:bg-white rounded-full"
+                layoutId="activeTab"
+                initial={false}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+            )}
+            <span
+              className={`relative z-10  ${
+                signState === "signUp" ? `text-white dark:text-black` : `text-black dark:text-white`
+              }`}
+            >
+              Sign Up
+            </span>
+          </motion.button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Header;
