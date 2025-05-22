@@ -5,13 +5,12 @@ import { Label } from "../../ui/label"
 import { useState } from "react"
 import { googleLogin, registerUser } from "@/services/authService"
 import type { AxiosResponse } from "axios"
-import { useNavigate } from "react-router-dom"
 import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { BarLoader } from "react-spinners"
 import { toast } from "sonner"
 import { motion } from "framer-motion"
+import OtpVerificationDialog from "@/components/common/otp-verification-dialog"
 
 const passwordSchema = z
   .string()
@@ -76,7 +75,9 @@ type FormData = z.infer<typeof formSchema>
 const SignupForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const navigate = useNavigate()
+    const [showOtpDialog, setShowOtpDialog] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  // const navigate = useNavigate()
 
   const {
     register,
@@ -95,8 +96,10 @@ const SignupForm = () => {
     const response: AxiosResponse = await registerUser(`${firstName} ${lastName}`, email, password)
     setLoading(false)
     if (response.status === 200) {
-      const data = { email, time: 120, length: 6 }
-      navigate("/verify-otp", { state: data })
+      // const data = { email, time: 120, length: 6 }
+      // navigate("/verify-otp", { state: data })
+              setUserEmail(email);
+        setShowOtpDialog(true);
     } else {
       toast.error(response.data.message, {
         position: "top-right",
@@ -218,9 +221,13 @@ const SignupForm = () => {
               <Button
                 className="w-full mt-5 cursor-pointer bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 transition-all duration-300"
                 type="submit"
+                disabled={loading}
               >
                 {loading ? (
-                  <BarLoader color="#fff" width={280} height={1} />
+                  <div className="flex items-center justify-center">
+                <div className="h-5 w-5 border-2 border-t-transparent border-white dark:border-black rounded-full animate-spin mr-2"></div>
+                Registering...
+              </div>
                 ) : (
                   <>
                     Create Account
@@ -279,6 +286,12 @@ const SignupForm = () => {
             <span className="ml-2">Google</span>
           </Button>
         </motion.div>
+        <OtpVerificationDialog
+  open={showOtpDialog}
+  onOpenChange={(open) => setShowOtpDialog(open)}
+  email={userEmail}
+/>
+
       </div>
     </motion.div>
   )

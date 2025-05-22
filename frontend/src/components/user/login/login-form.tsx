@@ -5,7 +5,7 @@ import { Label } from "../../ui/label"
 import { Input } from "../../ui/input"
 import { googleLogin, login } from "@/services/authService"
 import { useDispatch } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -13,6 +13,7 @@ import { toast } from "sonner"
 import { useAppDispatch } from "@/redux/store"
 import { fetchCartItems } from "@/redux/thunks/cartThunk"
 import { motion } from "framer-motion"
+import ForgotPasswordDialog from "@/components/common/forgot-password-dialog"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -195,14 +196,7 @@ const LoginForm = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.6 }}
       >
-        <Link to="/forgot-password">
-          <Button
-            variant="link"
-            className="text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white cursor-pointer"
-          >
-            Forgot password?
-          </Button>
-        </Link>
+       <ForgotPasswordDialog/>
       </motion.div>
     </motion.div>
   )

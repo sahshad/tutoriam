@@ -2,11 +2,8 @@ import ProtectedRoute from "@/components/user/auth/protected-routes";
 import { UserRole } from "@/lib/constants/role";
 import CartPage from "@/pages/user/CartPage";
 import UserCoursesPage from "@/pages/user/CoursesPage";
-import ForgotPasswordPage from "@/pages/user/ForgotPasswordPage";
 import HomePage from "@/pages/user/HomePage";
 import LoginPage from "@/pages/user/LoginPage";
-import OtpPage from "@/pages/user/OtpPage";
-import ResetPasswordPage from "@/pages/user/ResetPasswordPage";
 import UserCourseDetailsPage from "@/pages/user/UserCourseDetails";
 import WishlistPage from "@/pages/user/WishlistPage";
 import AdminLoginPage from "../pages/admin/LoginPage";
@@ -17,10 +14,7 @@ import ContactPage from "@/pages/user/contact-page";
 export const commonRoutes = (
   <>
     <Route path="/login" element={<LoginPage />} />
-    <Route path="/verify-otp" element={<OtpPage />} />
     <Route path="/" element={<HomePage />} />
-    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-    <Route path="/reset-password" element={<ResetPasswordPage />} />
     <Route path="/about" element={<AboutPage/>}/>
     <Route path="/contact" element={<ContactPage/>}/>
 

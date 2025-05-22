@@ -31,6 +31,7 @@ export default function OtpVerification({
     "idle" | "success" | "error"
   >("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [resendLoading, setResendLoading] = useState<boolean>(false)
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -49,6 +50,10 @@ export default function OtpVerification({
 
     return () => clearTimeout(timer);
   }, [timeLeft]);
+
+  useEffect(() => {
+  inputRefs.current[0]?.focus();
+}, []);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -116,14 +121,11 @@ export default function OtpVerification({
     inputRefs.current[lastFilledIndex]?.focus();
   };
 
-  const onResend = async (email:string) => {
-    const response = await resendOtp(email)
-    return response
-  }
 
   const handleResend = async () => {
     try {
-      const response = await onResend(email);
+      setResendLoading(true)
+      const response = await resendOtp(email);
       if(response?.status === 200){
       setTimeLeft(initialTimerSeconds);
       setIsResendDisabled(true);
@@ -131,9 +133,14 @@ export default function OtpVerification({
       setOtp(Array(length).fill(""));
       setActiveInput(0);
       inputRefs.current[0]?.focus();
+      }else{
+      toast.error("error while resending otp. please try again")
       }
     } catch (error) {
+      toast.error(error as string || "error while resending otp. please try again")
       console.error("Error resending OTP:", error);
+    }finally{
+      setResendLoading(false)
     }
   };
 
@@ -177,7 +184,7 @@ export default function OtpVerification({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 space-y-8">
+    <div className="max-w-[400px] py-5 space-y-8">
       <div className="text-center space-y-2">
         <h2 className="text-3xl font-bold">Verification</h2>
         <p className="text-muted-foreground">
@@ -205,7 +212,7 @@ export default function OtpVerification({
                 onPaste={index === 0 ? handlePaste : undefined}
                 onFocus={() => setActiveInput(index)}
                 className={cn(
-                  "w-14 h-14 text-center text-xl font-semibold",
+                  "w-[43px] h-[43px] sm:w-14 sm:h-14 text-center text-xl font-semibold",
                   activeInput === index && "border-[#000000]",
                   verificationStatus === "error" && "border-red-500"
                 )}
@@ -236,11 +243,11 @@ export default function OtpVerification({
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 px-2">
           <Button
             onClick={handleVerify}
             disabled={isVerifying || verificationStatus === "success"}
-            className="w-full hover:cursor-pointer"
+            className="hover:cursor-pointer w-full"
           >
             {isVerifying ? "Verifying..." : "Verify Code"}
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -252,13 +259,16 @@ export default function OtpVerification({
               <Button
                 variant="link"
                 onClick={handleResend}
-                disabled={isResendDisabled}
+                disabled={isResendDisabled || resendLoading}
                 className={cn(
-                  "p-0 h-auto text-[#ff7a59]",
+                  "h-auto text-[#ff7a59]",
                   isResendDisabled && "text-muted-foreground cursor-not-allowed"
                 )}
               >
-                Resend
+                {
+                  resendLoading ? "Resending..." : "Resend"
+                }
+                
               </Button>
             </p>
           </div>
