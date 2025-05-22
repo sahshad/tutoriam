@@ -157,11 +157,10 @@ export class AuthService implements IAuthService {
       const token = jwt.sign({ userId: user._id, email, purpose: "reset-password" }, process.env.JWT_TOKEN_SECRET!, {
         expiresIn: "15m",
       });
-      const magicLink = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
+      const magicLink = `${process.env.CLIENT_URL}/login?token=${token}`;
       await sendForgotPasswordMail(email, magicLink);
       await RedisClient.setex(`magicLink:${email}`, 900, JSON.stringify({ magicLink }));
       const link = await RedisClient.getex(`magicLink:${email}`);
-      console.log(link);
     } catch (error: any) {
       throw new Error(error.message);
     }

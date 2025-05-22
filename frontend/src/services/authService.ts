@@ -1,3 +1,4 @@
+import axios from "axios";
 import { setAuthData, logout } from "../redux/slices/authSlice";
 import { AppDispatch } from "../redux/store";
 import apiClient from "@/lib/axios";
@@ -9,7 +10,7 @@ export const registerUser = async (name: string, email: string, password: string
     const response = await apiClient.post("auth/register", { name, email, password });
 
     return response;
-  } catch (error:    any) {
+  } catch (error: any) {
     return error.response;
   }
 };
@@ -34,9 +35,21 @@ export const verifyOtp = async (email: string, otp: string, dispatch: AppDispatc
 export const resendOtp = async (email: string) => {
   try {
     const response = await apiClient.post(`auth/resend-otp`, { email });
-
     return response;
-  } catch (error) {}
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      if (!error.response) {
+        if (error.message === "Network Error") {
+          throw new Error("No internet connection. Please check your network.");
+        }
+        throw new Error("Network error. Please try again.");
+      }
+      throw new Error(error.response.data.message || "Something went wrong");
+    }
+    
+    console.error("Unexpected error:", error);
+    throw new Error("Unexpected error occurred");
+  }
 };
 
 export const adminLogin = async (email: string, password: string, dispatch: AppDispatch) => {
