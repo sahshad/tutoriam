@@ -95,8 +95,8 @@ export default function ForgotPasswordDialog() {
               className="w-full py-2 px-4 rounded-md  "
             >
               {isLoading ? (
-               <div className="flex items-center justify-center">
-                <div className="h-5 w-5 border-2 border-t-transparent border-white dark:border-black rounded-full animate-spin mr-2"></div>
+               <div className="flex items-center justify-center gap-1">
+                <div className="h-4 w-4 border-2 border-t-transparent rounded-full animate-spin mr-2"></div>
                 Sending Link...
               </div>
               ) : (

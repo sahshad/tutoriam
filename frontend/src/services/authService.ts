@@ -2,6 +2,11 @@ import axios from "axios";
 import { setAuthData, logout } from "../redux/slices/authSlice";
 import { AppDispatch } from "../redux/store";
 import apiClient from "@/lib/axios";
+import { clearCart } from "@/redux/slices/cartSlice";
+import { clearNotifications } from "@/redux/slices/notificationSlice";
+import { clearChat } from "@/redux/slices/chatSlice";
+import { clearInstructor } from "@/redux/slices/instructorSlice";
+import { clearMessage } from "@/redux/slices/messageSlice";
 
 // const API_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -90,7 +95,14 @@ export const login = async (email: string, password: string, dispatch: AppDispat
 export const userLogout = async (dispatch: AppDispatch) => {
   try {
     const response = await apiClient.post(`auth/logout`, {}, { withCredentials: true });
-    if (response.status === 200) dispatch(logout());
+    if (response.status === 200){
+      dispatch(logout());
+      dispatch(clearCart());
+      dispatch(clearNotifications())
+      dispatch(clearChat())
+      dispatch(clearInstructor())
+      dispatch(clearMessage())
+    } 
 
     return response;
   } catch (error) {

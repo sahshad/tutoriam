@@ -14,6 +14,7 @@ import { useAppDispatch } from "@/redux/store"
 import { fetchCartItems } from "@/redux/thunks/cartThunk"
 import { motion } from "framer-motion"
 import ForgotPasswordDialog from "@/components/common/forgot-password-dialog"
+import { fetchNotificationsThunk } from "@/redux/thunks/notificationThunk"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -43,9 +44,10 @@ const LoginForm = () => {
   const onSubmit = async (data: FormData) => {
     const { email, password } = data
     const response = await login(email, password, dispatch)
-    appDispatch(fetchCartItems())
     console.log(response)
     if (response.status === 200) {
+      appDispatch(fetchCartItems())
+      appDispatch(fetchNotificationsThunk())
       navigate("/")
     } else {
       toast.error(response.data.message || "invalid credentials", {
@@ -130,8 +132,8 @@ const LoginForm = () => {
             disabled={isSubmitting}
           >
             {isSubmitting ? (
-              <div className="flex items-center justify-center">
-                <div className="h-5 w-5 border-2 border-t-transparent border-white dark:border-black rounded-full animate-spin mr-2"></div>
+              <div className="flex items-center justify-center gap-1">
+                <div className="h-4 w-4 border-2 border-t-transparent rounded-full animate-spin mr-2"></div>
                 Signing in...
               </div>
             ) : (
