@@ -38,19 +38,12 @@ const chatSlice = createSlice({
         state.chats[index] = { ...state.chats[index], ...action.payload };
       }
     },
+    clearChat(state) {
+      state.chats = []
+      state.onlineUsers = []
+    }
+    ,
     updateOnlineUsers(state, action) {
-        // const onlineIds: string[] = action.payload;
-        
-        // const allChatParticipants = state.chats.flatMap(chat =>
-        //     chat.participants.map(p => {
-        //       if (typeof p === "string") return p;
-        //       if (typeof p === "object" && p._id) return p._id;
-        //       return null;
-        //     }).filter(Boolean)
-        //   );
-        // const uniqueParticipants = new Set(allChatParticipants);
-        // console.log(uniqueParticipants)
-        // state.onlineUsers = onlineIds.filter(id => uniqueParticipants.has(id));
         state.onlineUsers = action.payload
     }
   },
@@ -71,5 +64,5 @@ const chatSlice = createSlice({
   },
 });
 
-export const { addChat, updateChat, updateOnlineUsers } = chatSlice.actions;
+export const { addChat, updateChat, updateOnlineUsers, clearChat } = chatSlice.actions;
 export default chatSlice.reducer;

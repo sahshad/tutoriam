@@ -177,7 +177,14 @@ const ResetPasswordDialog = () => {
 
           <DialogFooter className="mt-6">
             <Button type="submit" className="w-full mt-2" disabled={loading}>
-              {loading ? "Resetting..." : "Reset Password"}
+              {loading ?
+              (
+                <div className="flex items-center justify-center gap-1">
+                <div className="h-4 w-4 border-2 border-t-transparent rounded-full animate-spin mr-2"></div>
+                 Resetting...
+                </div>
+              )
+              : "Reset Password"}
             </Button>
           </DialogFooter>
         </form>

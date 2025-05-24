@@ -60,6 +60,9 @@ const reviewsSlice = createSlice({
     setHasMore: (state, action: PayloadAction<boolean>) => {
       state.hasMore = action.payload;
     },
+    clearReview: (state) => {
+      state.reviews = []
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -83,6 +86,6 @@ const reviewsSlice = createSlice({
   },
 });
 
-export const { addReview, editReview, deleteReview, setFilter, setSkip, setLoadMore, setHasMore } = reviewsSlice.actions;
+export const { addReview, editReview, deleteReview, setFilter, setSkip, setLoadMore, setHasMore, clearReview } = reviewsSlice.actions;
 
 export default reviewsSlice.reducer;

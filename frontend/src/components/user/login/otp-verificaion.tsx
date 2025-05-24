@@ -249,7 +249,14 @@ export default function OtpVerification({
             disabled={isVerifying || verificationStatus === "success"}
             className="hover:cursor-pointer w-full"
           >
-            {isVerifying ? "Verifying..." : "Verify Code"}
+            {isVerifying ?
+            (
+              <div className="flex items-center justify-center gap-1">
+                <div className="h-4 w-4 border-2 border-t-transparent rounded-full animate-spin mr-2"></div>
+                Verifying...
+              </div>
+            )
+            : "Verify Code"}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
 

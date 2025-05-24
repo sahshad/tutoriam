@@ -21,6 +21,9 @@ const instructorSlice = createSlice({
     updateInstructor(state, action) {
       state.instructor = action.payload;
     },
+    clearInstructor(state) {
+      state.instructor = null
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -39,5 +42,5 @@ const instructorSlice = createSlice({
   },
 });
 
-export const { updateInstructor } = instructorSlice.actions;
+export const { updateInstructor, clearInstructor } = instructorSlice.actions;
 export default instructorSlice.reducer;
