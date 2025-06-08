@@ -11,6 +11,7 @@ import { TYPES } from "../di/types";
 import { IAuthRepository } from "../core/interfaces/repository/IAuthRepository";
 import { IUserRepository } from "../core/interfaces/repository/IUserRepository";
 import { HttpException } from "../core/exceptions/HttpException";
+import { LoginResponseDTO } from "../dtos/response/auth.response.dto";
 
 dotenv.config();
 
@@ -61,7 +62,7 @@ export class AuthService implements IAuthService {
     await RedisClient.del(`otp:${email}`);
     await RedisClient.del(`user_session:${email}`);
 
-    return { accessToken, refreshToken, user };
+    return { accessToken, refreshToken, user: LoginResponseDTO.fromEntity(user) };
   }
 
   async resendOtp(email: string): Promise<void> {
@@ -100,7 +101,7 @@ export class AuthService implements IAuthService {
     const accessToken = createAccessToken(userId, user.role);
     const refreshToken = createRefreshToken(userId, user.role);
 
-    return { accessToken, refreshToken, user };
+    return { accessToken, refreshToken, user: LoginResponseDTO.fromEntity(user) };
   }
 
   async login(email: string, password: string): Promise<verifiedUer> {
@@ -119,14 +120,10 @@ export class AuthService implements IAuthService {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw new Error("Incorrect password");
     const userId = user._id;
-    const accessToken = jwt.sign({ userId, role: user.role }, process.env.ACCESS_TOKEN_SECRET!, {
-      expiresIn: "15m",
-    });
-    const refreshToken = jwt.sign({ userId, role: user.role }, process.env.REFRESH_TOKEN_SECRET!, {
-      expiresIn: "7d",
-    });
+    const accessToken = createAccessToken(userId, user.role)
+    const refreshToken = createRefreshToken(userId, user.role)
 
-    return { accessToken, refreshToken, user };
+    return { accessToken, refreshToken, user: LoginResponseDTO.fromEntity(user) };
   }
 
   async refreshAccessToken(refreshToken: string): Promise<refreshedUser> {
@@ -135,9 +132,7 @@ export class AuthService implements IAuthService {
 
       const userId = decoded.userId;
       const role = decoded.role;
-      const newAccessToken = jwt.sign({ userId, role }, process.env.ACCESS_TOKEN_SECRET!, {
-        expiresIn: "15m",
-      });
+      const newAccessToken = createAccessToken(userId, role)
 
       const user = await this.authRepository.findUserById(decoded.userId);
 

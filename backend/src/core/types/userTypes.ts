@@ -1,4 +1,4 @@
-import { IAdmin } from "../../models/Admin";
+import { LoginResponseDTO } from "../../dtos/response/auth.response.dto";
 import { ICourse } from "../../models/Course";
 import { IEnrollment } from "../../models/Enrollment";
 import { IInstructor } from "../../models/Instructor";
@@ -8,12 +8,12 @@ import { IUser } from "../../models/User";
 export interface verifiedUer {
   accessToken: string;
   refreshToken: string;
-  user: IUser | IAdmin;
+  user: LoginResponseDTO 
 }
 
 export interface refreshedUser {
   accessToken: string;
-  user: IUser | IAdmin;
+  user: IUser 
 }
 
 export interface AdminDashboardStats {

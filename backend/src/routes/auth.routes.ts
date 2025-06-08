@@ -13,8 +13,8 @@ const authController = container.get<IAuthController>(TYPES.AuthController);
 router.post("/register", validateRequest(RegisterRequestDTO), authController.register);
 router.post("/verify-otp", validateRequest(OtpVerifyRequestDTO), authController.verifyOtp);
 router.post("/resend-otp", authController.resendOtp);
-router.post("/login", validateRequest(LoginRequestDTO), authController.login);
-router.post("/admin/login", validateRequest(LoginRequestDTO), authController.adminLogin);
+router.post("/login",validateRequest(LoginRequestDTO), authController.login);
+router.post("/admin/login",validateRequest(LoginRequestDTO), authController.adminLogin)
 router.post("/refresh-token", authController.refreshToken);
 router.post("/logout", authController.logout);
 router.post("/forgot-password", authController.forgotPassword);
