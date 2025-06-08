@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { IWebhookController } from "../core/interfaces/controller/IWebhookController";
 import asyncHandler from "express-async-handler";
-// import stripe from "../config/stripe";
 import Stripe from "stripe";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../di/types";
@@ -31,13 +30,6 @@ export class WebhookController implements IWebhookController {
       console.log(session)
       const result = await this.webhookService.handleCheckoutSuccess(session)
       res.status(StatusCodes.OK).json({received: true})
-      // this.webhookService
-      //   .handleCheckoutSuccess(session)
-      //   .then(() => res.status(200).json({ received: true }))
-      //   .catch((error) => {
-      //     console.error("Webhook handling error:", error);
-      //     res.status(500).json({ error: "Internal Server Error" });
-      //   });
     } else {
       res.status(200).json({ received: true });
     }

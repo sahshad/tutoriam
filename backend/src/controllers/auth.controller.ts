@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { AuthService } from "../services/auth.service";
 import { IAuthController } from "../core/interfaces/controller/IAuthController";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../di/types";
@@ -9,6 +8,7 @@ import { StatusCodes } from "http-status-codes";
 import { IUserService } from "../core/interfaces/service/IUserService";
 import { createRefreshToken } from "../utils/tokenServices";
 import dotenv from "dotenv";
+import { LoginRequestDTO } from "../dtos/request/auth.request.dto";
 dotenv.config();
 
 @injectable()
@@ -55,8 +55,7 @@ export class AuthController implements IAuthController {
   });
 
   login = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const { email, password } = req.body;
-    console.log(req.body);
+    const { email,password } = req.body as LoginRequestDTO
     const { refreshToken, ...user } = await this.authService.login(email, password);
 
     res.cookie("refreshToken", refreshToken, {
