@@ -47,4 +47,12 @@ export class CartService implements ICartService {
         return await this.cartRepository.removeItemFromCart(userId, courseId)
     }
 
+    async updateCart(userId: string, update:Partial<ICart>): Promise<ICart | null> {
+        return await this.cartRepository.findOneAndUpdate({userId}, update)
+    }
+
+    async findOne(userId: string): Promise<ICart | null> {
+        return await this.cartRepository.findOne({userId})
+    }
+
 }
