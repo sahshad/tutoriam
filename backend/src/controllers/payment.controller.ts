@@ -17,7 +17,6 @@ export class PaymentController implements IPaymentController {
         const userId = req.user?._id
         // console.log(req.body)
 
-
         const sessionUrl = await this.paymentService.createStripeSession(userId as string, courseIds)
         res.status(StatusCodes.OK).json({ url: sessionUrl });
     })

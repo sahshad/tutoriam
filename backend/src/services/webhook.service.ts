@@ -35,7 +35,7 @@ export class WebhookService implements IWebhookService{
         const paymentIntentId = session.payment_intent as string;
 
         const order = await this.orderService.createOrder(userId, courseIds,totalAmount, paymentIntentId );
-        await this.cartService.clearCart(userId)
+        await this.cartService.updateCart(userId, {courses: [],status: "paid", stripeSesstionId: null})
         for (const courseId of courseIds) {
             
             await this.enrollmentService.enrollUserIntoCourse(userId, courseId);
