@@ -96,7 +96,7 @@ export const createLessonData = (lesson:any, courseId?:string,moduleId?:string )
                   name: lesson.title,
                   isExpanded: true,
                   duration: lesson.duration,
-                  content: lesson.videoUrl,
+                  content: `http://localhost:5000/api/lessons/${lesson._id}/stream`,
               })),
           })),
       };

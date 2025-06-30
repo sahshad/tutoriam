@@ -7,6 +7,7 @@ export interface ILesson extends Document {
     description:string;
     contentType: string;
     videoUrl?: string;
+    videoPublicId?: string;
     duration:string;
     order: number;
     attachments?: string[]; 
@@ -22,6 +23,7 @@ const LessonSchema = new Schema<ILesson>(
       description: {type:String, required:true},
       contentType: { type: String, required: true },
       videoUrl: { type: String },
+      videoPublicId: {type: String},
       duration:{type:String},
       order: { type: Number, required: true },
       attachments: [{ type: String }], 

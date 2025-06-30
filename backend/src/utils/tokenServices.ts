@@ -38,7 +38,6 @@ export const createRefreshToken = (userId:string, role:string) => {
   );
 }
 
-
 export const createAccessToken = (userId:string, role:string) => {
   return jwt.sign(
     { userId, role },
@@ -48,3 +47,19 @@ export const createAccessToken = (userId:string, role:string) => {
     }
 );
 }
+
+export const extractUserFromRefreshToken = (
+  refreshToken: string
+): { userId: string; role: string } | null => {
+  try {
+    const user = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET!
+    ) as { userId: string; role: string };
+    
+    return user;
+  } catch (error) {
+    console.error("Invalid refresh token", error);
+    return null;
+  }
+};
