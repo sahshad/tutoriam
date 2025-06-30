@@ -3,7 +3,7 @@ import { BaseService } from "../core/abstracts/base.service";
 import { ILessonService } from "../core/interfaces/service/ILessonService";
 import { ILesson, Lesson } from "../models/Lesson";
 import { TYPES } from "../di/types";
-import { deleteVideoFromCloudinary, uploadVideoToCloudinary } from "../utils/clodinaryServices";
+import { deleteLessonFromCloudinary, deleteVideoFromCloudinary, uploadAuthenticatedVideoToCloudinary, uploadVideoToCloudinary } from "../utils/clodinaryServices";
 import { ILessonRepository } from "../core/interfaces/repository/ILessonRepository ";
 
 @injectable()
@@ -18,9 +18,10 @@ export class LessonService extends BaseService<ILesson> implements ILessonServic
         throw new Error("cannot find lesson. please try again")
     }
     if (file) {
-      await deleteVideoFromCloudinary(existingLesson?.videoUrl as string);
-      const videoData = await uploadVideoToCloudinary(file.buffer, "course/lesson");
+      await deleteLessonFromCloudinary(existingLesson.videoPublicId as string)
+      const videoData = await uploadAuthenticatedVideoToCloudinary(file.buffer, "course/lesson");
       data.videoUrl = videoData?.url
+      data.videoPublicId = videoData?.public_id
       data.duration = Math.floor(Number(videoData?.duration)).toString()
     }
 
@@ -33,7 +34,7 @@ export class LessonService extends BaseService<ILesson> implements ILessonServic
         throw new Error("please provide the file for creating a lesson")
     }
      const videoData = await uploadVideoToCloudinary(file?.buffer, 'course/lesson')
-     data.videoUrl = videoData?.url
+     data.videoPublicId = videoData?.public_id 
      data.duration = Math.floor(Number(videoData?.duration)).toString()
      return await this.lessonRepository.create(data)
   }
@@ -44,7 +45,7 @@ export class LessonService extends BaseService<ILesson> implements ILessonServic
         throw new Error("cannot find the lesson, please try again")
     }
 
-    await deleteVideoFromCloudinary(lesson?.videoUrl as string)
+    await deleteLessonFromCloudinary(lesson.videoPublicId as string)
     return await this.lessonRepository.delete(lessonId)
   }
 }

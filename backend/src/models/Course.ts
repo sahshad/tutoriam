@@ -16,7 +16,7 @@ export interface ICourse extends Document {
     congratulationsMessage:string;
     targetAudience?: string;
     requirements?: string[];
-    instructorId: ObjectId;
+    instructorId: ObjectId | string;
     modules?: ObjectId[];
     status?: boolean;
     price?: string;

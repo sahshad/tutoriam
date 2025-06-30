@@ -4,7 +4,8 @@ export interface Lesson {
   courseId: string;
   title: string;
   contentType: string;
-  videoUrl?: string;
+  // videoUrl?: string;
+  videoPublicId?: string
   duration: string;
   description: string;
   order: number;
