@@ -11,6 +11,7 @@ import { BaseService } from "../core/abstracts/base.service";
 import { DashboardData, PaginatedUsersResponse } from "../core/types/userTypes";
 import { IEnrollmentRepository } from "../core/interfaces/repository/IEnrollmentRepository";
 import { FilterQuery } from "mongoose";
+import { UserResponseDTO } from "../dtos/response/user.response.dto";
 
 @injectable()
 export class UserService extends BaseService<IUser> implements IUserService {
@@ -125,12 +126,12 @@ export class UserService extends BaseService<IUser> implements IUserService {
 
     const totalUsers = await this.userRepository.countDocuments(filter);
     const users = await this.userRepository.findAllUsers(skip, limit, filter)
-
+    const filterUsers = users?.map(user => UserResponseDTO.fromEntity(user)) ?? null
     return {
       totalUsers,
       totalPages: Math.ceil(totalUsers / limit),
       currentPage: page,
-      users,
+      users: filterUsers,
     };
   }
 }

@@ -1,4 +1,5 @@
 import { LoginResponseDTO } from "../../dtos/response/auth.response.dto";
+import { UserResponseDTO } from "../../dtos/response/user.response.dto";
 import { ICourse } from "../../models/Course";
 import { IEnrollment } from "../../models/Enrollment";
 import { IInstructor } from "../../models/Instructor";
@@ -48,7 +49,7 @@ export interface PaginatedUsersResponse {
   totalUsers: number;
   totalPages: number;
   currentPage: number;
-  users: IUser[] | null;
+  users: UserResponseDTO[] | null;
 }
 
 export interface PaginatedOrdersResponse {

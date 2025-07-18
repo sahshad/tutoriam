@@ -1,7 +1,8 @@
 import mongoose, { Document, Schema } from "mongoose";
+import { IUser } from "./User";
 
 export interface IInstructor extends Document {
-  userId: mongoose.Schema.Types.ObjectId | string;
+  userId: mongoose.Schema.Types.ObjectId | string | IUser;
   courses: mongoose.Schema.Types.ObjectId[];
   idCardImageUrl: string;
   education: {
