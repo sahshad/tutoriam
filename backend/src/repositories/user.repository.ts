@@ -79,6 +79,6 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
   }
 
   async findAllUsers(skip: number, limit: number, filter:FilterQuery<IUser>): Promise<IUser[] | null> {
-    return await User.find(filter).skip(skip).limit(limit)
+    return await User.find(filter).sort({createdAt: -1}).skip(skip).limit(limit)
   }
 }
