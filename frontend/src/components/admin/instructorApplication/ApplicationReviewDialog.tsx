@@ -1,5 +1,3 @@
-
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -23,7 +21,7 @@ export function ApplicationReviewDialog({
 }: ApplicationReviewDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md sm:max-w-lg">
+      <DialogContent className="max-w-md sm:max-w-lg overflow-scroll max-h-[70vh] no-scrollbar">
         <DialogHeader>
           <DialogTitle>Review Instructor Application</DialogTitle>
           <DialogDescription>Review the details of this instructor application.</DialogDescription>
