@@ -9,46 +9,52 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
   }
 
   async getCoursesByInstructorId(instructorId: string): Promise<ICourse[] | null> {
-    console.log(instructorId)
     return await Course.find({ instructorId });
   }
 
   async updateCoursePublishStatus(courseId: string): Promise<ICourse | null> {
-      return await Course.findByIdAndUpdate(courseId,  [
+    return await Course.findByIdAndUpdate(
+      courseId,
+      [
         {
           $set: {
             isPublic: {
-              $cond: { if: { $eq: ["$isPublic", true] }, then: false, else: true }
-            }
-          }
-        }
-      ], {new:true})
+              $cond: { if: { $eq: ["$isPublic", true] }, then: false, else: true },
+            },
+          },
+        },
+      ],
+      { new: true }
+    );
   }
 
-  async getAllCourses(filter:any, skip:any, limit:any, sort:any): Promise<ICourse[] | null> {
-      return await Course.find(filter).skip(skip).limit(limit).sort(sort).populate({
-        path: 'categoryId',
-        select: 'name',
-      })
-  }
-
-  async getAllCoursesForAdmin(skip: number, limit: number, filter:FilterQuery<ICourse>): Promise<ICourse[] | null> {
-    return await Course.find(filter).skip(skip).limit(limit).populate({
-      path: 'categoryId',
-      select: 'name',
-    })
-    .populate({
-      path: 'instructorId',
-      select: 'name email profileImageUrl'
+  async getAllCourses(filter: any, skip: any, limit: any, sort: any): Promise<ICourse[] | null> {
+    return await Course.find(filter).skip(skip).limit(limit).sort(sort).populate({
+      path: "categoryId",
+      select: "name",
     });
-}
+  }
 
-  async getCoursescount (filter:any):Promise<number>  {
+  async getAllCoursesForAdmin(skip: number, limit: number, filter: FilterQuery<ICourse>): Promise<ICourse[] | null> {
+    return await Course.find(filter)
+      .skip(skip)
+      .limit(limit)
+      .populate({
+        path: "categoryId",
+        select: "name",
+      })
+      .populate({
+        path: "instructorId",
+        select: "name email profileImageUrl",
+      });
+  }
+
+  async getCoursescount(filter: any): Promise<number> {
     return await Course.countDocuments(filter);
-  };
+  }
 
-  async getCoursesByIds(courseIds:string[]):Promise<ICourse[] | null> {
-    return await Course.find({_id:{$in:courseIds}})
+  async getCoursesByIds(courseIds: string[]): Promise<ICourse[] | null> {
+    return await Course.find({ _id: { $in: courseIds } });
   }
   async getCourseWithModulesAndLessons(courseId: string): Promise<ICourse | null> {
     const result = await Course.aggregate([
@@ -70,11 +76,27 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
         },
       },
 
+      // {
+      //   $lookup: {
+      //     from: "lessons",
+      //     localField: "modules._id",
+      //     foreignField: "moduleId",
+      //     as: "modules.lessons",
+      //   },
+      // },
+
       {
         $lookup: {
           from: "lessons",
-          localField: "modules._id",
-          foreignField: "moduleId",
+          let: { moduleId: "$modules._id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$moduleId", "$$moduleId"] } } },
+            {
+              $project: {
+                videoUrl: 0,
+              },
+            },
+          ],
           as: "modules.lessons",
         },
       },
@@ -87,10 +109,10 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
           as: "instructor",
         },
       },
-  
+
       {
         $unwind: {
-          path: "$instructor", 
+          path: "$instructor",
           preserveNullAndEmptyArrays: true,
         },
       },
@@ -109,7 +131,7 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
           preserveNullAndEmptyArrays: true,
         },
       },
-  
+
       // Extract subcategory name from categoryInfo.subcategories
       {
         $addFields: {
@@ -132,7 +154,6 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
           },
         },
       },
-  
 
       {
         $group: {
@@ -153,7 +174,7 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
           welcomeMessage: { $first: "$welcomeMessage" },
           congratulationsMessage: { $first: "$congratulationsMessage" },
           instructorId: { $first: "$instructorId" },
-          instructor:{$first: "$instructor"},
+          instructor: { $first: "$instructor" },
           price: { $first: "$price" },
           discountPrice: { $first: "$discountPrice" },
           rating: { $first: "$rating" },
