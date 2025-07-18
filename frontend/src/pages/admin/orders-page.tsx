@@ -12,11 +12,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
-import { IOrder } from "@/types/order"; // Adjust path based on your project structure
+import { IOrder } from "@/types/order"; 
 import { IUser } from "@/types/user";
 import { AlertCircle, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchAllOrders } from "@/services/orderService";
+import { OrderDetailsDialog } from "@/components/admin/dialogs/order-details-dialog";
+import { Course } from "@/types/course";
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -26,6 +28,8 @@ const OrdersPage = () => {
   const [search, setSearch] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedOrder, setSelectedOrder] = useState<IOrder & { userId: IUser; courseIds: Course[] } | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     const debounce = setTimeout(() => {
@@ -119,13 +123,11 @@ const OrdersPage = () => {
               <TableBody>
                 {orders.map((order) => {
                   const user = order.userId as Partial<IUser>;
-                //   const courses = order.courseIds as Partial<Course>[]
                   return (
                     <TableRow key={order._id}>
                       <TableCell>{order._id}</TableCell>
                       <TableCell>{user.name || "Unknown User"}</TableCell>
                       <TableCell className="text-center">
-                        {/* {courses.map((course) => course.title).join(", ") || "No Courses"} */}
                         {order.courseIds.length}
                       </TableCell>
                       <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
@@ -145,9 +147,10 @@ const OrdersPage = () => {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>View details</DropdownMenuItem>
-                            <DropdownMenuItem>Refund order</DropdownMenuItem>
-                            <DropdownMenuItem>Delete order</DropdownMenuItem>
+                            <DropdownMenuItem  onClick={() => {
+    setSelectedOrder(order as any);
+    setDialogOpen(true);
+}}>View details</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
@@ -159,6 +162,14 @@ const OrdersPage = () => {
           )}
         </CardContent>
       </Card>
+
+      {selectedOrder && (
+  <OrderDetailsDialog
+    order={selectedOrder}
+    open={dialogOpen}
+    onOpenChange={setDialogOpen}
+  />
+)}
 
       {!isLoading && totalPages > 1 && (
         <GenericPagination currentPage={page} onPageChange={setPage} totalPages={totalPages} />

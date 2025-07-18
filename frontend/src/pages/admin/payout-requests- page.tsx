@@ -27,6 +27,7 @@ import { MoreHorizontal, CheckCircle, XCircle } from "lucide-react";
 import { format } from "date-fns";
 import NoPayoutRequests from "@/components/admin/common/no-content";
 import { approvePayoutRequest, getAllPayoutRequestsForAdmin, rejectPayoutRequest } from "@/services/earningService";
+import { PayoutRequestDetailsDialog } from "@/components/admin/dialogs/payout-details-dialog";
 
 export default function PayoutRequestsPage() {
   const [payoutRequests, setPayoutRequests] = useState<IPayoutRequest[]>([]);
@@ -38,6 +39,10 @@ export default function PayoutRequestsPage() {
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState<boolean>(false);
   const [selectedPayoutRequestId, setSelectedPayoutRequestId] = useState<string | null>(null);
   const [adminNote, setAdminNote] = useState<string>("");
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState<
+    (IPayoutRequest & { instructorId: { name: string; email: string } }) | null
+  >(null);
 
   useEffect(() => {
     const debounce = setTimeout(() => {
@@ -51,7 +56,7 @@ export default function PayoutRequestsPage() {
   const fetchPayoutRequests = async () => {
     try {
       const data = await getAllPayoutRequestsForAdmin();
-      setPayoutRequests(data); // Adjust for correct response structure
+      setPayoutRequests(data);
       setTotalPages(data.totalPages);
     } catch (error) {
       toast.error((error as Error).message);
@@ -109,7 +114,7 @@ export default function PayoutRequestsPage() {
         <NoPayoutRequests />
       ) : (
         <Card>
-          <CardContent className="p-0">
+          <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
@@ -145,9 +150,7 @@ export default function PayoutRequestsPage() {
                           {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
                         </Badge>
                       </TableCell>
-                      <TableCell>
-                        {format(new Date(request.requestedAt), "MMM dd, yyyy")}
-                      </TableCell>
+                      <TableCell>{format(new Date(request.requestedAt), "MMM dd, yyyy")}</TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -158,20 +161,21 @@ export default function PayoutRequestsPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>View details</DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setSelectedRequest(request as any);
+                                setIsDetailsDialogOpen(true);
+                              }}
+                            >
+                              View details
+                            </DropdownMenuItem>
                             {request.status === "pending" && (
                               <>
-                                <DropdownMenuItem
-                                  onClick={() => handleApprove(request._id)}
-                                  className="text-green-600"
-                                >
+                                <DropdownMenuItem onClick={() => handleApprove(request._id)} className="text-green-600">
                                   <CheckCircle className="h-4 w-4 mr-2" />
                                   Approve
                                 </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => handleReject(request._id)}
-                                  className="text-red-600"
-                                >
+                                <DropdownMenuItem onClick={() => handleReject(request._id)} className="text-red-600">
                                   <XCircle className="h-4 w-4 mr-2" />
                                   Reject
                                 </DropdownMenuItem>
@@ -189,21 +193,21 @@ export default function PayoutRequestsPage() {
         </Card>
       )}
 
-      {totalPages > 1 && (
-        <GenericPagination
-          currentPage={page}
-          onPageChange={setPage}
-          totalPages={totalPages}
+      {selectedRequest && (
+        <PayoutRequestDetailsDialog
+          request={selectedRequest}
+          open={isDetailsDialogOpen}
+          onOpenChange={setIsDetailsDialogOpen}
         />
       )}
+
+      {totalPages > 1 && <GenericPagination currentPage={page} onPageChange={setPage} totalPages={totalPages} />}
 
       <Dialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Reject Payout Request</DialogTitle>
-            <DialogDescription>
-              Please provide a reason for rejecting this payout request (optional).
-            </DialogDescription>
+            <DialogDescription>Please provide a reason for rejecting this payout request (optional).</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
@@ -217,17 +221,10 @@ export default function PayoutRequestsPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsRejectDialogOpen(false)}
-            >
+            <Button variant="outline" onClick={() => setIsRejectDialogOpen(false)}>
               Cancel
             </Button>
-            <Button
-              variant="destructive"
-              onClick={confirmReject}
-              disabled={adminNote.trim() === ""} // Optional: Require a note
-            >
+            <Button variant="destructive" onClick={confirmReject} disabled={adminNote.trim() === ""}>
               Confirm Rejection
             </Button>
           </DialogFooter>
