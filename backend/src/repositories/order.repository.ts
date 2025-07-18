@@ -22,7 +22,7 @@ export class OrderRepository extends BaseRepository<IOrder> implements IOrderRep
       }
 
      async findAllOrders(skip: number, limit: number): Promise<IOrder[] | null> {
-       return await Order.find().skip(skip).limit(limit).populate({path: "userId", select: "name"})
+       return await Order.find().sort({ createdAt: -1 }).skip(skip).limit(limit).populate({path: "userId", select: "name"}).populate("courseIds")
      }
      
      async getRecentOrders(limit: number): Promise<IOrder[]> {

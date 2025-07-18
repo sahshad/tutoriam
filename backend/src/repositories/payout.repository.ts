@@ -15,7 +15,7 @@ export class PayoutRepository implements IPayoutRepository {
   }
 
   async findAllWithInstructor(): Promise<IPayoutRequest[]> {
-    return await PayoutRequest.find().populate("instructorId", "name email");
+    return await PayoutRequest.find().sort({ createdAt: -1 }).populate("instructorId", "name email");
   }
 
   async findByInstructorId(instructorId: string): Promise<IPayoutRequest[]> {
