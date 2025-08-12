@@ -59,37 +59,7 @@ Tutoriam follows a modular, layered architecture:
 
 ## Project Structure
 
-tutoriam/
-│
-├── frontend/                   # React + Vite client
-│   ├── src/
-│   │   ├── components/         # UI and feature components
-│   │   ├── context/            # Context providers
-│   │   ├── hooks/              # Custom hooks
-│   │   ├── lib/                # Axios, socket, utils
-│   │   ├── pages/              # Route-level pages
-│   │   ├── redux/              # Store, slices, thunks
-│   │   ├── routes/             # Route definitions
-│   │   ├── services/           # API service functions
-│   │   └── types/              # TypeScript types
-│   └── public/                 # Static assets
-│
-├── backend/                    # Node.js + Express API
-│   ├── src/
-│   │   ├── config/             # App config (db, cloud, payments)
-│   │   ├── controllers/        # Request handlers
-│   │   ├── core/               # Abstracts, interfaces
-│   │   ├── di/                 # Dependency injection setup
-│   │   ├── dtos/                # Data Transfer Objects
-│   │   ├── infrastructure/     # Socket, external services
-│   │   ├── middlewares/        # Express middlewares
-│   │   ├── models/             # Mongoose models
-│   │   ├── repositories/       # Data access layer
-│   │   ├── routes/             # API routes
-│   │   ├── services/           # Business logic
-│   │   └── utils/              # Helper functions
-│
-└── docker-compose.yml          # Docker orchestration
+<pre> ```plaintext tutoriam/ │ ├── frontend/ # React + Vite client │ ├── src/ │ │ ├── components/ # UI and feature components │ │ ├── context/ # Context providers │ │ ├── hooks/ # Custom hooks │ │ ├── lib/ # Axios, socket, utils │ │ ├── pages/ # Route-level pages │ │ ├── redux/ # Store, slices, thunks │ │ ├── routes/ # Route definitions │ │ ├── services/ # API service functions │ │ └── types/ # TypeScript types │ └── public/ # Static assets │ ├── backend/ # Node.js + Express API │ ├── src/ │ │ ├── config/ # App config (db, cloud, payments) │ │ ├── controllers/ # Request handlers │ │ ├── core/ # Abstracts, interfaces │ │ ├── di/ # Dependency injection setup │ │ ├── dtos/ # Data Transfer Objects │ │ ├── infrastructure/ # Socket, external services │ │ ├── middlewares/ # Express middlewares │ │ ├── models/ # Mongoose models │ │ ├── repositories/ # Data access layer │ │ ├── routes/ # API routes │ │ ├── services/ # Business logic │ │ └── utils/ # Helper functions │ └── docker-compose.yml # Docker orchestration ``` </pre>
 
 ## Getting Started
 
