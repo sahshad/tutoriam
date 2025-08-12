@@ -59,6 +59,7 @@ Tutoriam follows a modular, layered architecture:
 
 ## Project Structure
 
+```bash
 tutoriam/
 │
 ├── frontend/                   # React + Vite client
@@ -90,8 +91,7 @@ tutoriam/
 │   │   └── utils/              # Helper functions
 │
 └── docker-compose.yml          # Docker orchestration
-
-
+```
 ## Getting Started
 
 ### Prerequisites
@@ -106,21 +106,20 @@ Before you begin, ensure you have the following installed:
 ## Installation
 
 ### 1️⃣ Clone the Repository
-
 ```bash
 git clone https://github.com/sahshad/tutoriam.git
 cd tutoriam
-
+```
 2️⃣ Install Backend Dependencies
-
+```bash
 cd backend
 npm install
-
+```
 3️⃣ Install Frontend Dependencies
-
+```bash
 cd ../frontend
 npm install
-
+```
 4️⃣ Set Up Environment Variables
 Make sure to configure environment variables for both frontend and backend. See the Environment Variables section below.
 
@@ -128,15 +127,15 @@ Make sure to configure environment variables for both frontend and backend. See 
 Use two separate terminals:
 
 Terminal 1 – Backend
-
+```bash
 cd backend
 npm run dev
-
+```
 Terminal 2 – Frontend
-
+```bash
 cd frontend
 npm run dev
-
+```
 ## Environment Variables
 
 You need to configure environment variables for both the **Backend** and **Frontend** before running the app.
@@ -144,7 +143,7 @@ You need to configure environment variables for both the **Backend** and **Front
 ---
 
 ### 🔐 Backend (`backend/.env`)
-
+```bash
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/tutoriam
 CLIENT_URL=http://localhost:5173
@@ -167,13 +166,13 @@ CLIENT_SECRET=your_oauth_client_secret
 
 STRIPE_SECRET_KEY=your_stripe_secret
 STRIPE_WEBHOOK_SECRET=your_webhook_secret
-
-🌐 Frontend (frontend/.env)
-
+```
+### 🌐 Frontend (frontend/.env)
+```bash
 VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 VITE_API_BASE_URL=http://localhost:5000/api
 VITE_API_BASE_URL_FOR_SOCKET=http://localhost:5000
-
+```
 
 ## Scripts
 
@@ -183,30 +182,32 @@ VITE_API_BASE_URL_FOR_SOCKET=http://localhost:5000
 npm run dev       # Development mode
 npm run build     # Compile TypeScript
 npm start         # Start in production
-
+```
 ### Frontend
-
+```bash
 npm run dev       # Development mode
 npm run build     # Build for production
 npm run preview   # Preview build
-
+```
 ## Docker Setup
 
 ### Run everything:
 
 ```bash
 docker-compose up --build
-
+```
 Run services individually:
 
 # Backend
+```bash
 docker build -t tutoriam-backend ./backend
 docker run -p 5000:5000 tutoriam-backend
-
+```
 # Frontend
+```bash
 docker build -t tutoriam-frontend ./frontend
 docker run -p 5173:5173 tutoriam-frontend
-
+```
 ## Contributing
 
 We welcome contributions! To contribute, please follow these steps:
