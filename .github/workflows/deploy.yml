@@ -27,7 +27,7 @@ jobs:
 
     - name: Build and push Frontend image
       run: |
-        cd ../frontend
+        cd frontend
         docker build -f Dockerfile.prod -t shahzad18/tutoriam-frontend:latest .
         docker push shahzad18/tutoriam-frontend:latest
 
